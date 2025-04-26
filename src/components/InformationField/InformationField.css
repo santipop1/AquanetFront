@@ -1,0 +1,68 @@
+.fieldContainer {
+  margin-bottom: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+}
+
+.label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.input {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.readonly {
+  background-color: #e0e0e0;
+  color: #757575;
+  cursor: not-allowed;
+}
+
+.inputWithButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWithButton .input {
+  flex: 1;
+}
+
+.inputWithButton .symbolButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  margin-left: -2.5rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2c3e50;
+}
+
+.inputWithButton .symbolButton:hover {
+  background-color: #f0f0f0;
+  border-radius: 50%;
+}
+
+.noNativeIcon::-webkit-calendar-picker-indicator,
+.noNativeIcon::-webkit-inner-spin-button,
+.noNativeIcon::-webkit-outer-spin-button,
+.noNativeIcon::-webkit-clear-button {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.noNativeIcon {
+  appearance: none;
+  background: none;
+}
