@@ -1,0 +1,43 @@
+.rc-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 420px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+    text-align: center;
+  }
+  
+  .rc-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .rc-subtitle {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+  
+  .rc-label {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+  
+  .rc-input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .rc-button-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
