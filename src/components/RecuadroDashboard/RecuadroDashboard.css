@@ -1,0 +1,124 @@
+.dc-container {
+    background: #f9f9f9;
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dc-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #2455f4;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .dc-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .dc-table th,
+  .dc-table td {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+  
+  .dc-table th {
+    background-color: #eef2ff;
+    font-weight: 600;
+  }
+  
+  .dc-table button {
+    background: #e0e7ff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .dc-table button:hover {
+    background: #c7d2fe;
+  }
+  
+  .dc-block {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .dc-block label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .dc-block input {
+    width: 60px;
+    margin: 0 0.3rem;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.875rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .dc-fecha {
+    display: inline-block;
+    margin: 0.5rem 0;
+    font-weight: 600;
+  }
+  
+  .dc-btn-secondary {
+    background: #e0e7ff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .dc-btn-secondary:hover {
+    background: #c7d2fe;
+  }
+  
+  .dc-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .dc-tabs button {
+    background: #e0e7ff;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .dc-tabs .active {
+    background: #2455f4;
+    color: white;
+  }
+  
+  .dc-grafica-placeholder {
+    height: 160px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    color: #666;
+  }
+  
