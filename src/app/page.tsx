@@ -1,31 +1,17 @@
+// app/page.tsx
 
-import {InformationField} from "@/components/InformationField/InformationField"
+'use client';
+
+import Header from '@/components/Header/Header';
+import Inicio from './inicio/Inicio';
 
 export default function Home() {
   return (
-      <section>
-        <InformationField
-          variant = "text"
-          label = "Texto"
-        />
-        <InformationField
-          variant = "date"
-          label = "Fecha"
-        />
-        <InformationField
-          variant = "select"
-          label = "Seleccionar"
-          options={["30 mil - 50 mil", "50 mil - 1 millon"]}
-        />
-        <InformationField
-          variant = "password"
-          label = "Contraseña"
-        />
-        <InformationField
-          variant = "readonly"
-          label = "Solo leer"
-          value="Prueba"
-        />
-      </section>
+    <>
+      <Header />
+      <main>
+        <Inicio />
+      </main>
+    </>
   );
 }
