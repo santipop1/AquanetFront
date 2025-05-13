@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './InformationField.css';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
+import { Button } from '@mui/material';
 
 export interface InformationFieldProps {
   variant: 'text' | 'date' | 'select' | 'password' | 'readonly';
@@ -80,7 +81,7 @@ export const InformationField: React.FC<InformationFieldProps> = ({
             value={internalValue}
             onChange={handleChange}
           />
-          <SymbolButton variant="calendar" onClick={openDatePicker} />
+          <SymbolButton variant="calendar" onClick={openDatePicker}/>
         </div>
       )}
 

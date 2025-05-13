@@ -15,6 +15,8 @@
   width: 100%;
   text-align: center;
   animation: fadeInUp 0.6s ease-out;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 }
 
 .logo-form {
@@ -63,13 +65,13 @@ form input {
   background-color: #1b2dc7;
 }
 
-/* ✅ Botón estilo Google */
+
 .google-auth-btn {
   display: flex;
   align-items: center;
   gap: 12px;
   justify-content: center;
-  border: 1.5px solid #9eaeb9;
+  border: 2px solid #9eaeb9;
   background-color: #f9f7f4;
   color: #000;
   padding: 0.7rem 1.5rem;
@@ -85,8 +87,28 @@ form input {
   background-color: #f1efec;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
 
-/* Animación de entrada */
+.password-container input {
+  width: 100%;
+  padding-right: 40px; 
+}
+
+.eye-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+
 @keyframes fadeInUp {
   0% {
     opacity: 0;
