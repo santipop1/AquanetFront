@@ -1,5 +1,8 @@
+'use client';
+
 import './Inicio.css';
 import Image from 'next/image';
+import Link from 'next/link';
 import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
 import Footer from '@/components/Footer/Footer';
 
@@ -21,6 +24,12 @@ export default function Inicio() {
           </span>{' '}
           ofrecemos un software de gestión avanzada que te permite monitorear y administrar tu purificadora en tiempo real.
         </p>
+
+        <div className="registro-redirect">
+          <Link href="/registro" className="btn-ir-a-registro underline">
+            Ir a Registro
+          </Link>
+        </div>
       </header>
 
       {/* Onda superior */}
@@ -78,7 +87,7 @@ export default function Inicio() {
       {/* Planes de suscripción */}
       <section className="planes">
         <h2 className="titulo-planes">Elige tu plan</h2>
-        <div className="contenedor-planes">
+        <div className="contenedor-planes flex items-center">
           <ContratarPlan
             titulo="Plan Mensual"
             precio="$699"
@@ -89,7 +98,7 @@ export default function Inicio() {
             titulo="Plan Anual"
             precio="$579"
             periodicidad="al mes"
-            notaAdicional="un solo pago de $6948"
+            notaAdicional="un solo pago de $6,948"
             onContratar={() => alert("Plan anual contratado")}
           />
         </div>
