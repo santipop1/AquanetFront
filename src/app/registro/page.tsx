@@ -3,34 +3,54 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header/Header';
+import { InformationField } from '@/components/InformationField/InformationField';
+import Footer from '@/components/Footer/Footer';
 import './Registro.css';
 
 interface FormData {
-  nombre: string;
-  apellido: string;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  fechaNacimiento: string;
+  telefono: string;
   correo: string;
   contrasena: string;
+  verificarContrasena: string;
 }
 
 export default function Registro() {
   const [formData, setFormData] = useState<FormData>({
-    nombre: '',
-    apellido: '',
+    primerNombre: '',
+    segundoNombre: '',
+    primerApellido: '',
+    segundoApellido: '',
+    fechaNacimiento: '',
+    telefono: '',
     correo: '',
     contrasena: '',
+    verificarContrasena: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleFieldChange = (fieldName: keyof FormData, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [fieldName]: value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (formData.contrasena !== formData.verificarContrasena) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
     alert(`Registrado:\n${JSON.stringify(formData, null, 2)}`);
+  };
+
+  const handleGoogleAuth = () => {
+    alert("Redirigiendo a autenticación con Google...");
+    // Aquí puedes agregar la lógica real para Firebase/Auth0/etc.
   };
 
   return (
@@ -38,60 +58,99 @@ export default function Registro() {
       <Header />
       <div className="registro-container">
         <div className="form-card">
-          
-          <Image src="/logo.png" alt="aquaNet" width={150} height={60} className='mx-auto'/>
-          
-
+          <Image src="/logo.png" alt="aquaNet" width={150} height={60} className="mx-auto" />
           <h2>Regístrate</h2>
-          <p>¿Ya tienes cuenta? <a href="/login" className='underline'>Inicia sesión</a></p>
+          <p>
+            ¿Ya tienes cuenta? <a href="/login" className="underline">Inicia sesión</a>
+          </p>
 
-          {/* Botón personalizado de Google */}
-          <button className="google-auth-btn">
+          {/* 🔵 Botón de Google fuera del formulario para tener su propia funcionalidad */}
+          <button className="google-auth-btn" onClick={handleGoogleAuth}>
             <Image src="/google-icon.png" alt="Google" width={20} height={20} />
-            <span>Continue with Google</span>
+            <span>Continuar con Google</span>
           </button>
 
           <hr className="divider" />
 
           <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="nombre"
-              placeholder="Nombre(s)"
-              value={formData.nombre}
-              onChange={handleChange}
-              required
+            <InformationField
+              variant="text"
+              label="Primer nombre"
+              value={formData.primerNombre}
+              placeholder="Primer nombre"
+              onChange={(val) => handleFieldChange("primerNombre", val)}
             />
-            <input
-              type="text"
-              name="apellido"
-              placeholder="Apellido(s)"
-              value={formData.apellido}
-              onChange={handleChange}
-              required
+
+            <InformationField
+              variant="text"
+              label="Segundo nombre (opcional)"
+              value={formData.segundoNombre}
+              placeholder="Segundo nombre (opcional)"
+              onChange={(val) => handleFieldChange("segundoNombre", val)}
             />
-            <input
-              type="email"
-              name="correo"
-              placeholder="Correo electrónico"
+
+            <InformationField
+              variant="text"
+              label="Primer apellido"
+              value={formData.primerApellido}
+              placeholder="Primer apellido"
+              onChange={(val) => handleFieldChange("primerApellido", val)}
+            />
+
+            <InformationField
+              variant="text"
+              label="Segundo apellido"
+              value={formData.segundoApellido}
+              placeholder="Segundo apellido"
+              onChange={(val) => handleFieldChange("segundoApellido", val)}
+            />
+
+            <InformationField
+              variant="date"
+              label="Fecha de nacimiento"
+              value={formData.fechaNacimiento}
+              onChange={(val) => handleFieldChange("fechaNacimiento", val)}
+            />
+
+            <InformationField
+              variant="text"
+              label="Número de teléfono"
+              value={formData.telefono}
+              placeholder="Número de teléfono"
+              onChange={(val) => handleFieldChange("telefono", val)}
+            />
+
+            <InformationField
+              variant="text"
+              label="Correo electrónico"
               value={formData.correo}
-              onChange={handleChange}
-              required
+              placeholder="Correo electrónico"
+              onChange={(val) => handleFieldChange("correo", val)}
             />
-            <input
-              type="password"
-              name="contrasena"
-              placeholder="Contraseña"
+
+            <InformationField
+              variant="password"
+              label="Contraseña"
               value={formData.contrasena}
-              onChange={handleChange}
-              required
+              placeholder="Contraseña (mínimo 8 caracteres)"
+              onChange={(val) => handleFieldChange("contrasena", val)}
             />
+
+            <InformationField
+              variant="password"
+              label="Verificar contraseña"
+              value={formData.verificarContrasena}
+              placeholder="Verificar contraseña"
+              onChange={(val) => handleFieldChange("verificarContrasena", val)}
+            />
+
             <button type="submit" className="registro-btn">
               Regístrate
             </button>
           </form>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
