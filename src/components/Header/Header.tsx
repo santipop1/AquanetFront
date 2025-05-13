@@ -16,26 +16,26 @@ const Header = () => {
   const pathname = usePathname();
 
   return (
-    <header className="w-full border-b shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3">
+    <header className="w-full border-b-2 shadow-sm">
+      <div className="container mx-auto flex items-center justify-between px-4 py-5">
         
         {/* Logo + Título */}
         <div className="flex items-center gap-2">
           <Link href="/">
-            <Image src="/logo.png" alt="Logo" width={32} height={32} />
+            <Image src="/logo.png" alt="Logo" width={150} height={150} />
           </Link>
           
         </div>
 
         {/* Navegación */}
-        <nav className="flex gap-6">
+        <nav className="flex gap-10">
           {Links.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={clsx(
-                "text-sm font-medium transition-colors hover:text-blue-600",
-                pathname === href ? "text-blue-600 underline" : "text-gray-600",
+                "text-xl hover:text-blue-400 hover:-translate-y-1 duration-300",
+                pathname === href ? "text-blue-400 underline" : "text-gray-700",
               )}
             >
               {label}
@@ -45,9 +45,8 @@ const Header = () => {
 
         {/* Botones de acción */}
         <div className="flex gap-2">
-        <ButtonText label="Registrarte" href="/register" size="sm"/>
-        <ButtonText label="Iniciar sesión" href="/login" variant='variant2' size='sm' />
-
+          <Link href={'/registro'} className='bg-stone-300 rounded-xl px-6 py-4 text-stone-800 hover:bg-stone-400 duration-300'>Registrate</Link>
+          <Link href={'/login'} className='bg-blue-300 rounded-xl px-6 py-4 text-white hover:bg-blue-400 duration-300'>Iniciar Sesion</Link>
         </div>
       </div>
     </header>

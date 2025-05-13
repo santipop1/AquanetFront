@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram } from 'react-icons/fa';
+import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
@@ -27,12 +28,12 @@ const Footer = () => {
         {/* Redes sociales */}
         <div>
           <h3 className="font-semibold mb-2">Síguenos</h3>
-          <div className="flex gap-4 text-xl">
+          <div className="flex gap-4 text-xl justify-center">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
               <FaFacebookF />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
-              <FaTwitter />
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-stone-900">
+              <FaXTwitter />
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">
               <FaInstagram />
