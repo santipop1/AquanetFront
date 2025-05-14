@@ -64,7 +64,7 @@ export default function Registro() {
             ¿Ya tienes cuenta? <a href="/login" className="underline">Inicia sesión</a>
           </p>
 
-          {/* 🔵 Botón de Google fuera del formulario para tener su propia funcionalidad */}
+          
           <button className="google-auth-btn" onClick={handleGoogleAuth}>
             <Image src="/google-icon.png" alt="Google" width={20} height={20} />
             <span>Continuar con Google</span>
