@@ -9,7 +9,7 @@ import Image from 'next/image';
 const Links = [
   { href: '/popular', label: 'Inicio' },
   { href: '/purifica-tu-futuro', label: 'Purifica tu futuro' },
-  { href: '/aquanet-plus', label: 'Aquanet+' }
+  { href: '/login', label: 'Aquanet+' }
 ];
 
 const Header = () => {
