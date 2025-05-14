@@ -1,4 +1,3 @@
-// src/components/RecuadroDashboard/RecuadroDashboard.tsx
 import React from "react";
 import "./RecuadroDashboard.css";
 
