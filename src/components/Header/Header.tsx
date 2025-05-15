@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 const Links = [
   { href: '/popular', label: 'Inicio' },
-  { href: '/purifica-tu-futuro', label: 'Purifica tu futuro' },
+  { href: '/formulario', label: 'Purifica tu futuro' },
   { href: '/login', label: 'Aquanet+' }
 ];
 

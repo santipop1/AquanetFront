@@ -56,7 +56,7 @@ export default function Inicio() {
             </span>{' '}
             totalmente gratis
           </p>
-          <a href="#aplica" className="apply-link">Aplica ahora</a>
+          <a href="/formulario" className="apply-link">Aplica ahora</a>
         </section>
       </div>
 
