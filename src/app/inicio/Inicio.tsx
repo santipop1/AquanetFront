@@ -7,26 +7,53 @@ import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
 import Footer from '@/components/Footer/Footer';
 import { useEffect } from 'react';
 
+
+
 declare global {
   interface Window {
     watsonAssistantChatOptions: {
       integrationID: string;
       region: string;
       serviceInstanceID: string;
-      onLoad: (instance: any) => Promise<void>;
+      onLoad: (instance: any) => void;
       clientVersion?: string;
+      showLauncher?: boolean;
     };
   }
 }
 
 export default function Inicio() {
   useEffect(() => {
-    // Configuración del bot de Watson
+    // Configuración del bot de Watson con personalización
     window.watsonAssistantChatOptions = {
       integrationID: "9aa77c57-a1c6-44aa-9184-f937eb1cd57e",
       region: "us-south",
       serviceInstanceID: "f0d6142e-e0bd-48cc-bfee-14d7ea2a6525",
-      onLoad: async (instance) => { await instance.render(); }
+      showLauncher: true,
+      onLoad: (instance) => { 
+        // Personalización del launcher
+        instance.updateCSSVariables({
+            'launcher-icon-size': '0px',
+            'launcher-background-image': 'url(/animation.gif)', // Cambia esta línea
+            'launcher-background-size': 'cover',
+            'launcher-width': '80px',
+            'launcher-height': '80px',
+            'launcher-box-shadow': 'none',
+            'launcher-border-radius': '50%',
+            'launcher-background-color': 'transparent',
+            'launcher-border': '2px solid #05b852'
+});
+        
+        // Esperar a que el launcher se cargue para aplicar estilos adicionales
+        setTimeout(() => {
+          const launcher = document.querySelector('.MACLauncher__Button');
+          if (launcher) {
+            launcher.innerHTML = ''; // Eliminar el contenido SVG existente
+          }
+        }, 1000);
+        
+        instance.render();
+      }
     };
 
     // Crear y cargar el script
@@ -43,6 +70,7 @@ export default function Inicio() {
       }
     };
   }, []);
+
 
   return (
     <section className="inicio">
