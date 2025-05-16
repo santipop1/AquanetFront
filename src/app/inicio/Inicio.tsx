@@ -5,8 +5,73 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
 import Footer from '@/components/Footer/Footer';
+import { useEffect } from 'react';
+
+
+
+declare global {
+  interface Window {
+    watsonAssistantChatOptions: {
+      integrationID: string;
+      region: string;
+      serviceInstanceID: string;
+      onLoad: (instance: any) => void;
+      clientVersion?: string;
+      showLauncher?: boolean;
+    };
+  }
+}
 
 export default function Inicio() {
+  useEffect(() => {
+    // Configuración del bot de Watson con personalización
+    window.watsonAssistantChatOptions = {
+      integrationID: "9aa77c57-a1c6-44aa-9184-f937eb1cd57e",
+      region: "us-south",
+      serviceInstanceID: "f0d6142e-e0bd-48cc-bfee-14d7ea2a6525",
+      showLauncher: true,
+      onLoad: (instance) => { 
+        // Personalización del launcher
+        instance.updateCSSVariables({
+            'launcher-icon-size': '0px',
+            'launcher-background-image': 'url(/animation.gif)', // Cambia esta línea
+            'launcher-background-size': 'cover',
+            'launcher-width': '80px',
+            'launcher-height': '80px',
+            'launcher-box-shadow': 'none',
+            'launcher-border-radius': '50%',
+            'launcher-background-color': 'transparent',
+            'launcher-border': '2px solid #05b852'
+});
+        
+        // Esperar a que el launcher se cargue para aplicar estilos adicionales
+        setTimeout(() => {
+          const launcher = document.querySelector('.MACLauncher__Button');
+          if (launcher) {
+            launcher.innerHTML = ''; // Eliminar el contenido SVG existente
+          }
+        }, 1000);
+        
+        instance.render();
+      }
+    };
+
+    // Crear y cargar el script
+    const script = document.createElement('script');
+    script.src = "https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + 
+      (window.watsonAssistantChatOptions.clientVersion || 'latest') + 
+      "/WatsonAssistantChatEntry.js";
+    document.head.appendChild(script);
+
+    return () => {
+      // Limpieza: eliminar el script cuando el componente se desmonte
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
+
   return (
     <section className="inicio">
       <header className="hero">
@@ -32,7 +97,7 @@ export default function Inicio() {
       </header>
 
       <div className="wave">
-        <img src="/top-wave.svg"/>
+        <img src="/top-wave.svg" alt="Wave decoration" />
       </div>
 
       <div className="contenido">
@@ -61,7 +126,7 @@ export default function Inicio() {
       </div>
 
       <div className="wave">
-        <img src="/bottom-wave.svg" />
+        <img src="/bottom-wave.svg" alt="Wave decoration" />
       </div>
 
       <section className="franquicia">

@@ -131,5 +131,41 @@
   flex-wrap: wrap;
   gap: 2rem;
 }
+/* Estilos existentes... */
 
+/* Estilos para el Watson Assistant Launcher */
+.WACLauncher__ButtonContainer {
+  width: 64px !important;
+  height: 64px !important;
+}
 
+.WACLauncher__Button {
+  background-image: url('/animation.gif') !important; /* Cambia esta línea */
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  border: 2px solid #05b852 !important;
+  padding: 0 !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  background-color: whitesmoke;
+}
+.WACLauncher__Button svg {
+  display: none !important;
+}
+
+/* Efecto hover para el launcher personalizado */
+.WACLauncher__Button:hover {
+  transform: scale(1.1) !important;
+  transition: transform 0.2s ease-in-out !important;
+}
+
+/* Estilos para el contenedor del chat */
+.webchat-container {
+  border-radius: 12px !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
