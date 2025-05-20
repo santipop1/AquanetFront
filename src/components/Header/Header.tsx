@@ -8,8 +8,8 @@ import Image from 'next/image';
 
 const Links = [
   { href: '/popular', label: 'Inicio' },
-  { href: '/purifica-tu-futuro', label: 'Purifica tu futuro' },
-  { href: '/aquanet-plus', label: 'Aquanet+' }
+  { href: '/formulario', label: 'Purifica tu futuro' },
+  { href: '/login', label: 'Aquanet+' }
 ];
 
 const Header = () => {
