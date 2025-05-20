@@ -1,5 +1,12 @@
-import { CheckCircle, XCircle, Loader2, Upload, MessageSquare } from 'lucide-react';
-import { cn } from "@/lib/utils";
+'use client';
+
+import {
+  MessageSquare,
+  RotateCcw,
+  FileDown,
+} from 'lucide-react';
+import { ButtonText } from '@/components/ButtonText/ButtonText';
+import React from 'react';
 
 type DocumentStatus = 'accepted' | 'pending' | 'error' | 'none';
 
@@ -10,6 +17,7 @@ type DocumentRow = {
   description: string;
   status: DocumentStatus;
   message?: string;
+  fileName?: string;
 };
 
 type DocumentCardProps = {
@@ -21,46 +29,69 @@ export function DocumentCard({ title, documents }: DocumentCardProps) {
   const getStatusUI = (status: DocumentStatus, message?: string) => {
     switch (status) {
       case 'accepted':
-        return <span className="text-green-600 font-medium border border-green-600 px-2 py-1 rounded">Documento aceptado</span>;
+        return <span className="status-tag status-accepted">Documento aceptado</span>;
       case 'pending':
-        return <span className="text-yellow-600 font-medium border border-yellow-600 px-2 py-1 rounded">Documento en revisión</span>;
+        return <span className="status-tag status-pending">Documento en revisión</span>;
       case 'error':
         return (
-          <div className="flex items-center gap-2 text-red-600">
+          <div className="status-tag status-error">
             <MessageSquare className="w-4 h-4" />
-            <XCircle className="w-5 h-5" />
-            <span className="font-medium">Error</span>
-            {message && (
-              <div className="ml-2 text-sm text-gray-700 bg-white border rounded p-2 shadow max-w-sm">{message}</div>
-            )}
+            <RotateCcw className="w-4 h-4" />
+            <span>Error</span>
           </div>
         );
       default:
         return (
-          <button className="flex items-center gap-2 text-gray-700 font-medium border px-2 py-1 rounded hover:bg-gray-100 transition">
-            <Upload className="w-4 h-4" /> Subir documento
-          </button>
+          <ButtonText
+            label="Subir documento"
+            variant="variant1"
+            size="sm"
+            onClick={() => alert('Selecciona un archivo')}
+          />
         );
     }
   };
 
+  const renderUploadSection = (status: DocumentStatus, fileName?: string) => {
+    if (status === 'accepted' || status === 'error') {
+      return (
+        <div className="file-uploaded">
+          <FileDown className="w-4 h-4" />
+          {fileName || 'archivo.pdf'}
+        </div>
+      );
+    }
+    return getStatusUI(status);
+  };
+
   return (
-    <div className="bg-white rounded-2xl p-6 shadow border space-y-4">
-      <h2 className="text-lg font-semibold">{title}</h2>
+    <div className="form-card">
+      <h2 className="titulo-centrado">{title}</h2>
       <div className="space-y-4">
         {documents.map((doc, index) => (
-          <div key={index} className="flex justify-between items-start border-t pt-4">
-            <div className="flex items-start gap-4">
-              <div className="mt-1">{doc.icon}</div>
-              <div>
-                <p className="font-medium text-sm">{doc.title}</p>
-                <p className="text-xs text-gray-500">{doc.format}</p>
-                <p className="text-xs mt-1 text-gray-700">{doc.description}</p>
+          <div key={index} className="document-row">
+            <div className="document-info">
+              <div className="document-info-icon">{doc.icon}</div>
+              <div className="document-text">
+                <div className="title">{doc.title}</div>
+                <div className="format">{doc.format}</div>
+                <div className="description">{doc.description}</div>
               </div>
             </div>
-            <div>{getStatusUI(doc.status, doc.message)}</div>
+            <div className="document-status">
+              {renderUploadSection(doc.status, doc.fileName)}
+            </div>
           </div>
         ))}
+      </div>
+
+      <div className="text-center mt-8">
+        <ButtonText
+          label="Completar"
+          variant="variant5"
+          size="lg"
+          onClick={() => alert('Documentos enviados')}
+        />
       </div>
     </div>
   );
