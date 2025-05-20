@@ -8,4 +8,3 @@ export const protectedRoutesAdmin = new Set([
     "/admin/users",
     "/admin/settings"
 ]);
-

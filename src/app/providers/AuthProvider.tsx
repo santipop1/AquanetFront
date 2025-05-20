@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { User , getIdToken , onAuthStateChanged } from "firebase/auth";
-import { auth } from "../LIB/firebase";
+import { auth } from "@/app/libreria/firebase";
 
 //Tipar lo que queremos compartir en el contexto
 
