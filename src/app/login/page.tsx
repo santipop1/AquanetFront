@@ -21,44 +21,6 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-<<<<<<< Updated upstream
-    try {
-      const response = await fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCh7QAy6YbjrzFtQrZ6-3qSnt98HUzTBzg',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: correo,
-            password: contrasena,
-            returnSecureToken: true,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(`Error: ${data.error?.message || 'Error al iniciar sesión'}`);
-        return;
-      }
-
-      // Autenticación exitosa
-      console.log('Token:', data.idToken);
-      alert(`Sesión iniciada con éxito. Bienvenido/a ${data.email}`);
-
-      // Guardar el token en localStorage
-      localStorage.setItem('token', data.idToken);
-
-      // Redireccionar si deseas
-      // window.location.href = "/dashboard"; // Descomenta y cambia si tienes ruta protegida
-
-    } catch (error) {
-      console.error('Error al autenticar:', error);
-      alert('Hubo un error de conexión con el servidor');
-=======
     if (!correo || !contrasena) {
       alert('Por favor completa todos los campos.');
       return;
@@ -67,10 +29,9 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, correo, contrasena);
       alert('¡Inicio de sesión exitoso!');
-      router.push('/dashboard'); 
+      router.push('/dashboard');
     } catch (error: any) {
       alert(`Error al iniciar sesión:\nFirebase: ${error.message}`);
->>>>>>> Stashed changes
     }
   };
 
@@ -78,7 +39,7 @@ export default function Login() {
     try {
       await signInWithPopup(auth, provider);
       alert('¡Inicio de sesión con Google exitoso!');
-      router.push('/dashboard'); 
+      router.push('/dashboard');
     } catch (error: any) {
       alert(`Error con Google:\nFirebase: ${error.message}`);
     }
