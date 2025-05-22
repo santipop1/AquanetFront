@@ -1,6 +1,6 @@
 'use client';
-
-import './Inicio.css';
+//ES UNA PRUEBA PARA VER LA CONEXIÓN DE UN BOTÓN
+import './aquanet-plus.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
@@ -9,7 +9,6 @@ import Footer from '@/components/Footer/Footer';
 export default function Inicio() {
   return (
     <section className="inicio">
-      {/* Hero */}
       <header className="hero">
         <div className="logo-container">
           <Image src="/logo.png" alt="Logo aquanet" width={500} height={80} />
@@ -26,16 +25,16 @@ export default function Inicio() {
         </p>
 
         <div className="registro-redirect">
-          <Link href="/registro" className="btn-ir-a-registro underline">
+          <Link href="/registro" className="btn-ir-a-registro underline" style={{ color: '#05b852' }}>
             Ir a Registro
           </Link>
         </div>
       </header>
 
-      {/* Onda superior */}
-      <div className="wave wave-top"></div>
+      <div className="wave">
+        <img src="/top-wave.svg"/>
+      </div>
 
-      {/* Contenido principal */}
       <div className="contenido">
         <video controls className="video">
           <source src="/videoaquanet.mp4" type="video/mp4" />
@@ -61,10 +60,10 @@ export default function Inicio() {
         </section>
       </div>
 
-      {/* Onda inferior */}
-      <div className="wave wave-bottom"></div>
+      <div className="wave">
+        <img src="/bottom-wave.svg" />
+      </div>
 
-      {/* Sección intermedia: software aquanet+ */}
       <section className="franquicia">
         <div className="logo-aquanet-plus-img">
           <Image src="/aquanetplus.png" alt="aquanet+" width={200} height={80} />
@@ -84,7 +83,6 @@ export default function Inicio() {
         </ul>
       </section>
 
-      {/* Planes de suscripción */}
       <section className="planes">
         <h2 className="titulo-planes">Elige tu plan</h2>
         <div className="contenedor-planes flex items-center">
@@ -104,7 +102,6 @@ export default function Inicio() {
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
     </section>
   );

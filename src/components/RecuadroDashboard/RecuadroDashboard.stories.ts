@@ -1,4 +1,3 @@
-// src/components/RecuadroDashboard/RecuadroDashboard.stories.ts
 import type { Meta, StoryObj } from "@storybook/react";
 import RecuadroDashboard from "./RecuadroDashboard";
 

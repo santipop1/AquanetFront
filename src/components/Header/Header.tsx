@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { ButtonText } from '@/components/ButtonText/ButtonText';
+//import { ButtonText } from '@/components/ButtonText/ButtonText';
 
 const Links = [
   { href: '/popular', label: 'Inicio' },
-  { href: '/now-playing', label: 'Purifica tu futuro' },
-  { href: '/top-rated', label: 'Aquanet+' }
+  { href: '/formulario', label: 'Purifica tu futuro' },
+  { href: '/login', label: 'Aquanet+' }
 ];
 
 const Header = () => {
@@ -18,16 +18,13 @@ const Header = () => {
   return (
     <header className="w-full border-b-2 shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-5">
-        
-        {/* Logo + Título */}
+
         <div className="flex items-center gap-2">
           <Link href="/">
             <Image src="/logo.png" alt="Logo" width={150} height={150} />
           </Link>
-          
         </div>
 
-        {/* Navegación */}
         <nav className="flex gap-10">
           {Links.map(({ href, label }) => (
             <Link
@@ -43,7 +40,6 @@ const Header = () => {
           ))}
         </nav>
 
-        {/* Botones de acción */}
         <div className="flex gap-2">
           <Link href={'/registro'} className='bg-stone-300 rounded-xl px-6 py-4 text-stone-800 hover:bg-stone-400 duration-300'>Registrate</Link>
           <Link href={'/login'} className='bg-blue-300 rounded-xl px-6 py-4 text-white hover:bg-blue-400 duration-300'>Iniciar Sesion</Link>

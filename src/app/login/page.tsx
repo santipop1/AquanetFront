@@ -11,6 +11,7 @@ import { auth, provider } from '@/app/libreria/firebase';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
+
 import ResetPassword from '@/components/ResetPassword/ResetPassword';
 
 import './Login.css';
@@ -18,7 +19,9 @@ import './Login.css';
 export default function Login() {
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
+
   const [showResetModal, setShowResetModal] = useState(false);
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,6 +60,7 @@ export default function Login() {
           <h2>Iniciar Sesión</h2>
           <p>
             ¿No tienes cuenta?{' '}
+
             <Link href="/registro" className="link-style">
               Regístrate aquí
             </Link>
@@ -67,6 +71,7 @@ export default function Login() {
               Recupérala aquí
             </button>
           </p>
+
 
           <button type="button" className="google-auth-btn" onClick={handleGoogleLogin}>
             <Image src="/google-icon.png" alt="Google" width={20} height={20} />
@@ -100,7 +105,9 @@ export default function Login() {
       </div>
       <Footer />
 
+
       {showResetModal && <ResetPassword onClose={() => setShowResetModal(false)} />}
+
     </>
   );
 }
