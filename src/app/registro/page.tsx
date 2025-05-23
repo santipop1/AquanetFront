@@ -2,35 +2,42 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 import Header from '@/components/Header/Header';
-import { InformationField } from '@/components/InformationField/InformationField';
 import Footer from '@/components/Footer/Footer';
+import { InformationField } from '@/components/InformationField/InformationField';
+import { createUser } from '@/services/user';
+
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '@/app/libreria/firebase';
+
 import './Registro.css';
 
 interface FormData {
-  primerNombre: string;
-  segundoNombre: string;
-  primerApellido: string;
-  segundoApellido: string;
-  fechaNacimiento: string;
-  telefono: string;
-  correo: string;
-  contrasena: string;
-  verificarContrasena: string;
+  email: string;
+  password: string;
+  firstName: string;
+  middleName: string;
+  firstLastName: string;
+  secondLastName: string;
+  birthday: string;
+  phoneNumber: string;
 }
 
-export default function Registro() {
+export default function Register() {
   const [formData, setFormData] = useState<FormData>({
-    primerNombre: '',
-    segundoNombre: '',
-    primerApellido: '',
-    segundoApellido: '',
-    fechaNacimiento: '',
-    telefono: '',
-    correo: '',
-    contrasena: '',
-    verificarContrasena: '',
+    email: '',
+    password: '',
+    firstName: '',
+    middleName: '',
+    firstLastName: '',
+    secondLastName: '',
+    birthday: '',
+    phoneNumber: ''
   });
+
+  const router = useRouter();
 
   const handleFieldChange = (fieldName: keyof FormData, value: string) => {
     setFormData((prevData) => ({
@@ -39,18 +46,52 @@ export default function Registro() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (formData.contrasena !== formData.verificarContrasena) {
-      alert("Las contraseñas no coinciden.");
-      return;
+
+    try {
+      const payload = {
+        firstName: formData.firstName,
+        middleName: formData.middleName,
+        firstLastName: formData.firstLastName,
+        secondLastName: formData.secondLastName,
+        birthday: new Date(formData.birthday),
+        phoneNumber: formData.phoneNumber,
+        email: formData.email,
+        password: formData.password,
+        roleId: 1
+      };
+
+      const result = await createUser(payload);
+      console.log("✅ Registro exitoso:", result);
+      alert("✅ Registro exitoso. ¡Bienvenido!");
+
+      setFormData({
+        email: '',
+        password: '',
+        firstName: '',
+        middleName: '',
+        firstLastName: '',
+        secondLastName: '',
+        birthday: '',
+        phoneNumber: ''
+      });
+
+      router.push('/dashboard');
+    } catch (error) {
+      console.error("❌ Error en el registro:", error);
+      alert("Error al registrar. Intenta de nuevo.");
     }
-    alert(`Registrado:\n${JSON.stringify(formData, null, 2)}`);
   };
 
-  const handleGoogleAuth = () => {
-    alert("Redirigiendo a autenticación con Google...");
-    // Aquí puedes agregar la lógica real para Firebase/Auth0/etc.
+  const handleGoogleAuth = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+      alert('✅ Registro con Google exitoso.');
+      router.push('/dashboard');
+    } catch (error: any) {
+      alert(`❌ Error con Google:\nFirebase: ${error.message}`);
+    }
   };
 
   return (
@@ -59,12 +100,11 @@ export default function Registro() {
       <div className="registro-container">
         <div className="form-card">
           <Image src="/logo.png" alt="aquaNet" width={150} height={60} className="mx-auto" />
-          <h2>Regístrate</h2>
+          <h2>Crear cuenta</h2>
           <p>
-            ¿Ya tienes cuenta? <a href="/login" className="underline">Inicia sesión</a>
+            ¿Ya tienes una cuenta? <a href="/login" className="underline">Inicia sesión</a>
           </p>
 
-          
           <button className="google-auth-btn" onClick={handleGoogleAuth}>
             <Image src="/google-icon.png" alt="Google" width={20} height={20} />
             <span>Continuar con Google</span>
@@ -73,80 +113,16 @@ export default function Registro() {
           <hr className="divider" />
 
           <form onSubmit={handleSubmit}>
-            <InformationField
-              variant="text"
-              label="Primer nombre"
-              value={formData.primerNombre}
-              placeholder="Primer nombre"
-              onChange={(val) => handleFieldChange("primerNombre", val)}
-            />
+            <InformationField label="Email" value={formData.email} onChange={(val) => handleFieldChange("email", val)} placeholder="Email" variant="text" />
+            <InformationField label="Password" value={formData.password} onChange={(val) => handleFieldChange("password", val)} placeholder="Password" variant="password" />
+            <InformationField label="First Name" value={formData.firstName} onChange={(val) => handleFieldChange("firstName", val)} placeholder="First Name" variant="text" />
+            <InformationField label="Middle Name" value={formData.middleName} onChange={(val) => handleFieldChange("middleName", val)} placeholder="Second Last Name (optional)" variant="text" />
+            <InformationField label="First Last Name" value={formData.firstLastName} onChange={(val) => handleFieldChange("firstLastName", val)} placeholder="First LastName" variant="text" />
+            <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val)} placeholder="Second Last Name" variant="text" />
+            <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val)} variant="date" />
+            <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val)} placeholder="Phone Nombre" variant="text" />
 
-            <InformationField
-              variant="text"
-              label="Segundo nombre (opcional)"
-              value={formData.segundoNombre}
-              placeholder="Segundo nombre (opcional)"
-              onChange={(val) => handleFieldChange("segundoNombre", val)}
-            />
-
-            <InformationField
-              variant="text"
-              label="Primer apellido"
-              value={formData.primerApellido}
-              placeholder="Primer apellido"
-              onChange={(val) => handleFieldChange("primerApellido", val)}
-            />
-
-            <InformationField
-              variant="text"
-              label="Segundo apellido"
-              value={formData.segundoApellido}
-              placeholder="Segundo apellido"
-              onChange={(val) => handleFieldChange("segundoApellido", val)}
-            />
-
-            <InformationField
-              variant="date"
-              label="Fecha de nacimiento"
-              value={formData.fechaNacimiento}
-              onChange={(val) => handleFieldChange("fechaNacimiento", val)}
-            />
-
-            <InformationField
-              variant="text"
-              label="Número de teléfono"
-              value={formData.telefono}
-              placeholder="Número de teléfono"
-              onChange={(val) => handleFieldChange("telefono", val)}
-            />
-
-            <InformationField
-              variant="text"
-              label="Correo electrónico"
-              value={formData.correo}
-              placeholder="Correo electrónico"
-              onChange={(val) => handleFieldChange("correo", val)}
-            />
-
-            <InformationField
-              variant="password"
-              label="Contraseña"
-              value={formData.contrasena}
-              placeholder="Contraseña (mínimo 8 caracteres)"
-              onChange={(val) => handleFieldChange("contrasena", val)}
-            />
-
-            <InformationField
-              variant="password"
-              label="Verificar contraseña"
-              value={formData.verificarContrasena}
-              placeholder="Verificar contraseña"
-              onChange={(val) => handleFieldChange("verificarContrasena", val)}
-            />
-
-            <button type="submit" className="registro-btn">
-              Regístrate
-            </button>
+            <button type="submit" className="registro-btn">Registrarse</button>
           </form>
         </div>
       </div>

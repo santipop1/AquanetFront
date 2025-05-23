@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { protectedRoutes, protectedRoutesAdmin } from "@/components/AuthGuard/AuthGuard";
+import { protectedRoutes, protectedRoutesAdmin } from "@/utils/protectedRoutes";
 
 // Simula verificación (aquí iría tu lógica real con cookies o auth)
 const isAuthenticated = (req: NextRequest): boolean => {
