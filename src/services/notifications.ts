@@ -7,7 +7,7 @@ export const createNotification = async (payload: any) => {
     const res = await api.post('/notifications', payload);
     return res.data;
   } catch (error) {
-    console.error('❌ Error creando notificación:', error);
+    console.error(' Error creando notificación:', error);
     throw error;
   }
 };

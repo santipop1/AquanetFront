@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { createNotification } from '@/services/notifications';
+import './NewNotification.css';
+
 
 
 
@@ -63,10 +65,10 @@ const NotificationForm = () => {
 
   try {
     const result = await createNotification(payload);
-    alert('✅ Notificación enviada correctamente');
+    alert('Notificación enviada correctamente');
     console.log('Resultado:', result);
   } catch (error) {
-    alert('❌ Error al enviar notificación');
+    alert('Error al enviar notificación');
   }
 };
 
@@ -225,13 +227,7 @@ const NotificationForm = () => {
           )}
         </div>
       )}
-
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Crear Notificación
-      </button>
+      <button type="submit" className="New-Notification-boton" > Crear Notificación </button>
     </form>
   );
 };

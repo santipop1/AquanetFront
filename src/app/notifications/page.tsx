@@ -6,6 +6,7 @@ import NotificationModal from '@/components/Notifications/NotificationModal/Noti
 import { NotificationDetail } from '@/types/NotificationDetail';
 import { getNotifications } from '@/services/notifications';
 import { markAsReadNotification } from '@/services/notifications';
+import NotificationForm from '@/components/Notifications/NewNotification/NewNotification';
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<NotificationDetail[]>([]);
@@ -28,11 +29,14 @@ export default function NotificationsPage() {
     <div className="max-w-4xl mx-auto mt-8 px-4">
       <h2 className="text-2xl font-bold mb-4">
         Notificaciones{' '}
-        <span className="bg-pink-500 text-white rounded-full px-3 py-1 text-sm">
+        <span style={{ background: '#4caf50' }} className="bg-pink-500 text-white rounded-full px-3 py-1 text-sm"> 
+
           {notifications.length}
         </span>
       </h2>
 
+      <NotificationForm />
+      
       <div className="space-y-3">
         {notifications.map((notif) => (
           <NotificationCard

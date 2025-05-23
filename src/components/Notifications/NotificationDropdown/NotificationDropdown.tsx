@@ -53,7 +53,8 @@ export const NotificationDropdown = () => {
 
       {showDropdown && (
         <div className="absolute right-0 mt-2 w-[320px] bg-white border border-gray-200 rounded shadow-lg z-50">
-          <div className="bg-green-500 text-white px-4 py-2 font-semibold rounded-t">
+          <div style={{ background: '#4caf50' }} className="text-white px-4 py-2 font-semibold rounded-t">
+
             Notificaciones
           </div>
           <ul className="max-h-96 overflow-y-auto">
