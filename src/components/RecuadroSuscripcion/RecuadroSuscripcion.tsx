@@ -1,6 +1,12 @@
 import React from "react";
 import "./RecuadroSuscripcion.css";
 
+
+{/*
+  variante?: "default" | "subscribed";
+  planType: "monthly" | "anual";
+  size?: "default" | "small";
+  */}
 export interface RecuadroSuscripcionProps {
   variante: "variant1" | "variant2";
   logoSrc: string;
@@ -11,6 +17,24 @@ export interface RecuadroSuscripcionProps {
   nota?: string;
   fechaInicio?: string;
 }
+
+{/*
+const RecuadroSuscripcion: React.FC<RecuadroSuscripcionProps> = ({
+    variante = "default",
+    planType,
+    size = "default",
+    logoSrc,
+    nombre,
+    descripcion,
+    botonTexto,
+    precio,
+    nota,
+    fechaInicio,
+}) => {
+
+};
+
+*/}
 
 const RecuadroSuscripcion = ({
   variante,

@@ -37,7 +37,7 @@
   }
   
   .variant3 {
-    background-color: transparent;
+    background-color: white;
     border: 1px solid #3b3fc0;
     color: #3b3fc0;
   }
@@ -50,5 +50,10 @@
   .variant5 {
     background-color: #e00000;
     color: white;
+  }
+
+  .variant6 {
+    background-color: white;
+    color: #00b84c;
   }
   
