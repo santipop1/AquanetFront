@@ -1,0 +1,139 @@
+.documentos-subir-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    background-color: #f4f6f8;
+    min-height: 100vh;
+  }
+  
+  .form-card {
+    background-color: #ffffff;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 960px;
+    text-align: center;
+  }
+  
+  .form-card img {
+    margin: 0 auto 1.5rem;
+    max-width: 200px;
+  }
+  
+  .form-card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+  
+  .document-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    gap: 1rem;
+  }
+  
+  .document-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+    flex: 1;
+  }
+  
+  .document-info-icon {
+    margin-top: 0.25rem;
+  }
+  
+  .document-text {
+    font-size: 0.9rem;
+    color: #111827;
+  }
+  
+  .document-text .title {
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+  
+  .document-text .format {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+  }
+  
+  .document-text .description {
+    font-size: 0.75rem;
+    color: #374151;
+  }
+  
+  .document-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 150px;
+    justify-content: flex-end;
+  }
+  
+  .status-tag {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  
+  .status-accepted {
+    color: #059669;
+    border-color: #059669;
+    background-color: #ecfdf5;
+  }
+  
+  .status-pending {
+    color: #d97706;
+    border-color: #d97706;
+    background-color: #fef3c7;
+  }
+  
+  .status-error {
+    color: #dc2626;
+    border-color: #dc2626;
+    background-color: #fee2e2;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  
+  .file-uploaded {
+    font-size: 0.8rem;
+    border: 1px solid #d1d5db;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #f9fafb;
+  }
+  
+  .completar-btn {
+    margin-top: 2.5rem;
+    background-color: #1e293b;
+    color: white;
+    padding: 0.9rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .completar-btn:hover {
+    background-color: #0f172a;
+  }
+  
