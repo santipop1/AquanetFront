@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User , getIdToken , onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/app/libreria/firebase";
+import { api} from "@/services/api";
 
 //Tipar lo que queremos compartir en el contexto
 
@@ -39,6 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 try {
                     const token = await getIdToken(firebaseUser);
                     setIdToken(token);
+                   api.defaults.headers.common["Authorization"] = ` Bearer ${token}`;
                     // Aquí puedes obtener el rol del usuario desde tu base de datos
                     // Por ejemplo:
                     // const userRole = await getUserRoleFromDatabase(user.uid);
