@@ -83,17 +83,17 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <InformationField
               variant="text"
-              label="Correo electrónico"
+              label="Email"
               value={correo}
-              placeholder="Correo electrónico"
+              placeholder="Email"
               onChange={setCorreo}
             />
 
             <InformationField
               variant="password"
-              label="Contraseña"
+              label="Password"
               value={contrasena}
-              placeholder="Contraseña"
+              placeholder="Password"
               onChange={setContrasena}
             />
 
