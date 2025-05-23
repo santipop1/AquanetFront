@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { createNotification } from '@/services/notifications';
 import './NewNotification.css';
 
@@ -75,7 +76,10 @@ const NotificationForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4 bg-white rounded shadow space-y-4">
-      <h2 className="text-xl font-bold">Crear Notificación</h2>
+      <div className="New-Notification-header">
+            <Image src="/logo.png" alt="logo aquanet" width={220} height={80} />
+          </div>
+      <h2 className="New-Notification-title">Crear Notificación</h2>
 
       <div>
         <label className="block font-medium">Título</label>

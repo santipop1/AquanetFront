@@ -1,3 +1,17 @@
+.New-Notification-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.New-Notification-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
 .New-Notification-boton {
     display: block;
     margin: 2rem auto 0;
