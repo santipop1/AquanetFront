@@ -7,8 +7,6 @@ import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
 import Footer from '@/components/Footer/Footer';
 import { useEffect } from 'react';
 
-
-
 declare global {
   interface Window {
     watsonAssistantChatOptions: {
@@ -152,17 +150,10 @@ export default function Inicio() {
         <h2 className="titulo-planes">Elige tu plan</h2>
         <div className="contenedor-planes flex items-center">
           <ContratarPlan
-            titulo="Plan Mensual"
-            precio="$699"
-            periodicidad="al mes"
-            onContratar={() => alert("Plan mensual contratado")}
+            planType="monthly"
           />
           <ContratarPlan
-            titulo="Plan Anual"
-            precio="$579"
-            periodicidad="al mes"
-            notaAdicional="un solo pago de $6,948"
-            onContratar={() => alert("Plan anual contratado")}
+            planType="anual"
           />
         </div>
       </section>

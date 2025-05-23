@@ -4,14 +4,14 @@ import { SymbolButton } from '../SymbolButton/SymbolButton';
 import React from "react";
 
 export interface ProfilePictureProps {
-    picture?: string;
+    pictureUrl?: string;
 }
 
-export const ProfilePicture: React.FC<ProfilePictureProps> = ({ picture }) => {
+export const ProfilePicture: React.FC<ProfilePictureProps> = ({ pictureUrl }) => {
     return (
         <div className="profile-picture-container">
-            {picture ? (
-                <img src={picture} alt="Profile" className="profile-picture" />
+            {pictureUrl ? (
+                <img src={pictureUrl} alt="Profile" className="profile-picture" />
             ) : (
                 <FaCircleUser className="profile-picture icon" />
             )}
