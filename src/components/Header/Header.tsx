@@ -8,7 +8,7 @@ import { NotificationDropdown } from '@/components/Notifications/NotificationDro
 
 
 const Links = [
-  { href: '/popular', label: 'Inicio' },
+  { href: '/', label: 'Inicio' },
   { href: '/formulario', label: 'Purifica tu futuro' },
   { href: '/login', label: 'Aquanet+' }
 ];

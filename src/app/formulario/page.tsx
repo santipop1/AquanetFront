@@ -4,7 +4,8 @@ import './formulario.css';
 import Image from 'next/image';
 import { InformationField } from '@/components/InformationField/InformationField';
 import { useState } from 'react';
-import { Button } from '@mui/material';
+import Header from '@/components/Header/Header';
+//import { Button } from '@mui/material';
 
 export default function FormularioPage() {
   const [nombre, setNombre] = useState('');
@@ -14,6 +15,8 @@ export default function FormularioPage() {
   const [nombreAval, setNombreAval] = useState('');
 
   return (
+    <>
+    <Header />
     <div className="formulario-background">
       <div className="formulario-container">
         <div className="formulario-header">
@@ -67,5 +70,6 @@ export default function FormularioPage() {
 
       </div>
     </div>
+    </>
   );
 }
