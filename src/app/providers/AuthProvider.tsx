@@ -1,73 +1,84 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { User , getIdToken , onAuthStateChanged } from "firebase/auth";
+import { User as FirebaseUser , getIdToken , onAuthStateChanged } from "firebase/auth";
+import { User } from "@/types/User";
 import { auth } from "@/app/libreria/firebase";
-
-//Tipar lo que queremos compartir en el contexto
+import getUserByFirebaseId from "@/services/user/getUserByFirebaseId";
+import { Role } from "@/types/Role";
+import { Subscription } from "@/types/Subscription";
+import getSubscriptionByUserId from "@/services/subscription/getSubscriptionByUserId";
 
 interface AuthContextProps {
-    user: User | null;
-    loading: boolean;
-    idToken: string | null;
-    role: string | null;
-
+  user: User | null;
+  firebaseUser: FirebaseUser | null;
+  loading: boolean;
+  idToken: string | null;
+  role: Role | null;
+  subscription: Subscription | null;
+  setUserContext: (user: User) => void;
 }
 
-// Crear el contexto
 const AuthContext = createContext<AuthContextProps>({
-    user: null,
-    loading: true,
-    idToken: null,
-    role: null
+  user: null,
+  firebaseUser: null,
+  loading: true,
+  idToken: null,
+  role: null,
+  subscription: null,
+  setUserContext: () => {},
 });
 
-// Crear el provider para envolver la app
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [idToken, setIdToken] = useState<string | null>(null);
-    const [role, setRole] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [idToken, setIdToken] = useState<string | null>(null);
+  const [role, setRole] = useState<Role | null>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            setUser(firebaseUser);
-            
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const token = await getIdToken(firebaseUser);
+          const userData = await getUserByFirebaseId(firebaseUser.uid);
 
-            if (firebaseUser) {
-                try {
-                    const token = await getIdToken(firebaseUser);
-                    setIdToken(token);
-                    // Aquí puedes obtener el rol del usuario desde tu base de datos
-                    // Por ejemplo:
-                    // const userRole = await getUserRoleFromDatabase(user.uid);
-                    setRole('admin');
-                    // si existe una sesion, obtener el rol de algun storage como sessionStorage o localStorage
-                } catch (error) {
-                    console.error("Error al obtener el token:", error);
-                    setIdToken(null);
-                    setRole(null);
-                }
-            } else {
-                setUser(null);
-                setIdToken(null);
-                setRole(null);
-            }
-            setLoading(false);
-        });
+          setFirebaseUser(firebaseUser);
+          setIdToken(token);
+          setUser(userData);
 
-        return () => unsubscribe();
-    }, []);
+          if (userData) {
+            const subscriptionData = await getSubscriptionByUserId(userData.id);
+            setRole(userData.role);
+            setSubscription(subscriptionData);
+          }
+        } catch (error) {
+          console.error("Error al obtener el token:", error);
+          setFirebaseUser(null);
+          setIdToken(null);
+          setUser(null);
+          setRole(null);
+          setSubscription(null);
+        }
+      } else {
+        setFirebaseUser(null);
+        setIdToken(null);
+        setUser(null);
+        setRole(null);
+        setSubscription(null);
+      }
+      setLoading(false);
+    });
 
-    return (
-        <AuthContext.Provider value={{ user, loading, idToken, role }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ user, firebaseUser, loading, idToken, role, subscription, setUserContext: setUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-// crear un hook para usar el contexto
 export const UseAuth = () => useContext(AuthContext);
-
-

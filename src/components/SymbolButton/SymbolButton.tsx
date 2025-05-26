@@ -16,12 +16,12 @@ export interface SymbolButtonProps {
     | "add"
     | "opened-eye"
     | "closed-eye";
-  onClick?: () => void;
+  clickFunc?: () => void;
 }
 
 export const SymbolButton: React.FC<SymbolButtonProps> = ({
   variant,
-  onClick,
+  clickFunc,
 }) => {
   const icon = () => {
     switch (variant) {
@@ -51,7 +51,7 @@ export const SymbolButton: React.FC<SymbolButtonProps> = ({
   return (
     <div>
       <button
-        onClick={onClick}
+        onClick={clickFunc}
         className="symbolButton"
         type="button" 
       >
