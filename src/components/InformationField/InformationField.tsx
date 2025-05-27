@@ -4,13 +4,18 @@ import React, { useRef, useState, useEffect } from 'react';
 import './InformationField.css';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
 
+type Option = {
+  label: string;
+  value: number;
+};
+
 export interface InformationFieldProps {
   variant: 'text' | 'date' | 'select' | 'password' | 'readonly';
   label: string;
-  value?: string;
+  value?: string | number;
   placeholder?: string;
-  options?: string[]; // solo para select
-  onChange?: (value: string) => void;
+  options?: Option[]; // solo para select
+  onChange?: (value: string | number) => void;
 }
 
 export const InformationField: React.FC<InformationFieldProps> = ({
@@ -21,7 +26,7 @@ export const InformationField: React.FC<InformationFieldProps> = ({
   options = [],
   onChange,
 }) => {
-  const [internalValue, setInternalValue] = useState<string | null>(null);
+  const [internalValue, setInternalValue] = useState<string | number | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const dateInputRef = useRef<HTMLInputElement>(null);
@@ -97,8 +102,8 @@ export const InformationField: React.FC<InformationFieldProps> = ({
               --Seleccionar--
             </option>
             {options.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
               </option>
             ))}
           </select>
