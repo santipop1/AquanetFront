@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
-import { createUser } from '@/services/user';
+import { createUser, CreateUserPayload } from '@/services/user/createUser';
 
 import '../Registro.css';
 
@@ -41,13 +41,14 @@ export default function CompletarRegistro() {
     if (stored) {
       const googleData = JSON.parse(stored);
       const [firstName = '', firstLastName = ''] = googleData.displayName?.split(' ') || [];
+
       setFormData((prev) => ({
         ...prev,
         email: googleData.email || '',
         phoneNumber: googleData.phoneNumber || '',
         firstName,
         firstLastName,
-        password: Math.random().toString(36).slice(-8) // para que no falle el backend
+        password: Math.random().toString(36).slice(-8)
       }));
     } else {
       router.push('/registro');
@@ -64,29 +65,30 @@ export default function CompletarRegistro() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const payload: CreateUserPayload = {
+      email: formData.email,
+      password: formData.password,
+      firstName: formData.firstName,
+      middleName: formData.middleName,
+      firstLastName: formData.firstLastName,
+      secondLastName: formData.secondLastName,
+      birthday: new Date(formData.birthday),
+      phoneNumber: formData.phoneNumber,
+      curp: '',
+      rfc: '',
+      profilePictureUrl: '',
+      roleId: 1
+    };
+
     try {
-      const payload = {
-        firstName: formData.firstName,
-        middleName: formData.middleName,
-        firstLastName: formData.firstLastName,
-        secondLastName: formData.secondLastName,
-        birthday: new Date(formData.birthday),
-        phoneNumber: formData.phoneNumber,
-        email: formData.email,
-        password: formData.password,
-        roleId: 1
-        
-      };
-
-      console.log("Payload enviado:", payload);
+      console.log('📦 Payload enviado:', payload);
       await createUser(payload);
-
       localStorage.removeItem("googleUser");
       alert("✅ Registro completado");
       router.push("/dashboard");
     } catch (error) {
-      console.error("❌ Error en el registro:", error);
-      alert("Error al registrar. Revisa la consola.");
+      console.error('❌ Error creando usuario:', error);
+      alert('❌ Error al registrar. Verifica consola o contacta a backend.');
     }
   };
 
@@ -103,7 +105,6 @@ export default function CompletarRegistro() {
 
           <form onSubmit={handleSubmit}>
             <InformationField label="Email" value={formData.email} onChange={() => {}} placeholder="Email" variant="text" />
-            {/* Campo password oculto visualmente pero incluido en el payload */}
             <input type="hidden" value={formData.password} readOnly />
             <InformationField label="First Name" value={formData.firstName} onChange={(val) => handleFieldChange("firstName", val)} placeholder="First Name" variant="text" />
             <InformationField label="Middle Name" value={formData.middleName} onChange={(val) => handleFieldChange("middleName", val)} placeholder="Middle Name" variant="text" />
