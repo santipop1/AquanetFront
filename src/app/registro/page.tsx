@@ -84,11 +84,21 @@ export default function Register() {
     }
   };
 
+  // ✅ Actualizado: manejo de Google con redirección y datos temporales
   const handleGoogleAuth = async () => {
     try {
-      await signInWithPopup(auth, provider);
-      alert('✅ Registro con Google exitoso.');
-      router.push('/dashboard');
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Guardar en localStorage para que se use en /registro/completar-registro
+      localStorage.setItem("googleUser", JSON.stringify({
+        email: user.email || '',
+        displayName: user.displayName || '',
+        phoneNumber: user.phoneNumber || ''
+      }));
+
+      // Redirigir al paso de completar el registro
+      router.push('/registro/completar-registro');
     } catch (error: any) {
       alert(`❌ Error con Google:\nFirebase: ${error.message}`);
     }
@@ -116,11 +126,11 @@ export default function Register() {
             <InformationField label="Email" value={formData.email} onChange={(val) => handleFieldChange("email", val)} placeholder="Email" variant="text" />
             <InformationField label="Password" value={formData.password} onChange={(val) => handleFieldChange("password", val)} placeholder="Password" variant="password" />
             <InformationField label="First Name" value={formData.firstName} onChange={(val) => handleFieldChange("firstName", val)} placeholder="First Name" variant="text" />
-            <InformationField label="Middle Name" value={formData.middleName} onChange={(val) => handleFieldChange("middleName", val)} placeholder="Second Last Name (optional)" variant="text" />
+            <InformationField label="Middle Name" value={formData.middleName} onChange={(val) => handleFieldChange("middleName", val)} placeholder="Middle Name" variant="text" />
             <InformationField label="First Last Name" value={formData.firstLastName} onChange={(val) => handleFieldChange("firstLastName", val)} placeholder="First LastName" variant="text" />
             <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val)} placeholder="Second Last Name" variant="text" />
             <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val)} variant="date" />
-            <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val)} placeholder="Phone Nombre" variant="text" />
+            <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val)} placeholder="Phone Number" variant="text" />
 
             <button type="submit" className="registro-btn">Registrarse</button>
           </form>
