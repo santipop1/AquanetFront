@@ -29,11 +29,13 @@ export default function FormularioPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // 🧤 Evita recarga del form
+
     setLoading(true);
 
     const payload = {
       ...form,
       userId: useruid,
+
     };
 
     try {
@@ -42,6 +44,7 @@ export default function FormularioPage() {
       console.log('Cotización:', result);
     } catch (error) {
       console.error('❌ Error al enviar cotización:', error);
+
       alert('Hubo un error al enviar el formulario');
     } finally {
       setLoading(false);
@@ -53,6 +56,7 @@ export default function FormularioPage() {
       <Header />
       <div className="formulario-background">
         <form onSubmit={handleSubmit} className="formulario-container">
+
           <div className="formulario-header">
             <Image src="/logo.png" alt="logo aquanet" width={220} height={80} />
           </div>
@@ -109,11 +113,13 @@ export default function FormularioPage() {
           <button
             type="submit"
             className="formulario-boton"
+
             disabled={loading}
           >
             {loading ? 'Enviando...' : 'Confirmar'}
           </button>
         </form>
+
       </div>
     </>
   );

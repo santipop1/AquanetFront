@@ -1,71 +1,102 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { NotificationDropdown } from '@/components/Notifications/NotificationDropdown/NotificationDropdown';
+import { ButtonText } from '../ButtonText/ButtonText';
+import { SymbolButton } from '../SymbolButton/SymbolButton';
+import { UseAuth } from '@/providers/AuthProvider';
+import { useEffect, useState, useRef } from 'react';
+
 
 const Links = [
-  { href: '/popular', label: 'Inicio' },
-  { href: '/now-playing', label: 'Purifica tu futuro' },
-  { href: '/top-rated', label: 'Aquanet+' }
+  { href: '/', label: 'Inicio' },
+  { href: '/formulario', label: 'Purifica tu futuro' },
+  { href: '/login', label: 'Aquanet+' }
 ];
 
 const Header = () => {
   const pathname = usePathname();
+  const { user } = UseAuth();
+  const router = useRouter();
+
+  {/*
+    const isLoggedIn = user ? true : false;
+    */}
+
+  const isLoggedIn = false;
+
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  const handleSymbolClick = () => {
+    if(showPopup) {
+      setShowPopup(false);
+      return;
+    }
+    if (!isLoggedIn) {
+      router.push('/registro');
+    } else {
+      setShowPopup(prev => !prev);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (popupRef.current?.contains(target) || buttonRef.current?.contains(target)) {
+        return;
+      }
+      setShowPopup(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-<<<<<<< Updated upstream
-    <header className="w-full border-b shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3">
-        
-        {/* Logo + Título */}
-=======
-    <header className="w-full border-b-2 shadow-sm z-50 bg-white">
+    <header className="w-full shadow-sm border-b-1">
       <div className="container mx-auto flex items-center justify-between px-4 py-5">
->>>>>>> Stashed changes
-        <div className="flex items-center gap-2">
+
+        <div className="flex items-center gap-2 pl-2">
           <Link href="/">
-            <Image src="/logo.png" alt="Logo" width={32} height={32} />
+            <Image src="/logo.png" alt="Logo" width={180} height={180} />
           </Link>
         </div>
 
-<<<<<<< Updated upstream
-        {/* Navegación */}
-        <nav className="flex gap-6">
-=======
-        <nav className="flex items-center gap-8">
->>>>>>> Stashed changes
+        <nav className="flex gap-10">
           {Links.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={clsx(
-<<<<<<< Updated upstream
-                "text-sm font-medium transition-colors hover:text-blue-600",
-                pathname === href ? "text-blue-600 underline" : "text-gray-600",
-=======
-                "text-xl hover:text-blue-400 hover:-translate-y-1 transition-all",
-                pathname === href ? "text-blue-400 underline" : "text-gray-700"
->>>>>>> Stashed changes
+                "text-xl hover:text-blue-400 hover:-translate-y-1 duration-300",
+                pathname === href ? "text-blue-400 underline" : "text-gray-700",
               )}
             >
               {label}
             </Link>
           ))}
-          <NotificationDropdown />
         </nav>
-<<<<<<< Updated upstream
 
-        {/* Botones de acción */}
-        <div className="flex gap-2">
-        <ButtonText label="Registrarte" href="/register" size="sm"/>
-        <ButtonText label="Iniciar sesión" href="/login" variant='variant2' size='sm' />
+        <div className="relative flex gap-2 items-center pr-2">
 
+          <div ref={buttonRef}>
+            <SymbolButton variant='user' clickFunc={handleSymbolClick}/>
+          </div>
+
+          {showPopup && (
+            <div ref={popupRef} className="absolute right-0 top-14 z-10 bg-white shadow-lg rounded-lg border p-4 space-y-2 w-48 flex flex-col items-center">
+              <ButtonText variant='variant2' label='Editar perfil' onClick={() => router.push("/edit-user")} minW={40}/>
+              <NotificationDropdown/>
+            </div>
+          )}
         </div>
-=======
->>>>>>> Stashed changes
+
       </div>
     </header>
   );

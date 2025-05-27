@@ -6,6 +6,7 @@ export const createQuotation = async (payload: any) => {
     return res.data;
   } catch (error) {
     console.error(' Error creando quotations:', error);
+
     throw error;
   }
 };

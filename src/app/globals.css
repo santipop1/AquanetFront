@@ -5,6 +5,16 @@
   --foreground: #171717;
 }
 
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
+
+
 /*
 
 @theme inline {
