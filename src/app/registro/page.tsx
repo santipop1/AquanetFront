@@ -84,21 +84,22 @@ export default function Register() {
     }
   };
 
-  // ✅ Actualizado: manejo de Google con redirección y datos temporales
   const handleGoogleAuth = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Guardar en localStorage para que se use en /registro/completar-registro
       localStorage.setItem("googleUser", JSON.stringify({
         email: user.email || '',
         displayName: user.displayName || '',
         phoneNumber: user.phoneNumber || ''
       }));
 
-      // Redirigir al paso de completar el registro
-      router.push('/registro/completar-registro');
+      console.log("🧠 Google login exitoso. Redirigiendo a completar registro...");
+
+      setTimeout(() => {
+        router.push('/registro/completar-registro');
+      }, 100);
     } catch (error: any) {
       alert(`❌ Error con Google:\nFirebase: ${error.message}`);
     }

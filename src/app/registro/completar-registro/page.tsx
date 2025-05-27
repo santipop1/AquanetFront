@@ -1,31 +1,37 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { createUser } from '@/services/user';
+
+import Header from '@/components/Header/Header';
+import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
+import { createUser } from '@/services/user';
+
+import '../Registro.css';
 
 interface FormData {
+  email: string;
+  password: string;
   firstName: string;
   middleName: string;
   firstLastName: string;
   secondLastName: string;
   birthday: string;
   phoneNumber: string;
-  email: string;
-  password: string; // ➕ AÑADIDO para cumplir con el tipo
 }
 
 export default function CompletarRegistro() {
   const [formData, setFormData] = useState<FormData>({
+    email: '',
+    password: '',
     firstName: '',
     middleName: '',
     firstLastName: '',
     secondLastName: '',
     birthday: '',
-    phoneNumber: '',
-    email: '',
-    password: '' // ➕ VALOR POR DEFECTO VACÍO
+    phoneNumber: ''
   });
 
   const router = useRouter();
@@ -41,16 +47,21 @@ export default function CompletarRegistro() {
         phoneNumber: googleData.phoneNumber || '',
         firstName,
         firstLastName,
-        password: '' 
+        password: Math.random().toString(36).slice(-8) // para que no falle el backend
       }));
+    } else {
+      router.push('/registro');
     }
   }, []);
 
-  const handleChange = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleFieldChange = (fieldName: keyof FormData, value: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -64,33 +75,48 @@ export default function CompletarRegistro() {
         email: formData.email,
         password: formData.password,
         roleId: 1
+        
       };
+
+      console.log("Payload enviado:", payload);
       await createUser(payload);
+
       localStorage.removeItem("googleUser");
       alert("✅ Registro completado");
       router.push("/dashboard");
-    } catch (err) {
-      alert("❌ Error al completar el registro");
-      console.error(err);
+    } catch (error) {
+      console.error("❌ Error en el registro:", error);
+      alert("Error al registrar. Revisa la consola.");
     }
   };
 
   return (
-    <div className="registro-container">
-      <div className="form-card">
-        <h2>Completa tu registro</h2>
-        <form onSubmit={handleSubmit}>
-          <InformationField label="Email" value={formData.email} onChange={() => {}} placeholder="Email" variant="text" />
-          <InformationField label="First Name" value={formData.firstName} onChange={(v) => handleChange('firstName', v)} placeholder="First Name" variant="text" />
-          <InformationField label="Middle Name" value={formData.middleName} onChange={(v) => handleChange('middleName', v)} placeholder="Middle Name" variant="text" />
-          <InformationField label="First Last Name" value={formData.firstLastName} onChange={(v) => handleChange('firstLastName', v)} placeholder="Last Name" variant="text" />
-          <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(v) => handleChange('secondLastName', v)} placeholder="Second Last Name" variant="text" />
-          <InformationField label="Birthday" value={formData.birthday} onChange={(v) => handleChange('birthday', v)} variant="date" />
-          <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(v) => handleChange('phoneNumber', v)} placeholder="Phone Number" variant="text" />
+    <>
+      <Header />
+      <div className="registro-container">
+        <div className="form-card">
+          <Image src="/logo.png" alt="aquaNet" width={150} height={60} className="mx-auto" />
+          <h2>Completa tu registro</h2>
+          <p>Necesitamos algunos datos adicionales para crear tu cuenta.</p>
 
-          <button type="submit" className="registro-btn">Registrar</button>
-        </form>
+          <hr className="divider" />
+
+          <form onSubmit={handleSubmit}>
+            <InformationField label="Email" value={formData.email} onChange={() => {}} placeholder="Email" variant="text" />
+            {/* Campo password oculto visualmente pero incluido en el payload */}
+            <input type="hidden" value={formData.password} readOnly />
+            <InformationField label="First Name" value={formData.firstName} onChange={(val) => handleFieldChange("firstName", val)} placeholder="First Name" variant="text" />
+            <InformationField label="Middle Name" value={formData.middleName} onChange={(val) => handleFieldChange("middleName", val)} placeholder="Middle Name" variant="text" />
+            <InformationField label="First Last Name" value={formData.firstLastName} onChange={(val) => handleFieldChange("firstLastName", val)} placeholder="First LastName" variant="text" />
+            <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val)} placeholder="Second Last Name" variant="text" />
+            <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val)} variant="date" />
+            <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val)} placeholder="Phone Number" variant="text" />
+
+            <button type="submit" className="registro-btn">Registrar</button>
+          </form>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
