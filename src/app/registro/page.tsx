@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
-import { createUser } from '@/services/user';
+import { createUser } from '@/services/user/createUser';
 
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
@@ -59,6 +59,9 @@ export default function Register() {
         phoneNumber: formData.phoneNumber,
         email: formData.email,
         password: formData.password,
+        curp:"", 
+        rfc:"", 
+        profilePictureUrl:"",
         roleId: 1
       };
 
