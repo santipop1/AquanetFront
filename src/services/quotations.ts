@@ -5,7 +5,8 @@ export const createQuotation = async (payload: any) => {
     const res = await api.post('/Quotations', payload);
     return res.data;
   } catch (error) {
-    console.error(' Error creando notificación:', error);
+    console.error(' Error creando quotations:', error);
+
     throw error;
   }
 };

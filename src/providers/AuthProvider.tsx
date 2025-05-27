@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+
 import { User as FirebaseUser , getIdToken , onAuthStateChanged } from "firebase/auth";
 import { User } from "@/types/User";
 import { auth } from "@/app/libreria/firebase";

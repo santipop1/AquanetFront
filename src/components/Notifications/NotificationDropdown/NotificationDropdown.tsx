@@ -5,24 +5,29 @@ import { FiBell } from 'react-icons/fi';
 import { NotificationDetail } from '@/types/NotificationDetail';
 import { getNotifications } from '@/services/notifications';
 import { useRouter } from 'next/navigation';
+import { UseAuth } from '@/providers/AuthProvider'; // ajusta la ruta si es distinta
+
 
 export const NotificationDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState<NotificationDetail[]>([]);
+  const { useruid, loading } = UseAuth();
   const router = useRouter();
 
   useEffect(() => {
+    if (!useruid || loading) return;
+
     const fetchData = async () => {
       try {
-        const data = await getNotifications();
+        const data = await getNotifications(useruid);
         setNotifications(data);
       } catch (err) {
         console.error('Error loading notifications', err);
       }
     };
-
+    
     fetchData();
-  }, []);
+  }, [useruid, loading]);
 
   const formatDateDiff = (date: string) => {
     const now = new Date();
