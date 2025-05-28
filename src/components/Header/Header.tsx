@@ -59,7 +59,8 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="w-full shadow-sm border-b-1">
+    <header className="w-full shadow-sm border-b-1 dark:bg-[#0a1643]">
+
       <div className="container mx-auto flex items-center justify-between px-4 py-5">
 
         <div className="flex items-center gap-2 pl-2">
@@ -75,7 +76,7 @@ const Header = () => {
               href={href}
               className={clsx(
                 "text-xl hover:text-blue-400 hover:-translate-y-1 duration-300",
-                pathname === href ? "text-blue-400 underline" : "text-gray-700",
+                pathname === href ? "text-blue-400 underline" : "text-white",
               )}
             >
               {label}
@@ -84,6 +85,17 @@ const Header = () => {
         </nav>
 
         <div className="relative flex gap-2 items-center pr-2">
+
+          <button
+          onClick={() => {
+            const isDark = document.body.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+          }}
+          className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          >
+            🌓
+            </button>
+
 
           <div ref={buttonRef}>
             <SymbolButton variant='user' clickFunc={handleSymbolClick}/>
