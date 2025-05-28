@@ -5,7 +5,9 @@ import Image from 'next/image';
 import Header from '@/components/Header/Header';
 import Link from 'next/link';
 import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranquicias';
-import RecuadroDashboard from '@/components/RecuadroDashboard/RecuadroDashboard';
+import RecuadroInfo from '@/components/RecuadroDashboard/RecuadroInfo/RecuadroInfo';
+import RecuadroVentas from '@/components/RecuadroDashboard/RecuadroVentas/RecuadroVentas';
+import RecuadroRefacciones from '@/components/RecuadroDashboard/RecuadroRefacciones/RecuadroRefacciones';
 import { useState } from 'react';
 
 export default function DashboardPage() {
@@ -49,9 +51,9 @@ export default function DashboardPage() {
         <main className="dashboard-main">
           <h2 className="dashboard-titulo">{franquiciaActiva.nombre}</h2>
           <div className="dashboard-grid">
-            <RecuadroDashboard variante="info" />
-            <RecuadroDashboard variante="ventas" />
-            <RecuadroDashboard variante="refacciones" />
+            <RecuadroInfo />
+            <RecuadroVentas />
+            <RecuadroRefacciones />
           </div>
         </main>
       </div>
