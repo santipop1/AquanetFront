@@ -8,8 +8,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
+  ResponsiveContainer,} from 'recharts';
 import './RecuadroVentas.css';
 
 const initialData = [
