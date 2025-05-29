@@ -5,24 +5,29 @@ import { FiBell } from 'react-icons/fi';
 import { NotificationDetail } from '@/types/NotificationDetail';
 import { getNotifications } from '@/services/notifications';
 import { useRouter } from 'next/navigation';
+import { UseAuth } from '@/providers/AuthProvider'; // ajusta la ruta si es distinta
+
 
 export const NotificationDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState<NotificationDetail[]>([]);
+  const { useruid, loading } = UseAuth();
   const router = useRouter();
 
   useEffect(() => {
+    if (!useruid || loading) return;
+
     const fetchData = async () => {
       try {
-        const data = await getNotifications();
+        const data = await getNotifications(useruid);
         setNotifications(data);
       } catch (err) {
         console.error('Error loading notifications', err);
       }
     };
-
+    
     fetchData();
-  }, []);
+  }, [useruid, loading]);
 
   const formatDateDiff = (date: string) => {
     const now = new Date();
@@ -43,7 +48,10 @@ export const NotificationDropdown = () => {
       onMouseLeave={() => setShowDropdown(false)}
     >
       <div className="relative cursor-pointer" onClick={handleBellClick}>
-        <FiBell className="text-2xl text-gray-700 hover:text-blue-500" />
+        <div className='min-w-40 max-w-40 border-2 rounded-2xl justify-center text-md flex flex-row items-center justify-between py-0.5 text-gray-700 hover:text-blue-500'>
+          <FiBell className="text-2xl pr-1" />
+          Notificaciones
+        </div>
         {notifications.length > 0 && (
           <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-1.5">
             {notifications.length}

@@ -139,6 +139,12 @@
   height: 64px !important;
 }
 
+
+.WACLauncherComplex__Text {
+  display: none !important;
+}
+
+
 .WACLauncher__Button {
   background-image: url('/animation.gif') !important; /* Cambia esta línea */
   background-size: cover !important;
@@ -166,6 +172,44 @@
 
 /* Estilos para el contenedor del chat */
 .webchat-container {
-  border-radius: 12px !important;
+  border-radius: 4px !important;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
 }
+
+
+.WACLauncher__ButtonContainer {
+  width: 80px !important;
+  height: 80px !important;
+  right: 20px !important;
+  bottom: 20px !important;
+}
+
+
+/* Ocultar completamente el pop-up inicial */
+
+.MACLauncherComplex__FadeInSlideUp--animation{
+
+  background-color: red;
+}
+
+/* Ocultar botón de cerrar */
+.WACButton--close {
+  display: none !important;
+}
+
+
+/* Ocultar el botón de cerrar del chat */
+.cds--tag.MACLauncher.CloseButton {
+  display: none !important;
+}
+
+/* También puedes usar este selector alternativo por si acaso */
+button[aria-label="Close the chat launcher"] {
+  display: none !important;
+}
+
+.WACAnimLauncherComplex__FadeInSlideUp animation {
+
+  display: none;
+}
+

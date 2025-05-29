@@ -1,0 +1,83 @@
+.dc-container {
+  background-color: var(--background);
+  color: var(--foreground);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 1px 4px rgb(51, 65, 85);
+  margin-bottom: 2rem;
+  transition: background 0.3s, color 0.3s;
+}
+
+.recuadro-info h3 {
+  font-size: 1.2rem;
+  font-family: Helvetica;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #000000;
+  text-align: center;
+}
+
+/* 🌙 TÍTULO en modo oscuro */
+body.dark .recuadro-info h3 {
+  color: #ffffff;
+}
+
+.recuadro-info p {
+  margin: 0.5rem 0;
+}
+
+body.dark .recuadro-info {
+  background-color: #334155 !important;
+}
+
+.recuadro-info input[type="number"] {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.recuadro-info input[type="number"]:focus {
+  outline: none;
+  border-color: #2455f4;
+  box-shadow: 0 0 0 3px rgba(36, 85, 244, 0.2);
+}
+
+body.dark .recuadro-info input[type="number"] {
+  background-color: #334155;
+  border: 1px solid #64748b;
+  color: var(--foreground);
+}
+
+.dc-btn-secondary {
+  background-color: #3b8905;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+  margin-top: 0.75rem;
+}
+
+.dc-btn-secondary:hover {
+  background-color: #3c89059f;
+  transform: translateY(-1px);
+}
+
+body.dark .dc-btn-secondary {
+  background-color: #3b8905;
+  color: #ffffff;
+}
+
+body.dark .dc-btn-secondary:hover {
+  background-color: #3c89059f;
+}

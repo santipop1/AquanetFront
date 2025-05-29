@@ -5,9 +5,10 @@ import React from "react";
 
 export interface ProfilePictureProps {
     pictureUrl?: string;
+    editPicture?: () => void;
 }
 
-export const ProfilePicture: React.FC<ProfilePictureProps> = ({ pictureUrl }) => {
+export const ProfilePicture: React.FC<ProfilePictureProps> = ({ pictureUrl, editPicture }) => {
     return (
         <div className="profile-picture-container">
             {pictureUrl ? (
@@ -16,7 +17,7 @@ export const ProfilePicture: React.FC<ProfilePictureProps> = ({ pictureUrl }) =>
                 <FaCircleUser className="profile-picture icon" />
             )}
             <div className="edit-button">
-                <SymbolButton variant="edit"/>
+                <SymbolButton variant="edit" clickFunc={editPicture}/>
             </div>
         </div>
     );

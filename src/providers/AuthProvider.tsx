@@ -21,7 +21,7 @@ interface AuthContextProps {
   setUserContext: (user: User | null) => void;
 }
 
-// Contexto inicial con valores por defecto seguros
+// Contexto con valores seguros
 const AuthContext = createContext<AuthContextProps>({
   user: null,
   firebaseUser: null,
@@ -106,5 +106,5 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Hook para usar el contexto
+// Hook para consumir el contexto
 export const UseAuth = () => useContext(AuthContext);

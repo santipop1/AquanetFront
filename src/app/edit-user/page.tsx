@@ -20,7 +20,7 @@ interface AuthContextProps {
   setUserContext: (user: User | null) => void;
 }
 
-// Contexto inicial con valores seguros
+// Contexto con valores seguros por defecto
 const AuthContext = createContext<AuthContextProps>({
   user: null,
   firebaseUser: null,
@@ -31,7 +31,7 @@ const AuthContext = createContext<AuthContextProps>({
   setUserContext: () => {},
 });
 
-// Provider principal
+// Provider global
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
@@ -40,13 +40,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<Role | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  // Permite modificar el contexto desde otros componentes (registro, perfil)
+  // Función para actualizar el contexto desde otros componentes
   const setUserContext = (userData: User | null) => {
     setUser(userData);
     setRole(userData?.role || null);
   };
 
-  // Escuchar cambios de sesión de Firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -97,5 +96,5 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Hook para acceder fácilmente al contexto
+// Hook para consumir el contexto
 export const UseAuth = () => useContext(AuthContext);

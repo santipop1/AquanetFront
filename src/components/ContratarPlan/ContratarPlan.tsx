@@ -4,7 +4,7 @@ import { ButtonText } from "../ButtonText/ButtonText";
 
 interface ContratarPlanProps {
   variant?: "default" | "subscribed";
-  planType: "monthly" | "anual";
+  planType: "monthly" | "anual" | null | string;
   size?: "default" | "small";
 }
 

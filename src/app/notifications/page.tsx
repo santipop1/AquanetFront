@@ -6,24 +6,32 @@ import NotificationModal from '@/components/Notifications/NotificationModal/Noti
 import { NotificationDetail } from '@/types/NotificationDetail';
 import { getNotifications } from '@/services/notifications';
 import { markAsReadNotification } from '@/services/notifications';
+
 import NotificationForm from '@/components/Notifications/NewNotification/NewNotification';
+import { UseAuth } from '@/providers/AuthProvider'; // ajusta la ruta si es distinta
+
+
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<NotificationDetail[]>([]);
   const [selected, setSelected] = useState<NotificationDetail | null>(null);
+  const { useruid, loading } = UseAuth();
+
 
   useEffect(() => {
+    if (!useruid || loading) return;
+
     const fetchData = async () => {
       try {
-        const data = await getNotifications();
+        const data = await getNotifications(useruid);
         setNotifications(data);
       } catch (err) {
-        console.error('Error fetching notifications', err);
+        console.error('Error loading notifications', err);
       }
     };
 
     fetchData();
-  }, []);
+  }, [useruid, loading]);
 
   return (
     <div className="max-w-4xl mx-auto mt-8 px-4">
