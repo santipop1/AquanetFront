@@ -17,6 +17,11 @@ declare global {
       onLoad: (instance: any) => void;
       clientVersion?: string;
       showLauncher?: boolean;
+      greeting?: Array<{
+        delay: number;
+        message: string;
+        is_enabled: boolean;
+      }>;
     };
   }
 }
@@ -28,6 +33,11 @@ export default function Inicio() {
       region: 'us-south',
       serviceInstanceID: 'f0d6142e-e0bd-48cc-bfee-14d7ea2a6525',
       showLauncher: true,
+      greeting: [{
+        delay: 0,
+        message: "",
+        is_enabled: false
+      }],
       onLoad: (instance) => {
         instance.updateCSSVariables({
           'launcher-icon-size': '0px',
@@ -41,12 +51,32 @@ export default function Inicio() {
           'launcher-border': '2px solid #05b852'
         });
 
-        setTimeout(() => {
-          const launcher = document.querySelector('.MACLauncher__Button');
+        // Eliminar cualquier contenido dentro del launcher
+        const removeLauncherContent = () => {
+          const launcher = document.querySelector('.WACLauncher__Button');
           if (launcher) {
             launcher.innerHTML = '';
           }
-        }, 1000);
+          
+          const textContainer = document.querySelector('.WACLauncherComplex__Text');
+          if (textContainer) {
+            textContainer.remove();
+          }
+
+          const buttonContainer = document.querySelector('.WACLauncherComplex__ContentButton');
+          if (buttonContainer) {
+            buttonContainer.innerHTML = '';
+          }
+        };
+
+        // Ejecutar inmediatamente y cada segundo por si el elemento se añade después
+        removeLauncherContent();
+        const interval = setInterval(removeLauncherContent, 1000);
+
+        // Limpiar el intervalo después de 5 segundos
+        setTimeout(() => {
+          clearInterval(interval);
+        }, 5000);
 
         instance.render();
       }
