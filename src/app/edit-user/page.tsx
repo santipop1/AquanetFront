@@ -1,160 +1,101 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import getUserInfo from "@/services/user/getUserInfo";
+import { createContext, useContext, useEffect, useState } from "react";
+import { User as FirebaseUser, getIdToken, onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/app/libreria/firebase";
 import { User } from "@/types/User";
-import { InformationField } from "@/components/InformationField/InformationField";
-import { SymbolButton } from "@/components/SymbolButton/SymbolButton";
-import { ProfilePicture } from "@/components/ProfilePicture/ProfilePicture";
-import { ButtonText } from "@/components/ButtonText/ButtonText";
-import ContratarPlan from "@/components/ContratarPlan/ContratarPlan";
-import Image from "next/image";
+import { Role } from "@/types/Role";
+import { Subscription } from "@/types/Subscription";
+import getUserByFirebaseId from "@/services/user/getUserByFirebaseId";
+import getSubscriptionByUserId from "@/services/subscription/getSubscriptionByUserId";
 
-const UpdateUserPage = () => {
+// Tipado del contexto
+interface AuthContextProps {
+  user: User | null;
+  firebaseUser: FirebaseUser | null;
+  loading: boolean;
+  idToken: string | null;
+  role: Role | null;
+  subscription: Subscription | null;
+  setUserContext: (user: User | null) => void;
+}
 
-    const [user, setUser] = useState<User>();
+// Contexto inicial con valores seguros
+const AuthContext = createContext<AuthContextProps>({
+  user: null,
+  firebaseUser: null,
+  loading: true,
+  idToken: null,
+  role: null,
+  subscription: null,
+  setUserContext: () => {},
+});
 
-    const id = 1;
+// Provider principal
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [idToken, setIdToken] = useState<string | null>(null);
+  const [role, setRole] = useState<Role | null>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-    useEffect(() => {
-        const fetchUser = async() => {
-            try {
-                const data = await getUserInfo(id);
-                setUser(data.results);
-            }
-            catch(e) {
-                console.error("Couldn't load user: ", e);
-                throw e;
-            }
-        };
+  // Permite modificar el contexto desde otros componentes (registro, perfil)
+  const setUserContext = (userData: User | null) => {
+    setUser(userData);
+    setRole(userData?.role || null);
+  };
 
-        fetchUser();
+  // Escuchar cambios de sesión de Firebase
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const token = await getIdToken(firebaseUser);
+          const userData = await getUserByFirebaseId(firebaseUser.uid);
 
-    }, [id]);
+          setFirebaseUser(firebaseUser);
+          setIdToken(token);
+          setUser(userData);
 
-    function formatDateToDDMMYYYY(date: Date): string {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
+          if (userData) {
+            const subscriptionData = await getSubscriptionByUserId(userData.id);
+            setRole(userData.role || null);
+            setSubscription(subscriptionData);
+          } else {
+            setRole(null);
+            setSubscription(null);
+          }
+        } catch (error) {
+          console.error("❌ Error al obtener token o usuario:", error);
+          setFirebaseUser(null);
+          setIdToken(null);
+          setUser(null);
+          setRole(null);
+          setSubscription(null);
+        }
+      } else {
+        setFirebaseUser(null);
+        setIdToken(null);
+        setUser(null);
+        setRole(null);
+        setSubscription(null);
+      }
 
-    const subscribed = false;
-    const planType = "monthly";
-    const nextPaymentDate = "27/05/2025";
+      setLoading(false);
+    });
 
-    if(subscribed) {
-        return(
-            <div className="flex">
-                <div className="w-5/9 overflow-y-scroll max-h-screen scrollbar-hidden">
-                    {/* USER 
-                    'text' | 'date' | 'select' | 'password' | 'readonly';*/}
-                    <div className="flex pt-5 pl-5">
-                        <SymbolButton variant="back" />
-                    </div>
-                    <div className="flex flex-col justify-center items-center">
-                        <p className="text-xl pb-5 font-bold text-[rgb(0,0,51)]">MI PERFIL</p>
-                        <ProfilePicture pictureUrl={user?.profilePictureUrl ? user?.profilePictureUrl : ""} />
-                    </div>
-                    <div className="w-[90%] mx-auto pt-5">
-                        <InformationField variant="text" label="Nombre" placeholder={user?.firstName ? user?.firstName : "Nombre"}/>
-                        <InformationField variant="text" label="Segundo nombre" placeholder={user?.middleName ? user?.middleName : "Segundo nombre (opcional)"}/>
-                        <InformationField variant="text" label="Primer apellido" placeholder={user?.firstLastName ? user?.firstLastName : "Apellido paterno"}/>
-                        <InformationField variant="text" label="Segundo apellido" placeholder={user?.secondLastName ? user?.secondLastName : "Apellido materno"}/>
-                        <InformationField variant="date" label="Fecha de nacimiento" placeholder={user?.birthday ? formatDateToDDMMYYYY(new Date(user?.birthday)) : "dd/mm/yyyy"}/>
-                        <InformationField variant="text" label="Número de teléfono" placeholder={user?.firstName ? user?.firstName : "Número de teléfono"}/>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <div className="pb-3">
-                            <ButtonText label="Cambiar correo electrónico" variant="variant3" minW={80}/>
-                        </div>
-                        <div className="pb-3">
-                            <ButtonText label="Cambiar contraseña" variant="variant3" minW={80}/>
-                        </div>
-                        <div className="pb-3">
-                            <ButtonText label="Guardar cambios" variant="variant4" minW={80}/>
-                        </div>
-                        <div className="pb-5">
-                            <ButtonText label="Cerrar sesión" variant="variant2" minW={80}/>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-col justify-center mx-auto w-4/9 bg-[#e5e7eb] items-center h-screen">
-                    {/* Aquanet+ */}
-                    <Image
-                        src="/aquanetplus.png"
-                        alt="aquanet+"
-                        width={350}
-                        height={350}
-                        className="pb-5"
-                    />
-                    <ContratarPlan
-                        planType={planType}
-                        variant='subscribed'
-                    />
-                    <p className="text-xl font-bold pt-3 text-[rgb(0,0,51)]">Próximo ciclo de pago: {nextPaymentDate}</p>
-                </div>
-            </div>
-        );
-    }
+    return () => unsubscribe();
+  }, []);
 
-    return(
-        <div className="flex">
-            <div className="w-5/9 overflow-y-scroll max-h-screen scrollbar-hidden">
-                {/* USER 
-                'text' | 'date' | 'select' | 'password' | 'readonly';*/}
-                <div className="flex pt-5 pl-5">
-                    <SymbolButton variant="back" />
-                </div>
-                <div className="flex flex-col justify-center items-center">
-                    <p className="text-xl pb-5 font-bold text-[rgb(0,0,51)]">MI PERFIL</p>
-                    <ProfilePicture pictureUrl={user?.profilePictureUrl ? user?.profilePictureUrl : ""} />
-                </div>
-                <div className="w-[90%] mx-auto pt-5">
-                    <InformationField variant="text" label="Nombre" placeholder={user?.firstName ? user?.firstName : "Nombre"}/>
-                    <InformationField variant="text" label="Segundo nombre" placeholder={user?.middleName ? user?.middleName : "Segundo nombre (opcional)"}/>
-                    <InformationField variant="text" label="Primer apellido" placeholder={user?.firstLastName ? user?.firstLastName : "Apellido paterno"}/>
-                    <InformationField variant="text" label="Segundo apellido" placeholder={user?.secondLastName ? user?.secondLastName : "Apellido materno"}/>
-                    <InformationField variant="date" label="Fecha de nacimiento" placeholder={user?.birthday ? formatDateToDDMMYYYY(new Date(user?.birthday)) : "dd/mm/yyyy"}/>
-                    <InformationField variant="text" label="Número de teléfono" placeholder={user?.firstName ? user?.firstName : "Número de teléfono"}/>
-                </div>
-                <div className="flex flex-col items-center">
-                    <div className="pb-3">
-                        <ButtonText label="Cambiar correo electrónico" variant="variant3" minW={80}/>
-                    </div>
-                    <div className="pb-3">
-                        <ButtonText label="Cambiar contraseña" variant="variant3" minW={80}/>
-                    </div>
-                    <div className="pb-3">
-                        <ButtonText label="Guardar cambios" variant="variant4" minW={80}/>
-                    </div>
-                    <div className="pb-5">
-                        <ButtonText label="Cerrar sesión" variant="variant2" minW={80}/>
-                    </div>
-                </div>
-            </div>
-            <div className="flex flex-col justify-center mx-auto w-4/9 bg-[#e5e7eb] items-center h-screen">
-                {/* Aquanet+ */}
-                <Image
-                    src="/aquanetplus.png"
-                    alt="aquanet+"
-                    width={350}
-                    height={350}
-                    className="pb-5"
-                />
-                <div className="pb-6">
-                    <ContratarPlan
-                    planType="monthly"
-                    size='small'
-                    />
-                </div>
-                <ContratarPlan
-                    planType="anual"
-                    size='small'
-                />
-            </div>
-        </div>
-    );
+  return (
+    <AuthContext.Provider
+      value={{ user, firebaseUser, loading, idToken, role, subscription, setUserContext }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export default UpdateUserPage;
+// Hook para acceder fácilmente al contexto
+export const UseAuth = () => useContext(AuthContext);

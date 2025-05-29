@@ -5,6 +5,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
 import Footer from '@/components/Footer/Footer';
+import {  useRouter } from 'next/navigation';
+import { UseAuth } from '@/providers/AuthProvider';
+
+const { user } = UseAuth();
+const isLoggedIn = user ? true : false;
+if (!isLoggedIn) {
+      useRouter().push('/registro');
+      }
+      else { useRouter().push('/dashboard');}
+      
 
 export default function Inicio() {
   return (
@@ -87,17 +97,10 @@ export default function Inicio() {
         <h2 className="titulo-planes">Elige tu plan</h2>
         <div className="contenedor-planes flex items-center">
           <ContratarPlan
-            titulo="Plan Mensual"
-            precio="$699"
-            periodicidad="al mes"
-            onContratar={() => alert("Plan mensual contratado")}
+            planType={"monthly"}
           />
           <ContratarPlan
-            titulo="Plan Anual"
-            precio="$579"
-            periodicidad="al mes"
-            notaAdicional="un solo pago de $6,948"
-            onContratar={() => alert("Plan anual contratado")}
+            planType={"anual"}
           />
         </div>
       </section>
