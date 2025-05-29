@@ -3,12 +3,11 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
 import { createUser, CreateUserPayload } from '@/services/user/createUser';
-
+import { UseAuth } from '@/providers/AuthProvider';
 import '../Registro.css';
 
 interface FormData {
@@ -35,6 +34,7 @@ export default function CompletarRegistro() {
   });
 
   const router = useRouter();
+  const { setUserContext } = UseAuth();
 
   useEffect(() => {
     const stored = localStorage.getItem("googleUser");
@@ -48,7 +48,7 @@ export default function CompletarRegistro() {
         phoneNumber: googleData.phoneNumber || '',
         firstName,
         firstLastName,
-        password: Math.random().toString(36).slice(-8)
+        password: Math.random().toString(36).slice(-8) // ✅ Password aleatorio
       }));
     } else {
       router.push('/registro');
@@ -65,26 +65,30 @@ export default function CompletarRegistro() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payload: CreateUserPayload = {
-      email: formData.email,
-      password: formData.password,
-      firstName: formData.firstName,
-      middleName: formData.middleName,
-      firstLastName: formData.firstLastName,
-      secondLastName: formData.secondLastName,
-      birthday: new Date(formData.birthday),
-      phoneNumber: formData.phoneNumber,
-      curp: '',
-      rfc: '',
-      profilePictureUrl: '',
-      roleId: 1
-    };
-
     try {
+      // ✅ Crear solo en tu backend (el usuario ya fue autenticado con Google en Firebase)
+      const payload: CreateUserPayload = {
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        middleName: formData.middleName,
+        firstLastName: formData.firstLastName,
+        secondLastName: formData.secondLastName,
+        birthday: new Date(formData.birthday),
+        phoneNumber: formData.phoneNumber,
+        curp: '',
+        rfc: '',
+        profilePictureUrl: '',
+        roleId: 1, // ✅ Se incluye como en el registro tradicional
+      };
+
       console.log('📦 Payload enviado:', payload);
-      await createUser(payload);
+      const userCreated = await createUser(payload);
+      setUserContext(userCreated);
+
       localStorage.removeItem("googleUser");
       alert("✅ Registro completado");
+      console.log("🔀 Redirigiendo a /dashboard...");
       router.push("/dashboard");
     } catch (error) {
       console.error('❌ Error creando usuario:', error);
@@ -104,14 +108,14 @@ export default function CompletarRegistro() {
           <hr className="divider" />
 
           <form onSubmit={handleSubmit}>
-            <InformationField label="Email" value={formData.email} onChange={() => {}} placeholder="Email" variant="text" />
+            <InformationField label="Email" value={formData.email} onChange={(val) => handleFieldChange("email", val as string)} placeholder="Email" variant="text" />
             <input type="hidden" value={formData.password} readOnly />
-            <InformationField label="First Name" value={formData.firstName} onChange={(val) => handleFieldChange("firstName", val)} placeholder="First Name" variant="text" />
-            <InformationField label="Middle Name" value={formData.middleName} onChange={(val) => handleFieldChange("middleName", val)} placeholder="Middle Name" variant="text" />
-            <InformationField label="First Last Name" value={formData.firstLastName} onChange={(val) => handleFieldChange("firstLastName", val)} placeholder="First LastName" variant="text" />
-            <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val)} placeholder="Second Last Name" variant="text" />
-            <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val)} variant="date" />
-            <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val)} placeholder="Phone Number" variant="text" />
+            <InformationField label="First Name" value={formData.firstName} onChange={(val) => handleFieldChange("firstName", val as string)} placeholder="First Name" variant="text" />
+            <InformationField label="Middle Name" value={formData.middleName} onChange={(val) => handleFieldChange("middleName", val as string)} placeholder="Middle Name" variant="text" />
+            <InformationField label="First Last Name" value={formData.firstLastName} onChange={(val) => handleFieldChange("firstLastName", val as string)} placeholder="First LastName" variant="text" />
+            <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val as string)} placeholder="Second Last Name" variant="text" />
+            <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val as string)} variant="date" />
+            <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val as string)} placeholder="Phone Number" variant="text" />
 
             <button type="submit" className="registro-btn">Registrar</button>
           </form>
