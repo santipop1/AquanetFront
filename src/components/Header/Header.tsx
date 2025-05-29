@@ -9,6 +9,9 @@ import { ButtonText } from '../ButtonText/ButtonText';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
 import { UseAuth } from '@/providers/AuthProvider';
 import { useEffect, useState, useRef } from 'react';
+import { BiAdjust } from "react-icons/bi";
+
+
 
 
 const Links = [
@@ -93,7 +96,7 @@ const Header = () => {
           }}
           className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
-            🌓
+            <BiAdjust />
             </button>
 
 

@@ -39,7 +39,7 @@ const RecuadroVentas = () => {
   };
 
   return (
-    <div className="recuadro-ventas ">
+    <div className="recuadro-ventas">
       <h3 className="titulo-ventas">Ventas Proyectadas</h3>
 
       <ResponsiveContainer width="100%" height={300}>
@@ -47,8 +47,19 @@ const RecuadroVentas = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="mes" />
           <YAxis />
-          <Tooltip />
-          <Bar dataKey="ventas" fill="#2455f4" />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#0F172A',
+              color: '#ffffff',
+              borderRadius: '8px',
+              border: 'none',
+              fontWeight: 500,
+              fontSize: '0.85rem',
+            }}
+            itemStyle={{ color: '#ffffff' }}
+            labelStyle={{ color: '#ffffff', fontWeight: 600 }}
+          />
+          <Bar dataKey="ventas" fill="#3b8905" />
         </BarChart>
       </ResponsiveContainer>
 

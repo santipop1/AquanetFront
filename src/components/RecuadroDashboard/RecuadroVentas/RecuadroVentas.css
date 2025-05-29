@@ -1,84 +1,42 @@
-
-.dc-container {
-    background-color: var(--background);
-    color: var(--foreground);
-    border-radius: 16px;
-    padding: 1.5rem;
-    width: 100%;
-    max-width: 480px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-    transition: background 0.3s, color 0.3s;
-  }
-  
 .recuadro-ventas {
     background-color: var(--background);
     color: var(--foreground);
     border-radius: 16px;
     padding: 1.5rem;
-    width: 100%;
-    max-width: 480px;
+    width: auto;
+    max-width: 100%;
+    height: 60%;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+    transition: background-color 0.3s, color 0.3s;
   }
   
   .titulo-ventas {
     font-weight: 700;
     font-size: 1.1rem;
-    color: #2455f4;
+    color: var(--foreground);
     margin-bottom: 1rem;
     text-align: center;
   }
   
+
+  
   .btn-registrar-venta {
-    background-color: #e0e7ff;
+    background-color: #3b8905;
+    color: white;
+    padding: 0.6rem 1.25rem;
     border: none;
-    padding: 0.5rem 1rem;
     border-radius: 8px;
-    font-size: 0.85rem;
+    font-weight: 600;
+    font-size: 0.95rem;
     cursor: pointer;
-    transition: background 0.2s ease;
-    margin-top: 1rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+    margin-top: 0.75rem;
   }
   
   .btn-registrar-venta:hover {
-    background-color: #c7d2fe;
-  }
-  
-  .formulario-venta {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .formulario-venta input {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  .acciones-formulario {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .acciones-formulario button {
-    flex: 1;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .acciones-formulario button:first-child {
-    background-color: #4ade80;
-    color: white;
-  }
-  
-  .acciones-formulario button:last-child {
-    background-color: #f87171;
-    color: white;
+    background-color: #3c89059f;
   }
   
   .dc-popup {
@@ -95,16 +53,15 @@
   }
   
   .dc-popup-inner {
-    background-color: var(--background);
+    background-color: #0f172a;
     color: var(--foreground);
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(102, 255, 0, 0.2);
     min-width: 300px;
   }
   
   .dc-popup-inner input {
-
     width: 100%;
     padding: 0.5rem;
     margin: 1rem 0;
@@ -129,12 +86,12 @@
   }
   
   .dc-popup-buttons button:first-child {
-    background-color: #4ade80;
+    background-color: #3b8905;
     color: white;
   }
   
   .dc-popup-buttons button:last-child {
-    background-color: #f87171;
+    background-color: #f90000;
     color: white;
   }
   
@@ -142,3 +99,4 @@
     background-color: #334155;
     color: var(--foreground);
   }
+  
