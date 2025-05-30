@@ -31,10 +31,11 @@ export default function RootLayout({
       >
         <AuthProvider>
           <AuthGuard>
+
             {children}
+            
           </AuthGuard>
         </AuthProvider>
-        
       </body>
     </html>
   );
