@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import './InformationField.css';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
 
@@ -21,27 +21,20 @@ export interface InformationFieldProps {
 export const InformationField: React.FC<InformationFieldProps> = ({
   variant,
   label,
-  value,
+  value = '',
   placeholder = '',
   options = [],
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState<string | number | null>(null);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const dateInputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
 
-  useEffect(() => {
-    setInternalValue(value ?? '');
-  }, [value]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    if (onChange) {
-      onChange(e.target.value);
-    } else {
-      setInternalValue(e.target.value);
-    }
+    onChange?.(e.target.value);
   };
 
   const toggleShowPassword = () => {
@@ -56,10 +49,6 @@ export const InformationField: React.FC<InformationFieldProps> = ({
     selectRef.current?.showPicker?.();
   };
 
-  if (internalValue === null) {
-    return null;
-  }
-
   return (
     <div className="fieldContainer">
       <label className="label">{label}</label>
@@ -70,7 +59,7 @@ export const InformationField: React.FC<InformationFieldProps> = ({
           type="text"
           className="input"
           placeholder={placeholder}
-          value={internalValue}
+          value={value}
           onChange={handleChange}
         />
       )}
@@ -82,10 +71,10 @@ export const InformationField: React.FC<InformationFieldProps> = ({
             type="date"
             ref={dateInputRef}
             className="input noNativeIcon"
-            value={internalValue}
+            value={value}
             onChange={handleChange}
           />
-          <SymbolButton variant="calendar" onClick={openDatePicker} />
+          <SymbolButton variant="calendar" clickFunc={openDatePicker} />
         </div>
       )}
 
@@ -95,7 +84,7 @@ export const InformationField: React.FC<InformationFieldProps> = ({
           <select
             ref={selectRef}
             className="input noNativeIcon"
-            value={internalValue}
+            value={value}
             onChange={handleChange}
           >
             <option disabled value="">
@@ -107,10 +96,7 @@ export const InformationField: React.FC<InformationFieldProps> = ({
               </option>
             ))}
           </select>
-          <SymbolButton
-            variant="arrow-down" 
-            onClick={openSelect}
-          />
+          <SymbolButton variant="arrow-down" clickFunc={openSelect} />
         </div>
       )}
 
@@ -121,12 +107,12 @@ export const InformationField: React.FC<InformationFieldProps> = ({
             type={showPassword ? 'text' : 'password'}
             className="input"
             placeholder={placeholder}
-            value={internalValue}
+            value={value}
             onChange={handleChange}
           />
           <SymbolButton
             variant={showPassword ? 'closed-eye' : 'opened-eye'}
-            onClick={toggleShowPassword}
+            clickFunc={toggleShowPassword}
           />
         </div>
       )}
@@ -136,7 +122,7 @@ export const InformationField: React.FC<InformationFieldProps> = ({
         <input
           type="text"
           className="input readonly"
-          value={internalValue}
+          value={value}
           readOnly
         />
       )}

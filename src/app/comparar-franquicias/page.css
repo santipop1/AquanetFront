@@ -1,0 +1,38 @@
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 2rem;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+.carousel-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 1rem;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.carousel-button:hover {
+  background-color: #2563eb;
+}

@@ -48,7 +48,10 @@ export const NotificationDropdown = () => {
       onMouseLeave={() => setShowDropdown(false)}
     >
       <div className="relative cursor-pointer" onClick={handleBellClick}>
-        <FiBell className="text-2xl text-gray-700 hover:text-blue-500" />
+        <div className='min-w-40 max-w-40 border-2 rounded-2xl justify-center text-md flex flex-row items-center justify-between py-0.5 text-gray-700 hover:text-blue-500'>
+          <FiBell className="text-2xl pr-1" />
+          Notificaciones
+        </div>
         {notifications.length > 0 && (
           <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-1.5">
             {notifications.length}
@@ -58,7 +61,8 @@ export const NotificationDropdown = () => {
 
       {showDropdown && (
         <div className="absolute right-0 mt-2 w-[320px] bg-white border border-gray-200 rounded shadow-lg z-50">
-          <div className="bg-green-500 text-white px-4 py-2 font-semibold rounded-t">
+          <div style={{ background: '#4caf50' }} className="text-white px-4 py-2 font-semibold rounded-t">
+
             Notificaciones
           </div>
           <ul className="max-h-96 overflow-y-auto">

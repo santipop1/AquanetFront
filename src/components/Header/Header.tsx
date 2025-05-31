@@ -1,71 +1,112 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
+import clsx from 'clsx';
+
+import { BiAdjust } from "react-icons/bi";
+
+import { UseAuth } from '@/providers/AuthProvider';
+import { SymbolButton } from '../SymbolButton/SymbolButton';
+import { ButtonText } from '../ButtonText/ButtonText';
 import { NotificationDropdown } from '@/components/Notifications/NotificationDropdown/NotificationDropdown';
 
 const Links = [
-  { href: '/popular', label: 'Inicio' },
-  { href: '/now-playing', label: 'Purifica tu futuro' },
-  { href: '/top-rated', label: 'Aquanet+' }
+  { href: '/', label: 'Inicio' },
+  { href: '/formulario', label: 'Purifica tu futuro' },
+  { href: '/aquanet-plus', label: 'Aquanet+' }
 ];
 
 const Header = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = UseAuth();
+  const isLoggedIn = !!user;
+
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  const handleSymbolClick = () => {
+    if (!isLoggedIn) {
+      router.push('/registro');
+    } else {
+      setShowPopup((prev) => !prev);
+    }
+  };
+
+  // Cerrar el popup si se hace clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (popupRef.current?.contains(target) || buttonRef.current?.contains(target)) return;
+      setShowPopup(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-<<<<<<< Updated upstream
-    <header className="w-full border-b shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3">
-        
-        {/* Logo + Título */}
-=======
-    <header className="w-full border-b-2 shadow-sm z-50 bg-white">
+    <header className="w-full shadow-sm border-b-1 dark:bg-[#0a1643]">
       <div className="container mx-auto flex items-center justify-between px-4 py-5">
->>>>>>> Stashed changes
-        <div className="flex items-center gap-2">
+
+        {/* Logo */}
+        <div className="flex items-center gap-2 pl-2">
           <Link href="/">
-            <Image src="/logo.png" alt="Logo" width={32} height={32} />
+            <Image src="/logo.png" alt="Logo" width={180} height={180} />
           </Link>
         </div>
 
-<<<<<<< Updated upstream
         {/* Navegación */}
-        <nav className="flex gap-6">
-=======
-        <nav className="flex items-center gap-8">
->>>>>>> Stashed changes
+        <nav className="flex gap-10">
           {Links.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={clsx(
-<<<<<<< Updated upstream
-                "text-sm font-medium transition-colors hover:text-blue-600",
-                pathname === href ? "text-blue-600 underline" : "text-gray-600",
-=======
-                "text-xl hover:text-blue-400 hover:-translate-y-1 transition-all",
-                pathname === href ? "text-blue-400 underline" : "text-gray-700"
->>>>>>> Stashed changes
+                "text-xl hover:text-blue-400 hover:-translate-y-1 duration-300",
+                pathname === href ? "text-blue-400 underline" : "text-white",
               )}
             >
               {label}
             </Link>
           ))}
-          <NotificationDropdown />
         </nav>
-<<<<<<< Updated upstream
 
-        {/* Botones de acción */}
-        <div className="flex gap-2">
-        <ButtonText label="Registrarte" href="/register" size="sm"/>
-        <ButtonText label="Iniciar sesión" href="/login" variant='variant2' size='sm' />
+        {/* Botones a la derecha */}
+        <div className="relative flex gap-2 items-center pr-2">
 
+          {/* Botón de modo oscuro/claro */}
+          <button
+            onClick={() => {
+              const isDark = document.body.classList.toggle('dark');
+              localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            }}
+            className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          >
+            <BiAdjust />
+          </button>
+
+          {/* Botón de perfil */}
+          <div ref={buttonRef}>
+            <SymbolButton variant="user" clickFunc={handleSymbolClick} />
+          </div>
+
+          {/* Menú contextual (popup) */}
+          {showPopup && (
+            <div
+              ref={popupRef}
+              className="absolute right-0 top-14 z-10 bg-white shadow-lg rounded-lg border p-4 space-y-2 w-48 flex flex-col items-center"
+            >
+              <ButtonText variant="variant2" label="Editar perfil" onClick={() => router.push("/edit-user")} minW={40} />
+              <NotificationDropdown />
+            </div>
+          )}
         </div>
-=======
->>>>>>> Stashed changes
       </div>
     </header>
   );
