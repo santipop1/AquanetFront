@@ -8,6 +8,7 @@ import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
 import { createUser, CreateUserPayload } from '@/services/user/createUser';
 import { UseAuth } from '@/providers/AuthProvider';
+import { auth } from '@/app/libreria/firebase';
 import '../Registro.css';
 
 interface FormData {
@@ -53,7 +54,7 @@ export default function CompletarRegistro() {
     } else {
       router.push('/registro');
     }
-  }, []);
+  }, [router]);
 
   const handleFieldChange = (fieldName: keyof FormData, value: string) => {
     setFormData((prevData) => ({
@@ -66,7 +67,12 @@ export default function CompletarRegistro() {
     e.preventDefault();
 
     try {
-      // ✅ Crear solo en tu backend (el usuario ya fue autenticado con Google en Firebase)
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        alert('❌ No se encontró el usuario autenticado con Google.');
+        return;
+      }
+
       const payload: CreateUserPayload = {
         email: formData.email,
         password: formData.password,
@@ -79,7 +85,8 @@ export default function CompletarRegistro() {
         curp: '',
         rfc: '',
         profilePictureUrl: '',
-        roleId: 1, // ✅ Se incluye como en el registro tradicional
+        roleId: 1,
+        firebaseUid: currentUser.uid 
       };
 
       console.log('📦 Payload enviado:', payload);

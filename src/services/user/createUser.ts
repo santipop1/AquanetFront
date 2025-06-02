@@ -13,6 +13,7 @@ export interface CreateUserPayload {
   rfc: string;
   profilePictureUrl: string;
   roleId: number;
+  firebaseUid: string;
 }
 
 export const createUser = async (payload: CreateUserPayload) => {
