@@ -7,7 +7,7 @@ const getUserByFirebaseId = async (firebaseId: string) => {
     const user = auth.currentUser;
     const token = user && (await getIdToken(user));
 
-    const res = await back.get(`/users/${firebaseId}`, {
+    const res = await back.get(`/users/firebase_id/${firebaseId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

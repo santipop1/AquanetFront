@@ -9,7 +9,7 @@ import { InformationField } from '@/components/InformationField/InformationField
 import { createUser } from '@/services/user/createUser';
 import { signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
-import { UseAuth } from '@/providers/AuthProvider'; 
+import { UseAuth } from '@/providers/AuthProvider';
 
 import './Registro.css';
 
@@ -39,7 +39,7 @@ export default function Register() {
   });
 
   const router = useRouter();
-  const { setUserContext } = UseAuth(); // 🧠 Usar el setter del contexto
+  const { setUserContext } = UseAuth();
 
   const handleFieldChange = (fieldName: keyof FormData, value: string) => {
     setFormData((prevData) => ({
@@ -59,32 +59,30 @@ export default function Register() {
     try {
       // 1. Crear en Firebase Auth
       const authResult = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const firebaseUid = authResult.user.uid;
       console.log("✅ Usuario creado en Firebase:", authResult.user);
 
       // 2. Crear en tu backend
       const payload: any = {
-        firstName: formData.firstName,
-        firstLastName: formData.firstLastName,
-        secondLastName: formData.secondLastName,
-        birthday: new Date(formData.birthday),
-        phoneNumber: formData.phoneNumber,
         email: formData.email,
         password: formData.password,
+        firstName: formData.firstName,
+        middleName: formData.middleName || undefined,
+        firstLastName: formData.firstLastName,
+        secondLastName: formData.secondLastName,
+        birthday: formData.birthday,
+        phoneNumber: formData.phoneNumber,
         curp: "",
         rfc: "",
         profilePictureUrl: "",
         roleId: 1,
-         // Incluye el UID de Firebase
+        firebaseUid: firebaseUid, // 👈 Muy importante
       };
 
-      if (formData.middleName.trim() !== '') {
-        payload.middleName = formData.middleName;
-      }
-
-      const result = await createUser(payload); // Usuario del backend
+      const result = await createUser(payload);
       console.log("✅ Registro exitoso en backend:", result);
 
-      // 3. Actualizar el contexto directamente
+      // 3. Actualizar contexto global
       setUserContext(result);
 
       // 4. Redirigir
@@ -107,7 +105,6 @@ export default function Register() {
       }));
 
       console.log("🧠 Google login exitoso. Redirigiendo a completar registro...");
-
       setTimeout(() => {
         router.push('/registro/completar-registro');
       }, 100);
