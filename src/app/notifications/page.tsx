@@ -15,15 +15,15 @@ import { UseAuth } from '@/providers/AuthProvider'; // ajusta la ruta si es dist
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<NotificationDetail[]>([]);
   const [selected, setSelected] = useState<NotificationDetail | null>(null);
-  const { useruid, loading } = UseAuth();
+  const { firebaseUser, loading } = UseAuth();
 
 
   useEffect(() => {
-    if (!useruid || loading) return;
+    if (!firebaseUser || loading) return;
 
     const fetchData = async () => {
       try {
-        const data = await getNotifications(useruid);
+        const data = await getNotifications(firebaseUser.uid);
         setNotifications(data);
       } catch (err) {
         console.error('Error loading notifications', err);
@@ -31,7 +31,7 @@ export default function NotificationsPage() {
     };
 
     fetchData();
-  }, [useruid, loading]);
+  }, [firebaseUser, loading]);
 
   return (
     <div className="max-w-4xl mx-auto mt-8 px-4">

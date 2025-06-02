@@ -21,3 +21,4 @@ const getUserByFirebaseId = async (firebaseId: string) => {
 };
 
 export default getUserByFirebaseId;
+

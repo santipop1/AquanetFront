@@ -11,14 +11,14 @@ import { UseAuth } from '@/providers/AuthProvider';
 export default function FormularioPage() {
   const [form, setForm] = useState({
     budget: 0,
-    desired_plant_size_id: 0,
-    aval_first_name: '',
-    aval_first_last_name: '',
-    aval_second_last_name: '',
+    desiredPlantSizeId: 0,
+    avalFirstName: '',
+    avalFirstLastName: '',
+    avalSecondLastName: '',
   });
 
   const [loading, setLoading] = useState(false);
-  const { useruid } = UseAuth(); 
+  const { firebaseUser } = UseAuth();
 
   const handleChange = (name: string, value: string | number) => {
     setForm((prev) => ({
@@ -34,8 +34,7 @@ export default function FormularioPage() {
 
     const payload = {
       ...form,
-      userId: useruid,
-
+      user_uid: firebaseUser.uid,
     };
 
     try {
@@ -81,8 +80,8 @@ export default function FormularioPage() {
           <InformationField
             variant="select"
             label="Seleccionar tamaño deseado de local"
-            value={form.desired_plant_size_id}
-            onChange={(value) => handleChange('desired_plant_size_id', value)}
+            value={form.desiredPlantSizeId}
+            onChange={(value) => handleChange('desiredPlantSizeId', value)}
             options={[
               { label: 'Menos de 10 m²', value: 1 },
               { label: '10 - 20 m²', value: 2 },
@@ -94,20 +93,20 @@ export default function FormularioPage() {
           <InformationField
             variant="text"
             label="Nombre(s) de tu aval (como aparece en su INE)"
-            value={form.aval_first_name}
-            onChange={(value) => handleChange('aval_first_name', value)}
+            value={form.avalFirstName}
+            onChange={(value) => handleChange('avalFirstName', value)}
           />
           <InformationField
             variant="text"
             label="Apellido Paterno de tu aval (como aparece en su INE)"
-            value={form.aval_first_last_name}
-            onChange={(value) => handleChange('aval_first_last_name', value)}
+            value={form.avalFirstLastName}
+            onChange={(value) => handleChange('avalFirstLastName', value)}
           />
           <InformationField
             variant="text"
             label="Apellido Materno de tu aval (como aparece en su INE)"
-            value={form.aval_second_last_name}
-            onChange={(value) => handleChange('aval_second_last_name', value)}
+            value={form.avalSecondLastName}
+            onChange={(value) => handleChange('avalSecondLastName', value)}
           />
 
           <button

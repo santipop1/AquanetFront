@@ -11,15 +11,15 @@ import { UseAuth } from '@/providers/AuthProvider'; // ajusta la ruta si es dist
 export const NotificationDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState<NotificationDetail[]>([]);
-  const { useruid, loading } = UseAuth();
+  const { firebaseUser, loading } = UseAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!useruid || loading) return;
+    if (!firebaseUser || loading) return;
 
     const fetchData = async () => {
       try {
-        const data = await getNotifications(useruid);
+        const data = await getNotifications(firebaseUser.uid);
         setNotifications(data);
       } catch (err) {
         console.error('Error loading notifications', err);
@@ -27,7 +27,7 @@ export const NotificationDropdown = () => {
     };
     
     fetchData();
-  }, [useruid, loading]);
+  }, [firebaseUser, loading]);
 
   const formatDateDiff = (date: string) => {
     const now = new Date();

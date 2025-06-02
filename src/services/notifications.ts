@@ -8,7 +8,7 @@ export const createNotification = async (payload: any) => {
     const res = await api.post('/notifications', payload);
     return res.data;
   } catch (error) {
-    console.error(' Error creando notificación:', error);
+    console.error('❌ Error creando notificación:', error);
     throw error;
   }
 };
@@ -20,7 +20,7 @@ export const getNotifications = async (useruid: string): Promise<NotificationDet
         'Content-Type': 'text/plain',
       },
     });
-
+    console.log('Notificaciones obtenidas:', data);
     return data;
   } catch (error) {
     console.error('Error al obtener notificaciones:', error);
