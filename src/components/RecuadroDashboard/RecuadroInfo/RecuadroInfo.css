@@ -73,6 +73,13 @@ body.dark .recuadro-info input[type="number"] {
   transform: translateY(-1px);
 }
 
+.dc-btn-disabled {
+  background: #ccc !important;
+  color: #888 !important;
+  cursor: not-allowed !important;
+  border: none;
+}
+
 body.dark .dc-btn-secondary {
   background-color: #3b8905;
   color: #ffffff;

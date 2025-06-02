@@ -9,6 +9,7 @@ import { Subscription } from "@/types/Subscription";
 import getUserByFirebaseId from "@/services/user/getUserByFirebaseId";
 import getSubscriptionByUserId from "@/services/subscription/getSubscriptionByUserId";
 import { api } from "@/services/api";
+import back from "@/services/back";
 
 // Tipado del contexto
 interface AuthContextProps {
@@ -57,7 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setFirebaseUser(firebaseUser);
           setIdToken(token);
           setUser(userData);
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          back.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
           if (userData) {
             const subscriptionData = await getSubscriptionByUserId(userData.id);

@@ -8,16 +8,29 @@ import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranqu
 import RecuadroInfo from '@/components/RecuadroDashboard/RecuadroInfo/RecuadroInfo';
 import RecuadroVentas from '@/components/RecuadroDashboard/RecuadroVentas/RecuadroVentas';
 import RecuadroRefacciones from '@/components/RecuadroDashboard/RecuadroRefacciones/RecuadroRefacciones';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { UseAuth } from '@/providers/AuthProvider';
+import { ListWaterPlants } from '@/services/waterPlants';
 
 export default function DashboardPage() {
-  const franquicias = [
-    { nombre: 'Franquicia 1', logoSrc: '/gotita.png' },
-    { nombre: 'Franquicia 2', logoSrc: '/gotita.png' },
-    { nombre: 'Franquicia 3', logoSrc: '/gotita.png' }
-  ];
+  const { firebaseUser } = UseAuth();
+  const [franquicias, setFranquicias] = useState<any[]>([]);
+  const [franquiciaActiva, setFranquiciaActiva] = useState<any | null>(null);
 
-  const [franquiciaActiva, setFranquiciaActiva] = useState(franquicias[0]);
+  useEffect(() => {
+    const fetchFranquicias = async () => {
+      if (!firebaseUser) return;
+      try {
+        const data = await ListWaterPlants({ id: firebaseUser.uid });
+        setFranquicias(data);
+        if (data.length > 0) setFranquiciaActiva(data[0]);
+      } catch (error) {
+        setFranquicias([]);
+        setFranquiciaActiva(null);
+      }
+    };
+    fetchFranquicias();
+  }, [firebaseUser]);
 
   return (
     <>
@@ -37,22 +50,21 @@ export default function DashboardPage() {
           </h1>
           <h2 className="dashboard-subtitle">Mis Franquicias</h2>
           <div className="dashboard-franquicias-list">
-            {franquicias.map((f, i) => (
+            {franquicias.map((f) => (
               <RecuadroFranquicias
-                key={i}
-                nombre={f.nombre}
-                logoSrc={f.logoSrc}
+                key={f.id}
+                nombre={`Franquicia ${f.id}`}
+                logoSrc={"/gotita.png"}
                 onClick={() => setFranquiciaActiva(f)}
               />
             ))}
           </div>
         </aside>
-
         <main className="dashboard-main">
-          <h2 className="dashboard-titulo">{franquiciaActiva.nombre}</h2>
+          <h2 className="dashboard-titulo">{franquiciaActiva ? `Franquicia ${franquiciaActiva.id}` : ''}</h2>
           <div className="dashboard-grid">
-            <RecuadroInfo />
-            <RecuadroVentas />
+            <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
+            <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
             <RecuadroRefacciones />
           </div>
         </main>

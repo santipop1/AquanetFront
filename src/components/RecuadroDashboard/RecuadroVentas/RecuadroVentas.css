@@ -45,7 +45,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(191, 176, 176, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,7 +53,7 @@
   }
   
   .dc-popup-inner {
-    background-color: #0f172a;
+    background-color: #919fc0;
     color: var(--foreground);
     padding: 2rem;
     border-radius: 12px;

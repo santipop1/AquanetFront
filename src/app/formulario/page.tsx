@@ -18,7 +18,7 @@ export default function FormularioPage() {
   });
 
   const [loading, setLoading] = useState(false);
-  const { useruid } = UseAuth(); 
+  const { firebaseUser } = UseAuth();
 
   const handleChange = (name: string, value: string | number) => {
     setForm((prev) => ({
@@ -34,7 +34,7 @@ export default function FormularioPage() {
 
     const payload = {
       ...form,
-      user_uid: useruid,
+      user_uid: firebaseUser.uid,
     };
 
     try {
