@@ -63,12 +63,11 @@ export default function Register() {
     }
 
     try {
-      // 1. Crear en Firebase Auth
+      
       const authResult = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const firebaseUid = authResult.user.uid;
       console.log("✅ Usuario creado en Firebase:", authResult.user);
 
-      // 2. Crear en tu backend
       const payload = {
         email: formData.email,
         password: formData.password,
@@ -82,7 +81,7 @@ export default function Register() {
         rfc: formData.rfc || undefined,
         profilePictureUrl: formData.profilePictureUrl || undefined,
         roleId: 1,
-        firebaseId: firebaseUid, // Cambiado de firebaseUid a firebaseId
+        firebaseUid: firebaseUid, 
       };
 
       console.log("📦 Payload enviado al backend:", payload);
@@ -90,10 +89,10 @@ export default function Register() {
       const result = await createUser(payload);
       console.log("✅ Registro exitoso en backend:", result);
 
-      // 3. Actualizar contexto global
+      
       setUserContext(result);
 
-      // 4. Redirigir
+      
       router.push('/dashboard');
     } catch (error) {
       console.error("❌ Error en el registro:", error);
