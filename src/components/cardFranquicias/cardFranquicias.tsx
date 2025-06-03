@@ -1,37 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './cardFranquicias.css';
 
 interface CardFranquiciasProps {
-  pretitle: string;
   title: string;
+  brand: string;
+  year: string;
   description: string;
   imageUrl: string;
-  onPrimaryClick?: () => void;
-  onSecondaryClick?: () => void;
+  price?: string;
+  size?: string;
 }
 
 const CardFranquicias: React.FC<CardFranquiciasProps> = ({
-  pretitle,
   title,
+  brand,
+  year,
   description,
   imageUrl,
-  onPrimaryClick,
-  onSecondaryClick
+  price,
+  size
 }) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <div className="card-franquicias">
-      <img src={imageUrl} alt="Card visual" className="card-franquicias-image" />
-      <div className="card-franquicias-content">
-        <span className="card-franquicias-pretitle">{pretitle}</span>
-        <h2 className="card-franquicias-title">{title}</h2>
-        <p className="card-franquicias-description">{description}</p>
-        <div className="card-franquicias-buttons">
-          <button className="btn-franquicias primary" onClick={onPrimaryClick}>Primary</button>
-          <button className="btn-franquicias secondary" onClick={onSecondaryClick}>Secondary</button>
+    <>
+      <div className="card-franquicias">
+        <img src={imageUrl} alt={`${title} Poster`} className="card-franquicias-image" />
+        <div className="card-franquicias-content">
+          <h2 className="card-franquicias-title">{title}</h2>
+          <p className="card-franquicias-brand">Marca: {brand}</p>
+          <button className="card-franquicias-button" onClick={() => setShowModal(true)}>
+            Mostrar más información
+          </button>
         </div>
-        <a href="#" className="card-franquicias-link">Other link</a>
       </div>
-    </div>
+
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>{title}</h3>
+            <p><strong>Marca:</strong> {brand}</p>
+            <p><strong>Año:</strong> {year}</p>
+            <p className="modal-description">{description}</p>
+            <p><strong>Precio:</strong> {price}</p>
+            <p><strong>Tamaño:</strong> {size}</p>
+            <button className="modal-close" onClick={() => setShowModal(false)}>Cerrar</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

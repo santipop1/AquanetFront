@@ -1,69 +1,124 @@
 .card-franquicias {
-    width: 300px;
-    border-radius: 12px;
+    width: 230px;
+    height: 380px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    background-color: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background-color: #f9fafb;
     font-family: 'Segoe UI', sans-serif;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .card-franquicias:hover {
+    transform: scale(1.05);
   }
   
   .card-franquicias-image {
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
+    background-color: white;
+    padding: 8px;
   }
   
   .card-franquicias-content {
-    padding: 16px;
-  }
-  
-  .card-franquicias-pretitle {
-    color: #6366f1;
-    font-size: 12px;
-    text-transform: uppercase;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 8px 12px 12px 12px;
+    flex-grow: 1;
   }
   
   .card-franquicias-title {
-    font-size: 20px;
-    margin: 8px 0;
-    color: #1f2937;
+    font-size: 17px;
+    color: #111827;
+    font-weight: bold;
+    margin: 0;
   }
   
-  .card-franquicias-description {
+  .card-franquicias-brand {
     font-size: 14px;
-    color: #4b5563;
-    margin-bottom: 16px;
+    color: #6366f1;
+    margin: 2px 0 6px 0; 
   }
   
-  .card-franquicias-buttons {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-  
-  .btn-franquicias {
+  .card-franquicias-button {
+    width: 100%;
+    margin-top: auto;
     padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-  }
-  
-  .btn-franquicias.primary {
-    background-color: #3b82f6;
+    background-color: #6366f1;
     color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
   
-  .btn-franquicias.secondary {
-    background-color: #e5e7eb;
+  .card-franquicias-button:hover {
+    background-color: #4f46e5;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    font-family: 'Segoe UI', sans-serif;
+    text-align: left;
+  }
+  
+  .modal-content h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #111827;
+    font-weight: bold;
+  }
+  
+  .modal-content p {
+    font-size: 14px;
     color: #374151;
+    margin: 6px 0;
   }
   
-  .card-franquicias-link {
-    font-size: 12px;
-    color: #6b7280;
-    text-decoration: underline;
+  .modal-description {
+    text-align: justify;
+  }
+  
+  .modal-close {
+    margin: 24px auto 0 auto;
     display: block;
+    background-color: #ef4444;
+    color: white;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .modal-close:hover {
+    background-color: #dc2626;
   }
   
