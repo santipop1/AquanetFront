@@ -9,7 +9,6 @@ import clsx from 'clsx';
 import { BiAdjust } from "react-icons/bi";
 import { FaBell } from 'react-icons/fa';
 
-
 import { UseAuth } from '@/providers/AuthProvider';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
 import { ButtonText } from '../ButtonText/ButtonText';
@@ -81,7 +80,6 @@ const Header = () => {
         </nav>
 
         <div className="relative flex gap-2 items-center pr-2">
-
           <button
             onClick={() => {
               const isDark = document.body.classList.toggle('dark');
@@ -91,7 +89,6 @@ const Header = () => {
           >
             <BiAdjust />
           </button>
-
 
           <div ref={buttonRef}>
             <SymbolButton variant="user" clickFunc={handleSymbolClick} />
@@ -107,12 +104,7 @@ const Header = () => {
                 label="Editar perfil"
                 onClick={() => router.push("/edit-user")}
               />
-              <ButtonText
-                variant="pill-outline"
-                label="Notificaciones"
-                onClick={() => {}}
-                icon={<FaBell />}
-              />
+              <NotificationDropdown />
               <ButtonText
                 variant="pill-danger"
                 label="Cerrar sesión"
