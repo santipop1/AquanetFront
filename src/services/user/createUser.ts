@@ -14,6 +14,7 @@ export interface CreateUserPayload {
   profilePictureUrl: string;
   roleId: number;
   firebaseUid: string;
+  
 }
 
 export const createUser = async (payload: CreateUserPayload) => {

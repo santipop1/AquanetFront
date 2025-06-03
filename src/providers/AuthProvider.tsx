@@ -1,17 +1,15 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { User as FirebaseUser, getIdToken, onAuthStateChanged } from "firebase/auth";
+import { User as FirebaseUser, getIdToken, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/app/libreria/firebase";
 import { User } from "@/types/User";
 import { Role } from "@/types/Role";
 import { Subscription } from "@/types/Subscription";
 import getUserByFirebaseId from "@/services/user/getUserByFirebaseId";
 import getSubscriptionByUserId from "@/services/subscription/getSubscriptionByUserId";
-import { api } from "@/services/api";
 import back from "@/services/back";
 
-// Tipado del contexto
 interface AuthContextProps {
   user: User | null;
   firebaseUser: FirebaseUser | null;
@@ -20,9 +18,9 @@ interface AuthContextProps {
   role: Role | null;
   subscription: Subscription | null;
   setUserContext: (user: User | null) => void;
+  logout: () => Promise<void>;
 }
 
-// Contexto con valores seguros
 const AuthContext = createContext<AuthContextProps>({
   user: null,
   firebaseUser: null,
@@ -31,9 +29,9 @@ const AuthContext = createContext<AuthContextProps>({
   role: null,
   subscription: null,
   setUserContext: () => {},
+  logout: async () => {},
 });
 
-// Provider del contexto
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
@@ -42,10 +40,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<Role | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  // Permite modificar el usuario desde otros componentes
   const setUserContext = (userData: User | null) => {
     setUser(userData);
     setRole(userData?.role || null);
+  };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+
+    setFirebaseUser(null);
+    setIdToken(null);
+    setUser(null);
+    setRole(null);
+    setSubscription(null);
+    back.defaults.headers.common["Authorization"] = "";
   };
 
   useEffect(() => {
@@ -100,6 +112,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         role,
         subscription,
         setUserContext,
+        logout,
       }}
     >
       {children}
@@ -107,5 +120,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Hook para consumir el contexto
 export const UseAuth = () => useContext(AuthContext);
