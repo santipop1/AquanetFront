@@ -11,6 +11,7 @@ import RecuadroRefacciones from '@/components/RecuadroDashboard/RecuadroRefaccio
 import { useEffect, useState } from 'react';
 import { UseAuth } from '@/providers/AuthProvider';
 import { ListWaterPlants } from '@/services/waterPlants';
+import { BiAdjust } from "react-icons/bi";
 
 export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
@@ -37,17 +38,16 @@ export default function DashboardPage() {
       <Header />
       <div className="dashboard">
         <aside className="dashboard-sidebar">
-          <h1 className="dashboard-logo">
-            <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="Logo aquanet"
-                width={150}
-                height={150}
-                priority
-              />
-            </Link>
-          </h1>
+          {/* Botón de modo oscuro/claro */}
+        <button
+            onClick={() => {
+              const isDark = document.body.classList.toggle('dark');
+              localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            }}
+            className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition height-10 w-10 flex items-center justify-center mb-4"
+          >
+            <BiAdjust />
+          </button>
           <h2 className="dashboard-subtitle">Mis Franquicias</h2>
           <div className="dashboard-franquicias-list">
             {franquicias.map((f) => (
