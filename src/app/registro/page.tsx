@@ -9,7 +9,8 @@ import { InformationField } from '@/components/InformationField/InformationField
 import { createUser } from '@/services/user/createUser';
 import { signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
-import { UseAuth } from '@/providers/AuthProvider';
+import { UseAuth } from '@/providers/AuthProvider'; 
+
 
 import './Registro.css';
 
@@ -23,9 +24,7 @@ interface FormData {
   secondLastName: string;
   birthday: string;
   phoneNumber: string;
-  curp?: string;
-  rfc?: string;
-  profilePictureUrl?: string;
+
 }
 
 export default function Register() {
@@ -38,14 +37,12 @@ export default function Register() {
     firstLastName: '',
     secondLastName: '',
     birthday: '',
-    phoneNumber: '',
-    curp: '',
-    rfc: '',
-    profilePictureUrl: ''
+    phoneNumber: ''
   });
 
   const router = useRouter();
-  const { setUserContext } = UseAuth();
+  const { setUserContext } = UseAuth(); // 🧠 Usar el setter del contexto
+
 
   const handleFieldChange = (fieldName: keyof FormData, value: string) => {
     setFormData((prevData) => ({
@@ -63,36 +60,35 @@ export default function Register() {
     }
 
     try {
-      
+      // 1. Crear en Firebase Auth
       const authResult = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      const firebaseUid = authResult.user.uid;
       console.log("✅ Usuario creado en Firebase:", authResult.user);
 
-      const payload = {
-        email: formData.email,
-        password: formData.password,
+      // 2. Crear en tu backend
+      const payload: any = {
         firstName: formData.firstName,
-        middleName: formData.middleName || undefined,
         firstLastName: formData.firstLastName,
         secondLastName: formData.secondLastName,
-        birthday: formData.birthday,
+        birthday: new Date(formData.birthday),
         phoneNumber: formData.phoneNumber,
-        curp: formData.curp || undefined,
-        rfc: formData.rfc || undefined,
-        profilePictureUrl: formData.profilePictureUrl || undefined,
-        roleId: 1,
-        firebaseUid: firebaseUid, 
+        curp: "",
+        rfc: "",
+        firebaseId: authResult.user.uid, // 🧠 Usar el UID de Firebase
+         // Incluye el UID de Firebase
       };
 
-      console.log("📦 Payload enviado al backend:", payload);
+      if (formData.middleName.trim() !== '') {
+        payload.middleName = formData.middleName;
+      }
 
-      const result = await createUser(payload);
+      const result = await createUser(payload); // Usuario del backend
       console.log("✅ Registro exitoso en backend:", result);
 
-      
+      // 3. Actualizar el contexto directamente
       setUserContext(result);
 
-      
+      // 4. Redirigir
+
       router.push('/dashboard');
     } catch (error) {
       console.error("❌ Error en el registro:", error);
@@ -112,6 +108,7 @@ export default function Register() {
       }));
 
       console.log("🧠 Google login exitoso. Redirigiendo a completar registro...");
+
       setTimeout(() => {
         router.push('/registro/completar-registro');
       }, 100);
@@ -148,9 +145,7 @@ export default function Register() {
             <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val as string)} placeholder="Second Last Name" variant="text" />
             <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val as string)} variant="date" />
             <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val as string)} placeholder="Phone Number" variant="text" />
-            <InformationField label="CURP (opcional)" value={formData.curp || ''} onChange={(val) => handleFieldChange("curp", val as string)} placeholder="CURP" variant="text" />
-            <InformationField label="RFC (opcional)" value={formData.rfc || ''} onChange={(val) => handleFieldChange("rfc", val as string)} placeholder="RFC" variant="text" />
-            <InformationField label="Foto de perfil (URL opcional)" value={formData.profilePictureUrl || ''} onChange={(val) => handleFieldChange("profilePictureUrl", val as string)} placeholder="URL de imagen" variant="text" />
+
 
             <button type="submit" className="registro-btn">Registrarse</button>
           </form>
