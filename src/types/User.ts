@@ -15,4 +15,5 @@ export interface User {
     role: Role;
     createdAt: Date;
     updatedAt: Date;
+    
 };
