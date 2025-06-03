@@ -23,6 +23,9 @@ interface FormData {
   secondLastName: string;
   birthday: string;
   phoneNumber: string;
+  curp?: string;
+  rfc?: string;
+  profilePictureUrl?: string;
 }
 
 export default function Register() {
@@ -35,7 +38,10 @@ export default function Register() {
     firstLastName: '',
     secondLastName: '',
     birthday: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    curp: '',
+    rfc: '',
+    profilePictureUrl: ''
   });
 
   const router = useRouter();
@@ -63,7 +69,7 @@ export default function Register() {
       console.log("✅ Usuario creado en Firebase:", authResult.user);
 
       // 2. Crear en tu backend
-      const payload: any = {
+      const payload = {
         email: formData.email,
         password: formData.password,
         firstName: formData.firstName,
@@ -72,12 +78,14 @@ export default function Register() {
         secondLastName: formData.secondLastName,
         birthday: formData.birthday,
         phoneNumber: formData.phoneNumber,
-        curp: "",
-        rfc: "",
-        profilePictureUrl: "",
+        curp: formData.curp || undefined,
+        rfc: formData.rfc || undefined,
+        profilePictureUrl: formData.profilePictureUrl || undefined,
         roleId: 1,
-        firebaseUid: firebaseUid, // 👈 Muy importante
+        firebaseId: firebaseUid, // Cambiado de firebaseUid a firebaseId
       };
+
+      console.log("📦 Payload enviado al backend:", payload);
 
       const result = await createUser(payload);
       console.log("✅ Registro exitoso en backend:", result);
@@ -141,6 +149,9 @@ export default function Register() {
             <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val as string)} placeholder="Second Last Name" variant="text" />
             <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val as string)} variant="date" />
             <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val as string)} placeholder="Phone Number" variant="text" />
+            <InformationField label="CURP (opcional)" value={formData.curp || ''} onChange={(val) => handleFieldChange("curp", val as string)} placeholder="CURP" variant="text" />
+            <InformationField label="RFC (opcional)" value={formData.rfc || ''} onChange={(val) => handleFieldChange("rfc", val as string)} placeholder="RFC" variant="text" />
+            <InformationField label="Foto de perfil (URL opcional)" value={formData.profilePictureUrl || ''} onChange={(val) => handleFieldChange("profilePictureUrl", val as string)} placeholder="URL de imagen" variant="text" />
 
             <button type="submit" className="registro-btn">Registrarse</button>
           </form>
