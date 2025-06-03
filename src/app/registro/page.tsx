@@ -11,6 +11,7 @@ import { signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
 import { UseAuth } from '@/providers/AuthProvider'; 
 
+
 import './Registro.css';
 
 interface FormData {
@@ -23,6 +24,7 @@ interface FormData {
   secondLastName: string;
   birthday: string;
   phoneNumber: string;
+
 }
 
 export default function Register() {
@@ -40,6 +42,7 @@ export default function Register() {
 
   const router = useRouter();
   const { setUserContext } = UseAuth(); // 🧠 Usar el setter del contexto
+
 
   const handleFieldChange = (fieldName: keyof FormData, value: string) => {
     setFormData((prevData) => ({
@@ -85,6 +88,7 @@ export default function Register() {
       setUserContext(result);
 
       // 4. Redirigir
+
       router.push('/dashboard');
     } catch (error) {
       console.error("❌ Error en el registro:", error);
@@ -141,6 +145,7 @@ export default function Register() {
             <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val as string)} placeholder="Second Last Name" variant="text" />
             <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val as string)} variant="date" />
             <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val as string)} placeholder="Phone Number" variant="text" />
+
 
             <button type="submit" className="registro-btn">Registrarse</button>
           </form>

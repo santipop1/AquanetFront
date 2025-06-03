@@ -1,17 +1,18 @@
 import React from "react";
 import { Pencil } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import "./RecuadroFranquicias.css";
 
 export interface RecuadroFranquiciasProps {
   nombre: string;
-  onEditar?: () => void;
   logoSrc?: string;
+  onClick?: () => void;
 }
 
-const RecuadroFranquicias = ({ nombre, onEditar, logoSrc }: RecuadroFranquiciasProps) => {
+const RecuadroFranquicias = ({ nombre, logoSrc, onClick }: RecuadroFranquiciasProps) => {
   return (
-    <div className="recuadro-franquicia">
+    <div className="recuadro-franquicia" onClick={onClick}>
       <Image
         src={logoSrc || "/gotita.png"}
         alt="Logo de franquicia"
@@ -20,13 +21,14 @@ const RecuadroFranquicias = ({ nombre, onEditar, logoSrc }: RecuadroFranquiciasP
         className="recuadro-logo"
       />
       <span className="recuadro-nombre">{nombre}</span>
-      <button
-        onClick={onEditar}
+      <Link
+        href="/editar-franquicia"
         className="recuadro-boton"
+        onClick={(e) => e.stopPropagation()}
         aria-label="Editar franquicia"
       >
         <Pencil size={18} />
-      </button>
+      </Link>
     </div>
   );
 };

@@ -20,7 +20,7 @@ export const getNotifications = async (useruid: string): Promise<NotificationDet
         'Content-Type': 'text/plain',
       },
     });
-
+    console.log('Notificaciones obtenidas:', data);
     return data;
   } catch (error) {
     console.error('Error al obtener notificaciones:', error);
