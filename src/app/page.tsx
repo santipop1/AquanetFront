@@ -103,6 +103,7 @@ export default function Inicio() {
           <div className="logo-container">
             <Image src="/logo.png" alt="Logo aquanet" width={500} height={80} />
           </div>
+          </header>
           <p>
             En <span className="logo-inline"><Image src="/logo.png" alt="aquanet" width={90} height={30} /></span>, revolucionamos el emprendimiento con un modelo inteligente de franquicias de purificadoras de agua, el cual además facilita el acceso de la población a agua potable y ¡fomenta el consumo sustentable!
           </p>
@@ -110,29 +111,39 @@ export default function Inicio() {
             Nuestra plataforma analiza múltiples variables para asegurar que cada purificadora se instale en el <strong>lugar ideal</strong>, maximizando su rentabilidad y alcance. Además, con{' '}
             <span className="aquanetplus-inline">
               <Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
-            </span>{' '}
+            </span>
             ofrecemos un software de gestión avanzada que te permite monitorear y administrar tu purificadora en tiempo real.
           </p>
 
           <div className="registro-redirect">
-            <Link href="/registro" className="btn-ir-a-registro underline" style={{ color: '#05b852' }}>
-              Ir a Registro
+            <Link href="/registro">
+              <Image 
+              src="/registrate.png" 
+              alt="Regístrate" 
+              width={200} 
+              height={100} 
+              style={{ cursor: 'pointer' }}
+            />
             </Link>
           </div>
-        </header>
+        
 
         <div className="wave">
           <img src="/top-wave.svg" alt="Wave decoration" />
         </div>
+        
 
         <div className="contenido">
+          <section className="cta">
+            <h2>¡Purifica tu futuro!</h2>
+          </section>
           <video controls className="video">
             <source src="/videoaquanet.mp4" type="video/mp4" />
             Tu navegador no soporta este video.
           </video>
 
           <section className="cta">
-            <h2>¡Purifica tu futuro!</h2>
+            
             <p>
               Purifica tu futuro comprando una franquicia purificadora con{' '}
               <span className="logo-inline">
@@ -146,7 +157,17 @@ export default function Inicio() {
               </span>{' '}
               totalmente gratis
             </p>
-            <a href="/formulario" className="apply-link">Aplica ahora</a>
+            <div className="registro-redirect">
+            <Link href="/formulario">
+              <Image 
+              src="/quierofranquicia.png" 
+              alt="Formulario" 
+              width={250} 
+              height={150} 
+              style={{ cursor: 'pointer' }}
+            />
+            </Link>
+          </div>
           </section>
         </div>
 
