@@ -5,7 +5,7 @@
     padding: 1.5rem;
     width: auto;
     max-width: 100%;
-    height: 60%;
+    height: 70%;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
     transition: background-color 0.3s, color 0.3s;
@@ -53,7 +53,8 @@
   }
   
   .dc-popup-inner {
-    background-color: #919fc0;
+    background-color: #334155
+    ;
     color: var(--foreground);
     padding: 2rem;
     border-radius: 12px;

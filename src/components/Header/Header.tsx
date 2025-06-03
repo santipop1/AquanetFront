@@ -5,8 +5,10 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import clsx from 'clsx';
+
 import { BiAdjust } from "react-icons/bi";
 import { FaBell } from 'react-icons/fa';
+
 
 import { UseAuth } from '@/providers/AuthProvider';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
@@ -16,7 +18,7 @@ import { NotificationDropdown } from '@/components/Notifications/NotificationDro
 const Links = [
   { href: '/', label: 'Inicio' },
   { href: '/formulario', label: 'Purifica tu futuro' },
-  { href: '/aquanet-plus', label: 'Aquanet+' }
+  { href: '/dashboard', label: 'Aquanet+' }
 ];
 
 const Header = () => {
@@ -79,6 +81,7 @@ const Header = () => {
         </nav>
 
         <div className="relative flex gap-2 items-center pr-2">
+
           <button
             onClick={() => {
               const isDark = document.body.classList.toggle('dark');
@@ -88,6 +91,7 @@ const Header = () => {
           >
             <BiAdjust />
           </button>
+
 
           <div ref={buttonRef}>
             <SymbolButton variant="user" clickFunc={handleSymbolClick} />

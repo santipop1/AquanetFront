@@ -123,24 +123,28 @@ const RecuadroVentas = ({ waterPlantId }: { waterPlantId: number | null }) => {
       {mostrarFormulario && (
         <div className="dc-popup">
           <div className="dc-popup-inner">
-            <h4>Registrar Venta</h4>
-            <input
-              type="number"
-              value={form.quantityJug}
-              onChange={(e) => setForm(f => ({ ...f, quantityJug: e.target.value }))}
-              placeholder="Cantidad de garrafones"
-            />
+          <h4 style={{ color: 'white' }}>Registrar Venta</h4>
+          <input
+            type="number"
+            value={form.quantityJug}
+            onChange={(e) => setForm(f => ({ ...f, quantityJug: e.target.value }))}
+            placeholder="Cantidad de garrafones"
+            style={{ color: 'white' }}
+          />
+
             <input
               type="number"
               value={form.quantityLiter}
               onChange={(e) => setForm(f => ({ ...f, quantityLiter: e.target.value }))}
               placeholder="Cantidad de litros"
+              style={{ color: 'white' }}
             />
             <input
               type="number"
               value={form.quantityGallon}
               onChange={(e) => setForm(f => ({ ...f, quantityGallon: e.target.value }))}
               placeholder="Cantidad de galones"
+              style={{ color: 'white' }}
             />
             <div className="dc-popup-buttons">
               <button onClick={agregarVenta} disabled={loading}>Guardar</button>
