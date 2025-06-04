@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import clsx from 'clsx';
+import './Header.css';
 
 import { BiAdjust } from "react-icons/bi";
 import { FaBell } from 'react-icons/fa';
@@ -57,7 +58,7 @@ const Header = () => {
 
   return (
     <header className="w-full shadow-sm border-b-1 dark:bg-[#0a1643]">
-      <div className="container mx-auto flex items-center justify-between px-4 py-5">
+      <div className="container mx-auto flex items-center justify-between px-4 py-5 header-elegante">
         <div className="flex items-center gap-2 pl-2">
           <Link href="/">
             <Image src="/logo.png" alt="Logo" width={180} height={180} />
