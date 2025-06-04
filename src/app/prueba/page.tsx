@@ -1,6 +1,6 @@
 'use client';
 
-import './Inicio.css';
+import './prueba.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
@@ -59,11 +59,10 @@ export default function Prueba() {
         <section className="hero">
           <div className="hero-text">
             <h1>Agua pura y saludable para tu hogar</h1>
-            <p className="justificado">
-              En <span className="inline-logo"><Image src="/logo.png" alt="aquanet" width={90} height={30} /></span>, revolucionamos el emprendimiento con un modelo inteligente de franquicias de purificadoras de agua, el cual además facilita el acceso de la población a agua potable y ¡fomenta el consumo sustentable!<br />
-              Nuestra plataforma analiza múltiples variables para asegurar que cada purificadora se instale en el <strong>lugar ideal</strong>, maximizando su rentabilidad y alcance. Además, con <span className="inline-logo"><Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} /></span> ofrecemos un software de gestión avanzada que te permite monitorear y administrar tu purificadora en tiempo real.
+            <p>
+              En <strong>Aquanet</strong> revolucionamos el emprendimiento con franquicias inteligentes
+              y software de monitoreo avanzado. ¡Accede a agua potable y rentable desde cualquier lugar!
             </p>
-
             <Link href="/registro" className="boton">Regístrate</Link>
           </div>
            {/* AQUÍ CAMBIAR POR IMAGEN ADOCK A LAS PURIFICADORAS */}
