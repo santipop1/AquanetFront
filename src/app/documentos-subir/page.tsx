@@ -40,7 +40,7 @@ export default function SubirDocumento() {
     if (!user) return;
 
     const token = await getIdToken(user);
-    const waterPlantId = 1; // Debes obtener el id real de la planta que le corresponde al usuario
+    const waterPlantId = 3; // Debes obtener el id real de la planta que le corresponde al usuario
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -65,7 +65,7 @@ export default function SubirDocumento() {
         await createDocument({
           documentTypeId: typeId,
           documentUrl: result.url,
-          waterPlantId,
+          waterPlantId: 3,
           status: "pending",
           comments: "",
         });

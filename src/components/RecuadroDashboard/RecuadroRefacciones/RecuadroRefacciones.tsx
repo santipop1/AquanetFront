@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./RecuadroRefacciones.css";
+import { getSpareParts, UpdatedSparePart } from "@/services/spareParts";
 
-const RecuadroRefacciones = () => {
+const RecuadroRefacciones = ({ waterPlantId }: { waterPlantId: number | null }) => {
+  const [spareParts, setSpareParts] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!waterPlantId) return;
+    getSpareParts(waterPlantId).then(setSpareParts);
+  }, [waterPlantId]);
+
+  // Función para calcular el contador de días/meses/años
+  const getCountdown = (date: string | null) => {
+    if (!date) return 'Sin registro';
+    const now = new Date();
+    const target = new Date(date);
+    let diff = target.getTime() - now.getTime();
+    if (diff <= 0) return '¡Ya toca!';
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const years = Math.floor(days / 365);
+    const months = Math.floor((days % 365) / 30);
+    const remDays = days % 30;
+    let str = '';
+    if (years > 0) str += `${years} Año${years > 1 ? 's' : ''} `;
+    if (months > 0) str += `${months} Mes${months > 1 ? 'es' : ''} `;
+    if (remDays > 0) str += `${remDays} Día${remDays > 1 ? 's' : ''}`;
+    return str.trim();
+  };
+
   return (
     <div className="dc-container recuadro-refacciones">
       <h3 className="dc-title">Refacciones</h3>
@@ -14,12 +40,24 @@ const RecuadroRefacciones = () => {
           </tr>
         </thead>
         <tbody>
-          <tr><td>Filtro de sedimentos</td><td>4 Meses 17 Días</td><td><button>Registrar cambio</button></td></tr>
-          <tr><td>Filtro de carbón activado</td><td>7 Meses 12 Días</td><td><button>Registrar cambio</button></td></tr>
-          <tr><td>Membrana de ósmosis inversa</td><td>1 Año 3 Meses 21 Días</td><td><button>Registrar cambio</button></td></tr>
-          <tr><td>Bomba de presión</td><td>2 Años 4 Meses</td><td><button>Registrar cambio</button></td></tr>
-          <tr><td>Lámpara de luz UV</td><td>3 Meses 15 Días</td><td><button>Registrar cambio</button></td></tr>
-          <tr><td>Mangueras</td><td>1 Año 9 Meses 3 Días</td><td><button>Registrar cambio</button></td></tr>
+          {spareParts.map((sp) => (
+            <tr key={sp.id}>
+              <td>{sp.name}</td>
+              <td>{getCountdown(sp.nextChangeDate)}</td>
+              <td>
+                <button onClick={async () => {
+                  try {
+                    await UpdatedSparePart(sp.id);
+                    alert('Cambio registrado correctamente');
+                  } catch {
+                    alert('Error al registrar cambio');
+                  }
+                }}>
+                  Registrar cambio
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
