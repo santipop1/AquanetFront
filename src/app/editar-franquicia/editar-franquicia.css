@@ -1,0 +1,99 @@
+.editar-container {
+    background-color: #f7f7f7;
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .editar-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .editar-back {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: #111827;
+  }
+  
+  .editar-titulo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  
+  .editar-form {
+    max-width: 720px;
+    margin: 0 auto;
+    flex: 1;
+    width: 100%;
+  }
+  
+  .selector-wrapper {
+    margin-top: 1.5rem;
+  }
+  
+  .selector-titulo {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .editar-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .editar-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .btn-rojo {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .btn-rojo:hover {
+    background-color: #b91c1c;
+  }
+  
+  .btn-borde {
+    background-color: white;
+    border: 2px solid #111827;
+    color: #111827;
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .btn-borde:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .btn-borde:disabled {
+    border-color: #d1d5db;
+    color: #9ca3af;
+    background-color: #ffffff;
+    cursor: not-allowed;
+  }
+  

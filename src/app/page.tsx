@@ -1,103 +1,199 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import './Inicio.css';
+import Image from 'next/image';
+import Link from 'next/link';
+import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
+import Header from '@/components/Header/Header';
+import Footer from '@/components/Footer/Footer';
+import { useEffect } from 'react';
+
+declare global {
+  interface Window {
+    watsonAssistantChatOptions: {
+      integrationID: string;
+      region: string;
+      serviceInstanceID: string;
+      onLoad: (instance: any) => void;
+      clientVersion?: string;
+      showLauncher?: boolean;
+      greeting?: Array<{
+        delay: number;
+        message: string;
+        is_enabled: boolean;
+      }>;
+    };
+  }
+}
+
+export default function Inicio() {
+  useEffect(() => {
+    window.watsonAssistantChatOptions = {
+      integrationID: '9aa77c57-a1c6-44aa-9184-f937eb1cd57e',
+      region: 'us-south',
+      serviceInstanceID: 'f0d6142e-e0bd-48cc-bfee-14d7ea2a6525',
+      showLauncher: true,
+      greeting: [{
+        delay: 0,
+        message: "",
+        is_enabled: false
+      }],
+      onLoad: (instance) => {
+        instance.updateCSSVariables({
+          'launcher-icon-size': '0px',
+          'launcher-background-image': 'url(/animation.gif)',
+          'launcher-background-size': 'cover',
+          'launcher-width': '80px',
+          'launcher-height': '80px',
+          'launcher-box-shadow': 'none',
+          'launcher-border-radius': '50%',
+          'launcher-background-color': 'transparent',
+          'launcher-border': '2px solid #05b852'
+        });
+
+        // Eliminar cualquier contenido dentro del launcher
+        const removeLauncherContent = () => {
+          const launcher = document.querySelector('.WACLauncher__Button');
+          if (launcher) {
+            launcher.innerHTML = '';
+          }
+          
+          const textContainer = document.querySelector('.WACLauncherComplex__Text');
+          if (textContainer) {
+            textContainer.remove();
+          }
+
+          const buttonContainer = document.querySelector('.WACLauncherComplex__ContentButton');
+          if (buttonContainer) {
+            buttonContainer.innerHTML = '';
+          }
+        };
+
+        // Ejecutar inmediatamente y cada segundo por si el elemento se añade después
+        removeLauncherContent();
+        const interval = setInterval(removeLauncherContent, 1000);
+
+        // Limpiar el intervalo después de 5 segundos
+        setTimeout(() => {
+          clearInterval(interval);
+        }, 5000);
+
+        instance.render();
+      }
+    };
+
+    const script = document.createElement('script');
+    script.src = 'https://web-chat.global.assistant.watson.appdomain.cloud/versions/' +
+      (window.watsonAssistantChatOptions.clientVersion || 'latest') +
+      '/WatsonAssistantChatEntry.js';
+    document.head.appendChild(script);
+
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+      <Header />
+      <section className="inicio">
+        <header className="hero">
+          <div className="logo-container">
+            <Image src="/logo.png" alt="Logo aquanet" width={500} height={80} />
+          </div>
+          <p>
+            En <span className="logo-inline"><Image src="/logo.png" alt="aquanet" width={90} height={30} /></span>, revolucionamos el emprendimiento con un modelo inteligente de franquicias de purificadoras de agua, el cual además facilita el acceso de la población a agua potable y ¡fomenta el consumo sustentable!
+          </p>
+          <p>
+            Nuestra plataforma analiza múltiples variables para asegurar que cada purificadora se instale en el <strong>lugar ideal</strong>, maximizando su rentabilidad y alcance. Además, con{' '}
+            <span className="aquanetplus-inline">
+              <Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
+            </span>{' '}
+            ofrecemos un software de gestión avanzada que te permite monitorear y administrar tu purificadora en tiempo real.
+          </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <div className="registro-redirect">
+            <Link href="/registro" className="btn-ir-a-registro underline" style={{ color: '#05b852' }}>
+              Ir a Registro
+            </Link>
+          </div>
+        </header>
+
+        <div className="wave">
+          <img src="/top-wave.svg" alt="Wave decoration" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <div className="contenido">
+          <video controls className="video">
+            <source src="/videoaquanet.mp4" type="video/mp4" />
+            Tu navegador no soporta este video.
+          </video>
+
+          <section className="cta">
+            <h2>¡Purifica tu futuro!</h2>
+            <p>
+              Purifica tu futuro comprando una franquicia purificadora con{' '}
+              <span className="logo-inline">
+                <Image src="/logo.png" alt="aquanet" width={90} height={30} />
+              </span>! Nuestro avanzado algoritmo te ayudará a encontrar la purificadora de tus sueños, asegurando que tu inversión esté en el lugar ideal, maximizando su impacto y rentabilidad. Y disfruta...
+            </p>
+            <p className="bonus">
+              ¡Incluye 2 años de{' '}
+              <span className="aquanetplus-inline">
+                <Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
+              </span>{' '}
+              totalmente gratis
+            </p>
+            <a href="/formulario" className="apply-link">Aplica ahora</a>
+          </section>
+        </div>
+
+        <div className="wave">
+          <img src="/bottom-wave.svg" alt="Wave decoration" />
+        </div>
+
+        <section className="franquicia">
+          <div className="logo-aquanet-plus-img">
+            <Image src="/aquanetplus.png" alt="aquanet+" width={200} height={80} />
+          </div>
+          <h3 className="franquicia-titulo">¿Ya tienes una franquicia purificadora?</h3>
+          <p className="franquicia-descripcion">
+            Lleva tu negocio al siguiente nivel con{' '}
+            <span className="aquanetplus-inline">
+              <Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
+            </span>{' '}
+            y simplifica la administración de tu purificadora, con tecnología de monitoreo en tiempo real, reportes inteligentes y gestión eficiente de insumos, te ayudamos a maximizar la productividad y rentabilidad de tu franquicia.
+          </p>
+          <ul className="franquicia-beneficios">
+            <li>Gestión de ventas e inventario</li>
+            <li>Monitoreo en tiempo real</li>
+            <li>Reportes inteligentes</li>
+          </ul>
+        </section>
+
+        <section className="planes">
+          <h2 className="titulo-planes">Elige tu plan</h2>
+          <div className="contenedor-planes flex items-center">
+            <ContratarPlan
+              titulo="Plan Mensual"
+              precio="$699"
+              periodicidad="al mes"
+              onContratar={() => alert("Plan mensual contratado")}
+            />
+            <ContratarPlan
+              titulo="Plan Anual"
+              precio="$579"
+              periodicidad="al mes"
+              notaAdicional="un solo pago de $6,948"
+              onContratar={() => alert("Plan anual contratado")}
+            />
+          </div>
+        </section>
+
+        <Footer />
+      </section>
+    </>
   );
 }

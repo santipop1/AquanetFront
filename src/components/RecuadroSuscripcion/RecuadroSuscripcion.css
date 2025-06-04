@@ -1,0 +1,75 @@
+.rs-container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .rs-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .rs-logo {
+    width: 70px;
+    height: 60px;
+    border-radius: 12px;
+  }
+  
+  .rs-info {
+    text-align: left;
+  }
+  
+  .rs-nombre {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  
+  .rs-descripcion {
+    font-size: 0.875rem;
+    color: #555;
+  }
+  
+  .rs-body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 0.75rem;
+  }
+  
+  .rs-boton {
+    width: 100%;
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  
+  .rs-boton-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .rs-nota {
+    font-size: 0.75rem;
+    text-align: center;
+    color: #555;
+    margin-bottom: 0.3rem;
+  }
+  
+  .rs-fecha {
+    font-size: 0.85rem;
+    text-align: center;
+    color: #0d1b8a;
+    font-weight: 600;
+  }
+  
