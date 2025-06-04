@@ -48,7 +48,7 @@ export const NotificationDropdown = () => {
       onMouseLeave={() => setShowDropdown(false)}
     >
       <div className="relative cursor-pointer" onClick={handleBellClick}>
-        <div className='min-w-40 max-w-40 border-2 rounded-2xl justify-center text-md flex flex-row items-center justify-between py-0.5 text-gray-700 hover:text-blue-500'>
+        <div className='min-w-40 max-w-40 border-2 rounded-2xl justify-center text-md flex flex-row items-center py-0.5 text-gray-700 hover:text-blue-500'>
           <FiBell className="text-2xl pr-1" />
           Notificaciones
         </div>

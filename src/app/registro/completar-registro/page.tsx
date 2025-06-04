@@ -49,7 +49,7 @@ export default function CompletarRegistro() {
         phoneNumber: googleData.phoneNumber || '',
         firstName,
         firstLastName,
-        password: Math.random().toString(36).slice(-8) // ✅ Password aleatorio
+        password: Math.random().toString(36).slice(-8) 
       }));
     } else {
       router.push('/registro');
@@ -86,7 +86,7 @@ export default function CompletarRegistro() {
         rfc: '',
         profilePictureUrl: '',
         roleId: 1,
-        firebaseUid: currentUser.uid 
+        firebaseId: currentUser.uid 
       };
 
       console.log('📦 Payload enviado:', payload);
