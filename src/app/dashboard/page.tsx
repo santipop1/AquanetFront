@@ -65,7 +65,7 @@ export default function DashboardPage() {
           <div className="dashboard-grid">
             <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
             <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
-            <RecuadroRefacciones />
+            <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
           </div>
         </main>
       </div>
