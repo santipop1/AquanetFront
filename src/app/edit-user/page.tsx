@@ -6,7 +6,7 @@ import { ProfilePicture } from "@/components/ProfilePicture/ProfilePicture";
 import { ButtonText } from "@/components/ButtonText/ButtonText";
 import ContratarPlan from "@/components/ContratarPlan/ContratarPlan";
 import Image from "next/image";
-import { UseAuth } from "../providers/AuthProvider";
+import { UseAuth } from "@/providers/AuthProvider";
 import { useRef, useState, useEffect } from "react";
 import { User } from "@/types/User";
 import { updateUserInfo } from "@/services/user/updateUserInfo";
@@ -17,7 +17,8 @@ const UpdateUserPage = () => {
     const { user, subscription, setUserContext } = UseAuth();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [updatedUser, setUpdatedUser] = useState<User | null>(user ?? null);
-    const subscribed = subscription ? subscription.status : "inactive";
+    //const subscribed = subscription ? subscription.status : "inactive";
+    const subscribed = "inactive"
     const planType = subscription ? subscription.subscriptionType.planName : null;
     const nextPaymentDate = subscription ? subscription.nextPayment : null;
     const router = useRouter();
@@ -38,6 +39,7 @@ const UpdateUserPage = () => {
 
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("private", "false");
 
         try {
         const res = await fetch("/api/upload-profile-picture", {

@@ -3,7 +3,7 @@ import Config from "@/config";
 
 const back = axios.create({
     baseURL: Config.BACKEND_URL,
-    timeout: 5000
+    timeout: 180000
 });
 
 back.interceptors.response.use(

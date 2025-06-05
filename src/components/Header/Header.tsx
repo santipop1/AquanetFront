@@ -26,7 +26,7 @@ const Header = () => {
     const isLoggedIn = user ? true : false;
     */}
 
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ const Header = () => {
     if(showPopup) {
       setShowPopup(false);
       return;
-    }
+    } 
     if (!isLoggedIn) {
       router.push('/registro');
     } else {
