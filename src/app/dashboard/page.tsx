@@ -123,6 +123,13 @@ export default function DashboardPage() {
         {paymentStatus === 'failed' && (
           <div className="payment-error">
             <p>Error en el pago. Por favor intenta nuevamente.</p>
+        </aside>
+        <main className="dashboard-main">
+          <h2 className="dashboard-titulo">{franquiciaActiva ? `Franquicia ${franquiciaActiva.id}` : ''}</h2>
+          <div className="dashboard-grid">
+            <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
+            <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
+            <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
           </div>
         )}
 
