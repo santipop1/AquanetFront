@@ -1,15 +1,15 @@
 :root {
-  --dashboard-bg: #f5f6fa;
-  --sidebar-bg: #ffffff;
-  --text-primary: #1e293b;
-  --border-color: #e5e7eb;
+  --dashboard-bg: #F0F4F4;
+  --sidebar-bg: #ECE6DA;
+  --text-primary: #444444;
+  --border-color: #CCCCCC;
 }
 
 body.dark {
-  --dashboard-bg: #0f172a;
-  --sidebar-bg: #1e293b;
-  --text-primary: #f8fafc;
-  --border-color: #334155;
+  --dashboard-bg: #121619;
+  --sidebar-bg: #1F2326;
+  --text-primary: #DADADA;
+  --border-color: #3B4145;
 }
 
 .dashboard {

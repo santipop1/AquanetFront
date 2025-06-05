@@ -3,7 +3,7 @@
 import './formulario.css';
 import Image from 'next/image';
 import { useState } from 'react';
-import Header from '@/components/Header/Header';
+import HeaderMini from '@/components/HeaderMini/HeaderMini';
 import { createQuotation } from '@/services/quotations';
 import { InformationField } from '@/components/InformationField/InformationField';
 import { UseAuth } from '@/providers/AuthProvider';
@@ -28,7 +28,7 @@ export default function FormularioPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // 🧤 Evita recarga del form
+    e.preventDefault();
 
     setLoading(true);
 
@@ -39,10 +39,10 @@ export default function FormularioPage() {
 
     try {
       const result = await createQuotation(payload);
-      alert('✅ Cotización enviada correctamente');
+      alert('Cotización enviada correctamente');
       console.log('Cotización:', result);
     } catch (error) {
-      console.error('❌ Error al enviar cotización:', error);
+      console.error('Error al enviar cotización:', error);
 
       alert('Hubo un error al enviar el formulario');
     } finally {
@@ -52,7 +52,7 @@ export default function FormularioPage() {
 
   return (
     <>
-      <Header />
+      <HeaderMini />
       <div className="formulario-background">
         <form onSubmit={handleSubmit} className="formulario-container">
 

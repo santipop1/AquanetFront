@@ -99,7 +99,7 @@ const RecuadroVentas = ({ waterPlantId }: { waterPlantId: number | null }) => {
           <YAxis />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#0F172A',
+              backgroundColor: '#0F172A', //Recuadro de info
               color: '#ffffff',
               borderRadius: '8px',
               border: 'none',
@@ -109,7 +109,7 @@ const RecuadroVentas = ({ waterPlantId }: { waterPlantId: number | null }) => {
             itemStyle={{ color: '#ffffff' }}
             labelStyle={{ color: '#ffffff', fontWeight: 600 }}
           />
-          <Bar dataKey="ventas" fill="#3b8905" />
+          <Bar dataKey="ventas" fill="#8cc2c0" /> {/* Color de las barras */}
         </BarChart>
       </ResponsiveContainer>
 
