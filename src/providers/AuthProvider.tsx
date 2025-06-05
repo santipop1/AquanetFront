@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { User as FirebaseUser , getIdToken , onAuthStateChanged } from "firebase/auth";
-import { User } from "@/types/User";
+import { User as FirebaseUser, getIdToken, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/app/libreria/firebase";
-import getUserByFirebaseId from "@/services/user/getUserByFirebaseId";
+import { User } from "@/types/User";
 import { Role } from "@/types/Role";
 import { Subscription } from "@/types/Subscription";
+import getUserByFirebaseId from "@/services/user/getUserByFirebaseId";
 import getSubscriptionByUserId from "@/services/subscription/getSubscriptionByUserId";
+import back from "@/services/back";
 
 interface AuthContextProps {
   user: User | null;
@@ -16,7 +17,8 @@ interface AuthContextProps {
   idToken: string | null;
   role: Role | null;
   subscription: Subscription | null;
-  setUserContext: (user: User) => void;
+  setUserContext: (user: User | null) => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -27,6 +29,7 @@ const AuthContext = createContext<AuthContextProps>({
   role: null,
   subscription: null,
   setUserContext: () => {},
+  logout: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -36,6 +39,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [idToken, setIdToken] = useState<string | null>(null);
   const [role, setRole] = useState<Role | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
+
+  const setUserContext = (userData: User | null) => {
+    setUser(userData);
+    setRole(userData?.role || null);
+  };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+
+    setFirebaseUser(null);
+    setIdToken(null);
+    setUser(null);
+    setRole(null);
+    setSubscription(null);
+    back.defaults.headers.common["Authorization"] = "";
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -47,14 +70,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setFirebaseUser(firebaseUser);
           setIdToken(token);
           setUser(userData);
+          back.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
           if (userData) {
             const subscriptionData = await getSubscriptionByUserId(userData.id);
-            setRole(userData.role);
+            setRole(userData.role || null);
             setSubscription(subscriptionData);
+          } else {
+            setRole(null);
+            setSubscription(null);
           }
         } catch (error) {
-          console.error("Error al obtener el token:", error);
+          console.error("❌ Error al obtener token o usuario:", error);
           setFirebaseUser(null);
           setIdToken(null);
           setUser(null);
@@ -68,6 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setRole(null);
         setSubscription(null);
       }
+
       setLoading(false);
     });
 
@@ -75,7 +103,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, firebaseUser, loading, idToken, role, subscription, setUserContext: setUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        firebaseUser,
+        loading,
+        idToken,
+        role,
+        subscription,
+        setUserContext,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

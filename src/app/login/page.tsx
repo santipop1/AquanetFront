@@ -5,13 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
 
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
-
 import ResetPassword from '@/components/ResetPassword/ResetPassword';
 
 import './Login.css';
@@ -19,10 +18,19 @@ import './Login.css';
 export default function Login() {
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
-
   const [showResetModal, setShowResetModal] = useState(false);
-
   const router = useRouter();
+
+  const waitForFirebaseUser = (): Promise<void> => {
+    return new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        if (firebaseUser) {
+          unsubscribe(); 
+          resolve();
+        }
+      });
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,6 +42,7 @@ export default function Login() {
 
     try {
       await signInWithEmailAndPassword(auth, correo, contrasena);
+      await waitForFirebaseUser();
       alert('¡Inicio de sesión exitoso!');
       router.push('/dashboard');
     } catch (error: any) {
@@ -44,6 +53,7 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
+      await waitForFirebaseUser();
       alert('¡Inicio de sesión con Google exitoso!');
       router.push('/dashboard');
     } catch (error: any) {
@@ -60,7 +70,6 @@ export default function Login() {
           <h2>Iniciar Sesión</h2>
           <p>
             ¿No tienes cuenta?{' '}
-
             <Link href="/registro" className="link-style">
               Regístrate aquí
             </Link>
@@ -72,7 +81,6 @@ export default function Login() {
             </button>
           </p>
 
-
           <button type="button" className="google-auth-btn" onClick={handleGoogleLogin}>
             <Image src="/google-icon.png" alt="Google" width={20} height={20} />
             <span>Continuar con Google</span>
@@ -83,18 +91,18 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <InformationField
               variant="text"
-              label="Email"
+              label="Correo electrónico"
+              placeholder="Ingresa tu correo"
               value={correo}
-              placeholder="Email"
-              onChange={setCorreo}
+              onChange={(val) => setCorreo(String(val))}
             />
 
             <InformationField
               variant="password"
-              label="Password"
+              label="Contraseña"
+              placeholder="Ingresa tu contraseña"
               value={contrasena}
-              placeholder="Password"
-              onChange={setContrasena}
+              onChange={(val) => setContrasena(String(val))}
             />
 
             <button type="submit" className="registro-btn">
@@ -105,9 +113,7 @@ export default function Login() {
       </div>
       <Footer />
 
-
       {showResetModal && <ResetPassword onClose={() => setShowResetModal(false)} />}
-
     </>
   );
 }

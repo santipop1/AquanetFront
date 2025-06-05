@@ -1,11 +1,12 @@
 .formulario-background {
-    background-color: #f1f2f4;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
+  background-color: #8cc2c0;
+  min-height: 100vh;
+  padding: 3rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
   
   .formulario-container {
     background: #fff;

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { InformationField } from "@/components/InformationField/InformationField";
 import { SymbolButton } from "@/components/SymbolButton/SymbolButton";
