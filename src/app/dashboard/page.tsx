@@ -2,6 +2,7 @@
 
 import './dashboard.css';
 import Image from 'next/image';
+import HeaderMini from '@/components/HeaderMini/HeaderMini';
 import Link from 'next/link';
 import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranquicias';
 import RecuadroDashboard from '@/components/RecuadroDashboard/RecuadroDashboard';
@@ -84,39 +85,31 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="dashboard">
-      <aside className="dashboard-sidebar">
-        <h1 className="dashboard-logo">
-          <Link href="/">
-            <Image
-              src="/logo.png"
-              alt="Logo aquanet"
-              width={150}
-              height={150}
-              priority
-            />
-          </Link>
-        </h1>
-        <h2 className="dashboard-subtitle">Mis Franquicias</h2>
-        <div className="dashboard-franquicias-list">
-          {franquicias.map((f, i) => (
-            <RecuadroFranquicias
-              key={i}
-              nombre={f.nombre}
-              logoSrc={f.logoSrc}
-              onClick={() => setFranquiciaActiva(f)}
-            />          
-          ))}
-        </div>
-      </aside>
 
-      <main className="dashboard-main">
-        <h2 className="dashboard-titulo">{franquiciaActiva.nombre}</h2>
-        
-        {paymentStatus === 'completed' && (
-          <div className="payment-success">
-            <p>¡Pago completado con éxito!</p>
-            <p>Plan: {selectedPlan === 'monthly' ? 'Mensual' : 'Anual'}</p>
+    <>
+      <HeaderMini />
+      <div className="dashboard">
+        <aside className="dashboard-sidebar">
+          {/* Botón de modo oscuro/claro */}
+        <button
+            onClick={() => {
+              const isDark = document.body.classList.toggle('dark');
+              localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            }}
+            className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition height-10 w-10 flex items-center justify-center mb-4"
+          >
+            <BiAdjust />
+          </button>
+          <h2 className="dashboard-subtitle">Mis Franquicias</h2>
+          <div className="dashboard-franquicias-list">
+            {franquicias.map((f) => (
+              <RecuadroFranquicias
+                key={f.id}
+                nombre={`Franquicia ${f.id}`}
+                logoSrc={"/gotita.png"}
+                onClick={() => setFranquiciaActiva(f)}
+              />
+            ))}
           </div>
         )}
         

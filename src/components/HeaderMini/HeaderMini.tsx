@@ -8,6 +8,8 @@ import { FaBell } from 'react-icons/fa';
 import { UseAuth } from '@/providers/AuthProvider';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
 import { ButtonText } from '../ButtonText/ButtonText';
+import { NotificationDropdown } from '@/components/Notifications/NotificationDropdown/NotificationDropdown';
+import './HeaderMini.css';
 
 const Links = [
   { href: '/', label: 'Inicio' },
@@ -67,29 +69,24 @@ export default function HeaderMini() {
         ))}
       </nav>
       <div className="actions" ref={buttonRef}>
-        
-
         <SymbolButton variant="user" clickFunc={handleSymbolClick} />
-
         {showPopup && (
-          <div className="user-popup" ref={popupRef}>
-            <ButtonText
-              variant="pill-outline"
-              label="Editar perfil"
-              onClick={() => router.push("/edit-user")}
-            />
-            <ButtonText
-              variant="pill-outline"
-              label="Notificaciones"
-              icon={<FaBell />}
-              onClick={() => {}}
-            />
-            <ButtonText
-              variant="pill-danger"
-              label="Cerrar sesión"
-              onClick={handleLogout}
-            />
-          </div>
+          <div
+          ref={popupRef}
+          className="absolute right-0 top-14 z-10 bg-white shadow-lg rounded-lg border p-4 space-y-2 w-48 flex flex-col items-center"
+        >
+          <ButtonText
+            variant="pill-outline"
+            label="Editar perfil"
+            onClick={() => router.push("/edit-user")}
+          />
+          <NotificationDropdown />
+          <ButtonText
+            variant="pill-danger"
+            label="Cerrar sesión"
+            onClick={handleLogout}
+          />
+        </div>
         )}
       </div>
     </div>

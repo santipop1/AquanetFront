@@ -1,3 +1,16 @@
+:root {
+  --dashboard-bg: #F0F4F4;
+  --sidebar-bg: #ECE6DA;
+  --text-primary: #444444;
+  --border-color: #CCCCCC;
+}
+
+body.dark {
+  --dashboard-bg: #121619;
+  --sidebar-bg: #1F2326;
+  --text-primary: #DADADA;
+  --border-color: #3B4145;
+  
 .dashboard {
     display: flex;
     height: 100vh;
@@ -57,8 +70,6 @@
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 2rem;
   }
-  
-  /* Agrega esto al final de tu dashboard.css */
 
 .subscription-section {
   margin-top: 3rem;
@@ -73,6 +84,7 @@
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: #1e293b;
+
 }
 
 .plan-selector {
