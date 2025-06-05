@@ -12,6 +12,7 @@ type CreateDocumentPayload = {
 
 const createDocument = async (payload: CreateDocumentPayload) => {
   try {
+    console.log('Payload a enviar a /documents:', payload);
     const user = auth.currentUser;
     const token = user && (await getIdToken(user));
 

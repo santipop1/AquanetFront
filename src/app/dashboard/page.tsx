@@ -5,35 +5,87 @@ import Image from 'next/image';
 import HeaderMini from '@/components/HeaderMini/HeaderMini';
 import Link from 'next/link';
 import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranquicias';
-import RecuadroInfo from '@/components/RecuadroDashboard/RecuadroInfo/RecuadroInfo';
-import RecuadroVentas from '@/components/RecuadroDashboard/RecuadroVentas/RecuadroVentas';
-import RecuadroRefacciones from '@/components/RecuadroDashboard/RecuadroRefacciones/RecuadroRefacciones';
-import { useEffect, useState } from 'react';
-import { UseAuth } from '@/providers/AuthProvider';
-import { ListWaterPlants } from '@/services/waterPlants';
-import { BiAdjust } from "react-icons/bi";
+import RecuadroDashboard from '@/components/RecuadroDashboard/RecuadroDashboard';
+import { useState, useEffect } from 'react';
+import { createCheckoutSession, verifyPayment } from '@/services/stripe';
+import { loadStripe } from '@stripe/stripe-js';
 
 export default function DashboardPage() {
-  const { firebaseUser } = UseAuth();
-  const [franquicias, setFranquicias] = useState<any[]>([]);
-  const [franquiciaActiva, setFranquiciaActiva] = useState<any | null>(null);
+  const franquicias = [
+    { nombre: 'Franquicia 1', logoSrc: '/gotita.png' },
+    { nombre: 'Franquicia 2', logoSrc: '/gotita.png' },
+    { nombre: 'Franquicia 3', logoSrc: '/gotita.png' }
+  ];
+
+  const [franquiciaActiva, setFranquiciaActiva] = useState(franquicias[0]);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'annual'>('monthly');
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchFranquicias = async () => {
-      if (!firebaseUser) return;
-      try {
-        const data = await ListWaterPlants({ id: firebaseUser.uid });
-        setFranquicias(data);
-        if (data.length > 0) setFranquiciaActiva(data[0]);
-      } catch (error) {
-        setFranquicias([]);
-        setFranquiciaActiva(null);
+    const id = localStorage.getItem('userId');
+    setUserId(id);
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const sessionId = searchParams.get('session_id');
+    const planType = searchParams.get('plan_type');
+    
+    if (sessionId && planType && id) {
+      verifyPaymentStatus(sessionId, id, planType as 'monthly' | 'annual');
+    }
+  }, []);
+
+  const verifyPaymentStatus = async (
+    sessionId: string, 
+    userId: string, 
+    planType: 'monthly' | 'annual'
+  ) => {
+    try {
+      setIsLoading(true);
+      const result = await verifyPayment(sessionId, userId, planType);
+      if (result.status === 'success') {
+        setPaymentStatus('completed');
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
-    };
-    fetchFranquicias();
-  }, [firebaseUser]);
+    } catch (error) {
+      console.error('Error verifying payment:', error);
+      setPaymentStatus('failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePayment = async () => {
+    if (!userId) return;
+    
+    setIsLoading(true);
+    setPaymentStatus(null);
+    
+    try {
+      const { sessionId, publicKey } = await createCheckoutSession(userId, selectedPlan);
+      
+      const stripe = await loadStripe(publicKey);
+      if (stripe) {
+        const result = await stripe.redirectToCheckout({
+          sessionId: sessionId
+        });
+        
+        if (result.error) {
+          console.error(result.error.message);
+          setPaymentStatus('failed');
+        }
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      setPaymentStatus('failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
+
     <>
       <HeaderMini />
       <div className="dashboard">
@@ -59,16 +111,68 @@ export default function DashboardPage() {
               />
             ))}
           </div>
+        )}
+        
+        {paymentStatus === 'failed' && (
+          <div className="payment-error">
+            <p>Error en el pago. Por favor intenta nuevamente.</p>
         </aside>
         <main className="dashboard-main">
           <h2 className="dashboard-titulo">{franquiciaActiva ? `Franquicia ${franquiciaActiva.id}` : ''}</h2>
           <div className="dashboard-grid">
             <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
             <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
-            <RecuadroRefacciones />
+            <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
           </div>
-        </main>
-      </div>
-    </>
+        )}
+
+        <div className="dashboard-grid">
+          <RecuadroDashboard variante="info" />
+          <RecuadroDashboard variante="ventas" />
+          <RecuadroDashboard variante="refacciones" />
+        </div>
+
+        <div className="subscription-section">
+          <h3>Selecciona tu plan de suscripción</h3>
+          
+          <div className="plan-selector">
+            <label className={`plan-option ${selectedPlan === 'monthly' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="plan"
+                checked={selectedPlan === 'monthly'}
+                onChange={() => setSelectedPlan('monthly')}
+              />
+              <div className="plan-content">
+                <span className="plan-name">Plan Mensual</span>
+                <span className="plan-price">$70.00 USD/mes</span>
+              </div>
+            </label>
+            
+            <label className={`plan-option ${selectedPlan === 'annual' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="plan"
+                checked={selectedPlan === 'annual'}
+                onChange={() => setSelectedPlan('annual')}
+              />
+              <div className="plan-content">
+                <span className="plan-name">Plan Anual</span>
+                <span className="plan-price">$69.48 USD/año</span>
+                <span className="plan-savings">(Ahorras 1.7%)</span>
+              </div>
+            </label>
+          </div>
+
+          <button 
+            onClick={handlePayment} 
+            disabled={isLoading || !userId}
+            className="stripe-button"
+          >
+            {isLoading ? 'Procesando...' : `Suscribirse ${selectedPlan === 'monthly' ? 'Mensualmente' : 'Anualmente'}`}
+          </button>
+        </div>
+      </main>
+    </div>
   );
 }

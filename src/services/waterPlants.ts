@@ -1,5 +1,16 @@
 import api from './api';
 
+export const ListWaterPlantsAll = async () => {
+  try {
+      const { data } = await api.get('/waterplants/listall');
+      console.log('Plantas de agua obtenidas:', data);
+      return data;
+    } catch (error) {
+      console.error('Error al obtener plantas de agua:', error);
+      throw error;
+    }
+};
+
 export const ListWaterPlants = async (useruid: any) => {
   try {
       const { data } = await api.post('/waterplants/list', useruid);

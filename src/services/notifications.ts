@@ -1,5 +1,4 @@
 
-import { use } from 'react';
 import api from '../services/api';
 import { NotificationDetail } from '../types/NotificationDetail';
 
