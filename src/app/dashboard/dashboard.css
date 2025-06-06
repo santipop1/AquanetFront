@@ -6,22 +6,23 @@
 }
 
 body.dark {
-  --dashboard-bg: #121619;
+  --dashboard-bg: #1E2A2A;
   --sidebar-bg: #1F2326;
   --text-primary: #DADADA;
   --border-color: #3B4145;
+}
   
 .dashboard {
     display: flex;
     height: 100vh;
     font-family: 'Inter', sans-serif;
-    background-color: #f5f6fa;
+    background-color: var(--dashboard-bg);
   }
   
   .dashboard-sidebar {
     width: 260px;
     padding: 2rem 1rem;
-    background-color: #ffffff;
+    background-color: var(--sidebar-bg);
     border-right: 1px solid #e5e7eb;
     display: flex;
     flex-direction: column;
@@ -43,7 +44,7 @@ body.dark {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #1e293b;
+    color: var(--text-primary);
   }
   
   .dashboard-franquicias-list {
@@ -61,7 +62,7 @@ body.dark {
   .dashboard-titulo {
     font-size: 2rem;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-primary);
     margin-bottom: 2rem;
   }
   
@@ -71,103 +72,13 @@ body.dark {
     gap: 2rem;
   }
 
-.subscription-section {
-  margin-top: 3rem;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.modo-boton {
+  background-color: var(--sidebar-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.subscription-section h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #1e293b;
-
-}
-
-.plan-selector {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.plan-option {
-  flex: 1;
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.plan-option.selected {
-  border-color: #05b852;
-  background-color: #f0fdf4;
-}
-
-.plan-option input {
-  display: none;
-}
-
-.plan-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.plan-name {
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.plan-price {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #05b852;
-}
-
-.plan-savings {
-  font-size: 0.875rem;
-  color: #64748b;
-}
-
-.stripe-button {
-  width: 100%;
-  padding: 1rem;
-  background-color: #05b852;
-  color: white;
-  font-weight: 600;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.stripe-button:hover {
-  background-color: #049a46;
-}
-
-.stripe-button:disabled {
-  background-color: #cbd5e1;
-  cursor: not-allowed;
-}
-
-.payment-success {
-  padding: 1rem;
-  margin-bottom: 2rem;
-  background-color: #f0fdf4;
-  border: 1px solid #05b852;
-  border-radius: 0.5rem;
-  color: #049a46;
-}
-
-.payment-error {
-  padding: 1rem;
-  margin-bottom: 2rem;
-  background-color: #fef2f2;
-  border: 1px solid #ef4444;
-  border-radius: 0.5rem;
-  color: #dc2626;
+.modo-boton:hover {
+  filter: brightness(2.05);
 }
