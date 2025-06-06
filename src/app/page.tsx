@@ -57,20 +57,24 @@ export default function Prueba() {
       <main className="pagina-prueba">
         {/* Hero Section */}
         <section className="hero">
-          <div className="hero-text">
-            <h1>Agua pura y saludable para tu hogar</h1>
-            <p className="justificado">
-              En <span className="inline-logo"><Image src="/logo.png" alt="aquanet" width={90} height={30} /></span>, revolucionamos el emprendimiento con un modelo inteligente de franquicias de purificadoras de agua, el cual además facilita el acceso de la población a agua potable y ¡fomenta el consumo sustentable!<br />
-              Nuestra plataforma analiza múltiples variables para asegurar que cada purificadora se instale en el <strong>lugar ideal</strong>, maximizando su rentabilidad y alcance. Además, con <span className="inline-logo"><Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} /></span> ofrecemos un software de gestión avanzada que te permite monitorear y administrar tu purificadora en tiempo real.
-            </p>
+  <div className="hero-overlay" />
+  <div className="hero-content">
+    <div className="hero-text">
+      <h1>Soluciones inteligentes en purificación de agua</h1>
+      <p>
+        Con <span className="inline-logo"><Image src="/logo.png" alt="aquanet" width={90} height={30} /></span>,
+        llevamos el acceso a agua purificada al siguiente nivel con un modelo de franquicias rentable, sustentable y automatizado.
+      </p>
+      <div className="hero-buttons">
+        <Link href="/registro" className="btn-primary">Regístrate</Link>
+      </div>
+    </div>
+    <div className="hero-image">
+      <Image src="/agua.jpg" alt="Agua pura" width={500} height={400} />
+    </div>
+  </div>
+</section>
 
-            <Link href="/registro" className="boton">Regístrate</Link>
-          </div>
-           {/* AQUÍ CAMBIAR POR IMAGEN ADOCK A LAS PURIFICADORAS */}
-          <div className="hero-image">
-            <Image src="/agua.jpg" alt="Agua pura" width={500} height={400} />
-          </div>
-        </section>
 
         {/* Video + CTA */}
         <section className="contenido">
