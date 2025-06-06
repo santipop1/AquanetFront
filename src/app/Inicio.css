@@ -1,6 +1,6 @@
 :root {
-  --turquesa: #8cc2c0;
-  --arena: #eadab4;
+  --turquesa: #8cc2c0b3;
+  --arena: #eee0c1d9;
   --gris: #1e1e1e;
   --fuente: 'Georgia', serif;
 }
@@ -333,4 +333,105 @@ button[aria-label="Close the chat launcher"],
 
 .justificado {
   text-align: justify;
+}
+
+
+
+.hero {
+  position: relative;
+  background-image: url('/fondo-agua.jpg'); /* Usa una imagen tipo fondo con montañas o agua */
+  background-size: cover;
+  background-position: center;
+  padding: 8rem 5% 6rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 100, 100, 0.4));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  z-index: 2;
+  flex-wrap: wrap;
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.hero-text p {
+  font-size: 1.3rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  color: #e0f7fa;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.8rem 1.6rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #1e1e1e;
+  color: white;
+  border: 2px solid #1e1e1e;
+}
+
+.btn-primary:hover {
+  background-color: transparent;
+  color: #1e1e1e;
+  border: 2px solid white;
+  background: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: white;
+  color: var(--gris);
+}
+
+.hero-image img {
+  max-width: 450px;
+  border-radius: 12px;
 }
