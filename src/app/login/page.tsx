@@ -8,7 +8,8 @@ import { useRouter } from 'next/navigation';
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
-  onAuthStateChanged
+  onAuthStateChanged,
+  getIdToken
 } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
 
@@ -39,8 +40,29 @@ export default function Login() {
     });
   };
 
+  const handleLoginSuccess = async () => {
+    try {
+      await waitForFirebaseUser();
+
+      const user = auth.currentUser;
+      if (user) {
+        const token = await getIdToken(user, true);
+        localStorage.setItem('token', token);
+
+        const userId = user.uid;
+
+        // Redirige a la página de pago con Stripe
+        router.push(`/payment?userId=${userId}`);
+      }
+    } catch (error) {
+      console.error('Error en el proceso de login:', error);
+      alert('Error al procesar el inicio de sesión');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('entre dos')
     e.preventDefault();
     setErrorMsg('');
 
@@ -49,30 +71,23 @@ export default function Login() {
       return;
     }
 
-    console.log('before try')
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, correo, contrasena);
-      await waitForFirebaseUser();
-      console.log(loading, '1')
-      router.push('/dashboard');
-      console.log(loading, '2')
+      await handleLoginSuccess();
     } catch (error: any) {
       setErrorMsg('Inicio de sesión incorrecto. Verifica tus datos e intenta de nuevo.');
       setLoading(false);
     }
-    console.log(loading, '3')
   };
 
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
       await signInWithPopup(auth, provider);
-      await waitForFirebaseUser();
-      router.push('/dashboard');
+      await handleLoginSuccess();
     } catch (error: any) {
       setErrorMsg('Error con Google. Intenta de nuevo.');
-    } finally {
       setLoading(false);
     }
   };
