@@ -23,7 +23,7 @@ const createDocument = async (payload: CreateDocumentPayload) => {
       },
     });
 
-    return res.data; // Devuelve el DocumentEntity creado
+    return res.data; 
   } catch (e) {
     console.error("❌ Error al crear el documento: ", e);
     throw e;

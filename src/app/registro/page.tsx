@@ -126,9 +126,8 @@ export default function Register() {
       router.push('/dashboard');
     } catch (error) {
       setErrorMsg("Error al registrar. Intenta de nuevo.");
-    } finally {
       setLoading(false);
-    }
+    } 
   };
 
   const handleGoogleAuth = async () => {

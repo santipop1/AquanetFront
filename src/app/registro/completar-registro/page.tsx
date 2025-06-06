@@ -114,11 +114,9 @@ export default function CompletarRegistro() {
       const userCreated = await createUser(payload);
       setUserContext(userCreated);
       localStorage.removeItem("googleUser");
-      router.push("/dashboard");
+      router.push('/dashboard');
     } catch (error) {
-      console.error('❌ Error creando usuario:', error);
-      setErrorMsg('Error al registrar. Verifica los datos o contacta al soporte.');
-    } finally {
+      setErrorMsg("Error al registrar. Intenta de nuevo.");
       setLoading(false);
     }
   };
