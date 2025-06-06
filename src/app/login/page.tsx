@@ -5,7 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  onAuthStateChanged
+} from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
 
 import Header from '@/components/Header/Header';
@@ -13,19 +17,22 @@ import Footer from '@/components/Footer/Footer';
 import { InformationField } from '@/components/InformationField/InformationField';
 import ResetPassword from '@/components/ResetPassword/ResetPassword';
 
+import { RingLoader } from 'react-spinners';
 import './Login.css';
 
 export default function Login() {
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [showResetModal, setShowResetModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
 
   const waitForFirebaseUser = (): Promise<void> => {
     return new Promise((resolve) => {
       const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         if (firebaseUser) {
-          unsubscribe(); 
+          unsubscribe();
           resolve();
         }
       });
@@ -34,32 +41,47 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMsg('');
 
     if (!correo || !contrasena) {
-      alert('Por favor completa todos los campos.');
+      setErrorMsg('Por favor completa todos los campos.');
       return;
     }
 
     try {
+      setLoading(true);
       await signInWithEmailAndPassword(auth, correo, contrasena);
       await waitForFirebaseUser();
-      alert('¡Inicio de sesión exitoso!');
       router.push('/dashboard');
     } catch (error: any) {
-      alert(`Error al iniciar sesión:\nFirebase: ${error.message}`);
+      setErrorMsg('Inicio de sesión incorrecto. Verifica tus datos e intenta de nuevo.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
+      setLoading(true);
       await signInWithPopup(auth, provider);
       await waitForFirebaseUser();
-      alert('¡Inicio de sesión con Google exitoso!');
       router.push('/dashboard');
     } catch (error: any) {
-      alert(`Error con Google:\nFirebase: ${error.message}`);
+      setErrorMsg('Error con Google. Intenta de nuevo.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+        <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+        <RingLoader color="#8cc2c0b3" size={140} />
+        <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -108,6 +130,12 @@ export default function Login() {
             <button type="submit" className="registro-btn">
               Iniciar sesión
             </button>
+
+            {errorMsg && (
+              <div className="mt-4 text-sm text-red-600 bg-red-100 p-2 rounded">
+                {errorMsg}
+              </div>
+            )}
           </form>
         </div>
       </div>

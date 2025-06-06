@@ -9,6 +9,7 @@ import { InformationField } from '@/components/InformationField/InformationField
 import { createUser, CreateUserPayload } from '@/services/user/createUser';
 import { UseAuth } from '@/providers/AuthProvider';
 import { auth } from '@/app/libreria/firebase';
+import { RingLoader } from 'react-spinners';
 import '../Registro.css';
 
 interface FormData {
@@ -34,6 +35,10 @@ export default function CompletarRegistro() {
     phoneNumber: ''
   });
 
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
   const router = useRouter();
   const { setUserContext } = UseAuth();
 
@@ -49,7 +54,7 @@ export default function CompletarRegistro() {
         phoneNumber: googleData.phoneNumber || '',
         firstName,
         firstLastName,
-        password: Math.random().toString(36).slice(-8) 
+        password: Math.random().toString(36).slice(-8)
       }));
     } else {
       router.push('/registro');
@@ -63,13 +68,30 @@ export default function CompletarRegistro() {
     }));
   };
 
+  useEffect(() => {
+    if (!/^\d{10}$/.test(formData.phoneNumber)) {
+      setPhoneError("El número debe tener 10 dígitos numéricos.");
+    } else {
+      setPhoneError('');
+    }
+  }, [formData.phoneNumber]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMsg('');
+
+    if (!/^\d{10}$/.test(formData.phoneNumber)) {
+      setPhoneError("El número debe tener 10 dígitos numéricos.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) {
-        alert('❌ No se encontró el usuario autenticado con Google.');
+        setErrorMsg('No se encontró el usuario autenticado con Google.');
+        setLoading(false);
         return;
       }
 
@@ -86,22 +108,30 @@ export default function CompletarRegistro() {
         rfc: '',
         profilePictureUrl: '',
         roleId: 1,
-        firebaseId: currentUser.uid 
+        firebaseId: currentUser.uid
       };
 
-      console.log('📦 Payload enviado:', payload);
       const userCreated = await createUser(payload);
       setUserContext(userCreated);
-
       localStorage.removeItem("googleUser");
-      alert("✅ Registro completado");
-      console.log("🔀 Redirigiendo a /dashboard...");
       router.push("/dashboard");
     } catch (error) {
       console.error('❌ Error creando usuario:', error);
-      alert('❌ Error al registrar. Verifica consola o contacta a backend.');
+      setErrorMsg('Error al registrar. Verifica los datos o contacta al soporte.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+        <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+        <RingLoader color="#8cc2c0b3" size={140} />
+        <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -123,8 +153,15 @@ export default function CompletarRegistro() {
             <InformationField label="Second Last Name" value={formData.secondLastName} onChange={(val) => handleFieldChange("secondLastName", val as string)} placeholder="Second Last Name" variant="text" />
             <InformationField label="Birthday" value={formData.birthday} onChange={(val) => handleFieldChange("birthday", val as string)} variant="date" />
             <InformationField label="Phone Number" value={formData.phoneNumber} onChange={(val) => handleFieldChange("phoneNumber", val as string)} placeholder="Phone Number" variant="text" />
+            {phoneError && <div className="text-sm text-red-600 mt-1 ml-1">{phoneError}</div>}
 
             <button type="submit" className="registro-btn">Registrar</button>
+
+            {errorMsg && (
+              <div className="mt-4 text-sm text-red-600 bg-red-100 p-2 rounded">
+                {errorMsg}
+              </div>
+            )}
           </form>
         </div>
       </div>
