@@ -2,7 +2,7 @@
 
 import './dashboard.css';
 import Image from 'next/image';
-import Header from '@/components/Header/Header';
+import HeaderMini from '@/components/HeaderMini/HeaderMini';
 import Link from 'next/link';
 import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranquicias';
 import RecuadroInfo from '@/components/RecuadroDashboard/RecuadroInfo/RecuadroInfo';
@@ -35,7 +35,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Header />
+      <HeaderMini />
       <div className="dashboard">
         <aside className="dashboard-sidebar">
           {/* Botón de modo oscuro/claro */}
@@ -44,7 +44,7 @@ export default function DashboardPage() {
               const isDark = document.body.classList.toggle('dark');
               localStorage.setItem('theme', isDark ? 'dark' : 'light');
             }}
-            className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition height-10 w-10 flex items-center justify-center mb-4"
+            className="modo-boton text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition height-10 w-10 flex items-center justify-center mb-4"
           >
             <BiAdjust />
           </button>
@@ -65,7 +65,7 @@ export default function DashboardPage() {
           <div className="dashboard-grid">
             <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
             <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
-            <RecuadroRefacciones />
+            <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
           </div>
         </main>
       </div>
