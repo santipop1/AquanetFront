@@ -40,6 +40,7 @@ export default function Login() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('entre dos')
     e.preventDefault();
     setErrorMsg('');
 
@@ -48,16 +49,19 @@ export default function Login() {
       return;
     }
 
+    console.log('before try')
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, correo, contrasena);
       await waitForFirebaseUser();
+      console.log(loading, '1')
       router.push('/dashboard');
+      console.log(loading, '2')
     } catch (error: any) {
       setErrorMsg('Inicio de sesión incorrecto. Verifica tus datos e intenta de nuevo.');
-    } finally {
       setLoading(false);
     }
+    console.log(loading, '3')
   };
 
   const handleGoogleLogin = async () => {
