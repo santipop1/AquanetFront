@@ -2,18 +2,18 @@
   --franquicia-bg: #f3f4f6;
   --franquicia-bg-hover: #e0e7ff;
   --franquicia-text: #1f2937;
-  --franquicia-text-hover: #1d4ed8;
+  --franquicia-text-hover: #72aaa8;
   --franquicia-icon: #4b5563;
-  --franquicia-icon-hover: #2563eb;
+  --franquicia-icon-hover: #72aaa8;
 }
 
 body.dark {
   --franquicia-bg: #29373f;
   --franquicia-bg-hover: #47616f;
   --franquicia-text: #f1f5f9;
-  --franquicia-text-hover: #93c5fd;
+  --franquicia-text-hover: #72aaa8;
   --franquicia-icon: #cbd5e1;
-  --franquicia-icon-hover: #60a5fa;
+  --franquicia-icon-hover: #72aaa8;
 }
 .recuadro-franquicia {
   display: flex;

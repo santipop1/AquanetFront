@@ -1,6 +1,6 @@
 :root {
   --turquesa: #8cc2c0b3;
-  --arena: #eee0c1d9;
+  --arena: #8cc2c0b3;
   --gris: #1e1e1e;
   --fuente: 'Georgia', serif;
 }
@@ -130,6 +130,7 @@ body {
   width: 100%;
   max-width: 450px;
   border-radius: 12px;
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
 }
 
 .boton {
@@ -171,6 +172,7 @@ body {
   margin: 0 auto 2rem;
   display: block;
   border-radius: 8px;
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
 }
 
 /* PROMO + CTA */
@@ -213,6 +215,7 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 70px 70px rgba(0, 0, 0, 0.2);
 }
 
 .cta-franquicia:hover {
@@ -262,7 +265,7 @@ body {
   background-color: var(--turquesa);
   padding: 4rem 8%;
   text-align: center;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .titulo-planes {

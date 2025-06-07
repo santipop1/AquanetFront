@@ -5,9 +5,9 @@
   padding: 1.5rem;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 1px 4px rgb(51, 65, 85);
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  transition: background 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .recuadro-info h3 {
@@ -44,8 +44,8 @@ body.dark .recuadro-info {
 
 .recuadro-info input[type="number"]:focus {
   outline: none;
-  border-color: #2455f4;
-  box-shadow: 0 0 0 3px rgba(36, 85, 244, 0.2);
+  border-color: #72aaa8;
+  box-shadow: 0 0 0 3px #72aaa85c;
 }
 
 body.dark .recuadro-info input[type="number"] {
@@ -55,7 +55,7 @@ body.dark .recuadro-info input[type="number"] {
 }
 
 .dc-btn-secondary {
-  background-color: #8cc2c0;
+  background-color: #72aaa8;
   color: white;
   padding: 0.6rem 1.25rem;
   border: none;
@@ -66,10 +66,11 @@ body.dark .recuadro-info input[type="number"] {
   transition: background-color 0.2s ease, transform 0.2s ease;
   display: inline-block;
   margin-top: 0.75rem;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
 }
 
 .dc-btn-secondary:hover {
-  background-color: #9cbebd;
+  background-color: #2e7d7c;
   transform: translateY(-1px);
 }
 
@@ -80,11 +81,3 @@ body.dark .recuadro-info input[type="number"] {
   border: none;
 }
 
-body.dark .dc-btn-secondary {
-  background-color: #3b8905;
-  color: #ffffff;
-}
-
-body.dark .dc-btn-secondary:hover {
-  background-color: #3c89059f;
-}

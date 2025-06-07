@@ -1,6 +1,6 @@
 :root {
   --dashboard-bg: #F0F4F4;
-  --sidebar-bg: #ECE6DA;
+  --sidebar-bg: #72aaa87a;
   --text-primary: #444444;
   --border-color: #CCCCCC;
 }
@@ -34,10 +34,6 @@ body.dark {
     font-weight: 800;
     color: #1e293b;
     margin-bottom: 1rem;
-  }
-  
-  .dashboard-logo-plus {
-    color: #05b852;
   }
   
   .dashboard-subtitle {
