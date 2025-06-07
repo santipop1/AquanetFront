@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -26,8 +26,23 @@ export default function Login() {
   const [contrasena, setContrasena] = useState('');
   const [showResetModal, setShowResetModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
+  const [loginSuccess, setLoginSuccess] = useState(false); // 👈 nuevo estado
   const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const token = await getIdToken(user, true);
+        localStorage.setItem('token', token);
+        router.push(`/payment?userId=${user.uid}`);
+      } else {
+        setInitializing(false);
+      }
+      unsubscribe();
+    });
+  }, []);
 
   const waitForFirebaseUser = (): Promise<void> => {
     return new Promise((resolve) => {
@@ -42,21 +57,20 @@ export default function Login() {
 
   const handleLoginSuccess = async () => {
     try {
+      setLoginSuccess(true); // 👈 mantenemos pantalla de carga activa
       await waitForFirebaseUser();
 
       const user = auth.currentUser;
       if (user) {
         const token = await getIdToken(user, true);
         localStorage.setItem('token', token);
-
         const userId = user.uid;
-
-        // Redirige a la página de pago con Stripe
         router.push(`/payment?userId=${userId}`);
       }
     } catch (error) {
       console.error('Error en el proceso de login:', error);
       alert('Error al procesar el inicio de sesión');
+      setLoginSuccess(false); // Solo si hubo error
     } finally {
       setLoading(false);
     }
@@ -92,7 +106,7 @@ export default function Login() {
     }
   };
 
-  if (loading) {
+  if (initializing || loading || loginSuccess) {
     return (
       <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
         <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
