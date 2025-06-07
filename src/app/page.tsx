@@ -4,7 +4,7 @@ import './Inicio.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import ContratarPlan from '@/components/ContratarPlan/ContratarPlan';
-import HeaderMini from '@/components/HeaderMini/HeaderMini';
+import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import { useEffect } from 'react';
 
@@ -53,7 +53,7 @@ export default function Prueba() {
 
   return (
     <>
-      <HeaderMini />
+      <Header/>
       <main className="pagina-prueba">
         {/* Hero Section */}
         <section className="hero">

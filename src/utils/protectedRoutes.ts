@@ -1,6 +1,6 @@
 
 export const protectedRoutes = new Set([
-    "/dashboard",
+    //"/dashboard",
     "/profile",
     "/settings"
 ]);

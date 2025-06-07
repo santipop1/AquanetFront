@@ -3,7 +3,7 @@
 import './formulario.css';
 import Image from 'next/image';
 import { useState } from 'react';
-import HeaderMini from '@/components/HeaderMini/HeaderMini';
+import Header from '@/components/Header/Header';
 import { createQuotation } from '@/services/quotations';
 import { InformationField } from '@/components/InformationField/InformationField';
 import { UseAuth } from '@/providers/AuthProvider';
@@ -52,7 +52,7 @@ export default function FormularioPage() {
 
   return (
     <>
-      <HeaderMini />
+      <Header/>
       <div className="formulario-background">
         <form onSubmit={handleSubmit} className="formulario-container">
 

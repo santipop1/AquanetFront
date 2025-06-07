@@ -2,7 +2,7 @@
 
 import './dashboard.css';
 import Image from 'next/image';
-import HeaderMini from '@/components/HeaderMini/HeaderMini';
+import Header from '@/components/Header/Header';
 import Link from 'next/link';
 import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranquicias';
 import RecuadroInfo from '@/components/RecuadroDashboard/RecuadroInfo/RecuadroInfo';
@@ -35,7 +35,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <HeaderMini />
+      <Header />
       <div className="dashboard">
         <aside className="dashboard-sidebar">
           {/* Botón de modo oscuro/claro */}
