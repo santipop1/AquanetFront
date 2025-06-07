@@ -42,7 +42,7 @@
   .formulario-boton {
     display: block;
     margin: 2rem auto 0;
-    background-color: #000035 !important;
+    background-color: #8cc2c0 !important;
     color: #ffffff !important;
     padding: 0.75rem 2.5rem;
     font-weight: 600;
@@ -53,6 +53,10 @@
     box-shadow: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
+  }
+
+  .formulario-boton:hover {
+    background-color: #000035 !important;
   }
   
   .formulario-boton:active {

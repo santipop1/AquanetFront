@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { FaBell } from 'react-icons/fa';
 import { UseAuth } from '@/providers/AuthProvider';
 import { SymbolButton } from '../SymbolButton/SymbolButton';
 import { ButtonText } from '../ButtonText/ButtonText';

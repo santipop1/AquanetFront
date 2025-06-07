@@ -1,9 +1,7 @@
 'use client';
 
 import './dashboard.css';
-import Image from 'next/image';
 import Header from '@/components/Header/Header';
-import Link from 'next/link';
 import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranquicias';
 import RecuadroInfo from '@/components/RecuadroDashboard/RecuadroInfo/RecuadroInfo';
 import RecuadroVentas from '@/components/RecuadroDashboard/RecuadroVentas/RecuadroVentas';
