@@ -7,18 +7,22 @@ import Header from '@/components/Header/Header';
 import { createQuotation } from '@/services/quotations';
 import { InformationField } from '@/components/InformationField/InformationField';
 import { UseAuth } from '@/providers/AuthProvider';
+import { useRouter } from 'next/navigation';
+import { setStatus } from '@/services/waterPlant/setStatus';
 
 export default function FormularioPage() {
   const [form, setForm] = useState({
     budget: 0,
-    desiredPlantSizeId: 0,
+    desiredPlantSizeId: 1,
     avalFirstName: '',
+    avalMiddleName: '',
     avalFirstLastName: '',
     avalSecondLastName: '',
   });
 
   const [loading, setLoading] = useState(false);
   const { firebaseUser } = UseAuth();
+  const router = useRouter();
 
   const handleChange = (name: string, value: string | number) => {
     setForm((prev) => ({
@@ -39,8 +43,12 @@ export default function FormularioPage() {
 
     try {
       const result = await createQuotation(payload);
-      alert('Cotización enviada correctamente');
-      console.log('Cotización:', result);
+      //alert('Cotización enviada correctamente');
+      //console.log('Cotización:', result);
+      const waterPlantId = result.waterPlantId;
+      const result2 = await setStatus(waterPlantId, "ghost");
+      console.log("Status changed: ", result2);
+      router.push(`/seleccionar-colonia?wpid=${waterPlantId}`)
     } catch (error) {
       console.error('Error al enviar cotización:', error);
 
@@ -70,10 +78,11 @@ export default function FormularioPage() {
             value={form.budget}
             onChange={(value) => handleChange('budget', value)}
             options={[
-              { label: 'Menos de $10,000', value: 10000 },
-              { label: '$10,000 - $30,000', value: 30000 },
-              { label: '$30,000 - $50,000', value: 50000 },
-              { label: 'Más de $50,000', value: 100000 },
+              { label: 'Menos de $50,000', value: 0 },
+              { label: '$50,000 - $100,000', value: 50000 },
+              { label: '$100,000 - $200,000', value: 100000 },
+              { label: '$200,000 - $300,000', value: 200000 },
+              { label: 'Más de $300,000', value: 300000 },
             ]}
           />
 
@@ -83,10 +92,9 @@ export default function FormularioPage() {
             value={form.desiredPlantSizeId}
             onChange={(value) => handleChange('desiredPlantSizeId', value)}
             options={[
-              { label: 'Menos de 10 m²', value: 1 },
-              { label: '10 - 20 m²', value: 2 },
-              { label: '20 - 40 m²', value: 3 },
-              { label: 'Más de 40 m²', value: 4 },
+              { label: '10 - 20 m²', value: 1 },
+              { label: '20 - 30 m²', value: 2 },
+              { label: '30 m²', value: 3 },
             ]}
           />
 

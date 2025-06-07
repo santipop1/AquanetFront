@@ -2,9 +2,10 @@
 
 import {
   MessageSquare,
-  RotateCcw,
   CheckCircle,
   Upload,
+  Clock,
+  RotateCcw,
 } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import React, { useState } from 'react';
@@ -23,15 +24,14 @@ export type DocumentRow = {
 
 type DocumentCardProps = {
   title: string;
-  documents: Omit<DocumentRow, 'status' | 'file'>[];
+  documents: DocumentRow[]; // ya no omitimos status ni file
   onSubmit: (files: (File | undefined)[]) => Promise<void>;
 };
 
 export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) {
-  const [docStates, setDocStates] = useState<DocumentRow[]>(
-    documents.map((doc) => ({ ...doc, status: 'none', file: undefined }))
-  );
+  const [docStates, setDocStates] = useState<DocumentRow[]>(documents);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const handleFileSelect = (index: number, file: File | null) => {
     const newDocs = [...docStates];
@@ -50,7 +50,6 @@ export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) 
       }
 
       newDocs[index].file = file;
-      newDocs[index].status = 'pending';
     }
 
     setDocStates(newDocs);
@@ -58,17 +57,58 @@ export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) 
 
   const renderUploadSection = (index: number, doc: DocumentRow) => {
     const inputId = `file-${index}`;
-    switch (doc.status) {
-      case 'pending':
-        return (
-          <div className="flex items-center justify-end gap-2 self-start">
-            <input
-              type="file"
-              id={inputId}
-              accept=".pdf"
-              className="hidden"
-              onChange={(e) => handleFileSelect(index, e.target.files?.[0] || null)}
-            />
+
+    if (doc.status === 'pending') {
+      return (
+        <div className="flex items-center justify-end gap-2 self-start">
+          <span className="flex items-center gap-1 px-3 py-1 rounded-md text-sm text-yellow-700 bg-yellow-50 border border-yellow-500">
+            <Clock className="w-4 h-4" />
+            En revisión
+          </span>
+        </div>
+      );
+    }
+
+    if (doc.status === 'accepted') {
+      return (
+        <div className="flex items-center justify-end self-start">
+          <CheckCircle className="text-green-600 w-5 h-5" />
+        </div>
+      );
+    }
+
+    if (doc.status === 'error') {
+      return (
+        <div className="flex flex-col gap-1 items-end self-start">
+          <input
+            type="file"
+            id={inputId}
+            accept=".pdf"
+            className="hidden"
+            onChange={(e) => handleFileSelect(index, e.target.files?.[0] || null)}
+          />
+          <label htmlFor={inputId} className="flex flex-col items-end gap-1 cursor-pointer">
+            <span className="flex gap-1 items-center px-3 py-1 rounded-md text-sm text-red-700 bg-red-100 border border-red-500">
+              <MessageSquare className="w-4 h-4" />
+              Error
+            </span>
+            <span className="text-sm text-gray-500">(Haz clic para reintentar)</span>
+          </label>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-end gap-2 self-start">
+        <input
+          type="file"
+          id={inputId}
+          accept=".pdf"
+          className="hidden"
+          onChange={(e) => handleFileSelect(index, e.target.files?.[0] || null)}
+        />
+        {doc.file ? (
+          <>
             <label htmlFor={inputId} className="flex items-center gap-2">
               <span className="flex items-center gap-1 px-3 py-1 rounded-md text-sm text-orange-700 bg-orange-50 border border-orange-500">
                 Listo para enviar
@@ -77,56 +117,18 @@ export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) 
             <label htmlFor={inputId} className="cursor-pointer">
               <RotateCcw className="w-5 h-5 text-green-600 hover:text-green-800" />
             </label>
-          </div>
-        );
-
-      case 'accepted':
-        return (
-          <div className="flex items-center justify-end self-start">
-            <CheckCircle className="text-green-600 w-5 h-5" />
-          </div>
-        );
-
-      case 'error':
-        return (
-          <div className="flex flex-col gap-1 items-end self-start">
-            <input
-              type="file"
-              id={inputId}
-              accept=".pdf"
-              className="hidden"
-              onChange={(e) => handleFileSelect(index, e.target.files?.[0] || null)}
-            />
-            <label htmlFor={inputId} className="flex flex-col items-end gap-1 cursor-pointer">
-              <span className="flex gap-1 items-center px-3 py-1 rounded-md text-sm text-red-700 bg-red-100 border border-red-500">
-                <MessageSquare className="w-4 h-4" />
-                Error
-              </span>
-              <span className="text-sm text-gray-500">(Haz clic para reintentar)</span>
-            </label>
-          </div>
-        );
-
-      default:
-        return (
-          <div className="flex items-center self-start">
-            <input
-              type="file"
-              id={inputId}
-              accept=".pdf"
-              className="hidden"
-              onChange={(e) => handleFileSelect(index, e.target.files?.[0] || null)}
-            />
-            <label
-              htmlFor={inputId}
-              className="flex items-center gap-2 cursor-pointer px-3 py-1 rounded-md text-sm text-blue-700 bg-blue-50 border border-blue-500 hover:bg-blue-100"
-            >
-              <Upload className="w-4 h-4" />
-              Subir documento
-            </label>
-          </div>
-        );
-    }
+          </>
+        ) : (
+          <label
+            htmlFor={inputId}
+            className="flex items-center gap-2 cursor-pointer px-3 py-1 rounded-md text-sm text-blue-700 bg-blue-50 border border-blue-500 hover:bg-blue-100"
+          >
+            <Upload className="w-4 h-4" />
+            Subir documento
+          </label>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -153,10 +155,29 @@ export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) 
 
         <div className="text-center mt-8">
           <button
-            className="px-5 py-2 rounded-md text-white font-bold bg-green-600 hover:bg-green-700"
-            onClick={() => onSubmit(docStates.map((doc) => doc.file))}
+            disabled={
+              uploading ||
+              docStates.every((doc) =>
+                doc.status === 'pending' || doc.status === 'accepted'
+              )
+            }
+            className="px-5 py-2 rounded-md text-white font-bold 
+              bg-green-600 hover:bg-green-700 
+              disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={async () => {
+              setUploading(true);
+              setDocStates((prev) =>
+                prev.map((doc) =>
+                  doc.file ? { ...doc, status: 'pending' } : doc
+                )
+              );
+              await onSubmit(docStates.map((doc) => doc.file));
+              setUploading(false);
+            }}
           >
-            Completar
+            {uploading
+              ? 'Subiendo...'
+              : 'Completar'}
           </button>
         </div>
       </div>

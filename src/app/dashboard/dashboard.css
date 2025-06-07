@@ -11,7 +11,7 @@ body.dark {
   --text-primary: #DADADA;
   --border-color: #3B4145;
 }
-  
+
 .dashboard {
     display: flex;
     height: 100vh;

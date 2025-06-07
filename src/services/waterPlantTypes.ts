@@ -11,12 +11,14 @@ export interface WaterPlantTypeCard {
 }
 
 export interface WaterPlantTypeDTO {
+  id: number;
   name: string;
   description: string;
   price: number;
   sizeM2: number;
+  userId: number;
   userFirstName: string;
-  userProfilePictureUrl: string | null;
+  userProfilePictureUrl: string;
 }
 
 export const getWaterPlantTypes = async (): Promise<WaterPlantTypeCard[]> => {

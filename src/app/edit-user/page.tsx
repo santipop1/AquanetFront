@@ -1,100 +1,177 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { User as FirebaseUser, getIdToken, onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/app/libreria/firebase";
+import { InformationField } from "@/components/InformationField/InformationField";
+import { SymbolButton } from "@/components/SymbolButton/SymbolButton";
+import { ProfilePicture } from "@/components/ProfilePicture/ProfilePicture";
+import { ButtonText } from "@/components/ButtonText/ButtonText";
+import ContratarPlan from "@/components/ContratarPlan/ContratarPlan";
+import ResetPassword from "@/components/ResetPassword/ResetPassword";
+import Image from "next/image";
+import { UseAuth } from "@/providers/AuthProvider";
+import { useRef, useState, useEffect } from "react";
 import { User } from "@/types/User";
-import { Role } from "@/types/Role";
-import { Subscription } from "@/types/Subscription";
-import getUserByFirebaseId from "@/services/user/getUserByFirebaseId";
-import getSubscriptionByUserId from "@/services/subscription/getSubscriptionByUserId";
+import { updateUserInfo } from "@/services/user/updateUserInfo";
+import { useRouter } from "next/navigation";
 
-// Tipado del contexto
-interface AuthContextProps {
-  user: User | null;
-  firebaseUser: FirebaseUser | null;
-  loading: boolean;
-  idToken: string | null;
-  role: Role | null;
-  subscription: Subscription | null;
-  setUserContext: (user: User | null) => void;
-}
+const UpdateUserPage = () => {
+    const { user, subscription, setUserContext, logout, firebaseUser } = UseAuth();
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [updatedUser, setUpdatedUser] = useState<User | null>(user ?? null);
+    const [showResetModal, setShowResetModal] = useState(false);
+    const router = useRouter();
 
-// Contexto con valores seguros por defecto
-const AuthContext = createContext<AuthContextProps>({
-  user: null,
-  firebaseUser: null,
-  loading: true,
-  idToken: null,
-  role: null,
-  subscription: null,
-  setUserContext: () => {},
-});
+    const subscribed = subscription ? subscription.status : "inactive";
+    const planType = subscription ? subscription.subscriptionType.planName : null;
+    const nextPaymentDate = subscription ? subscription.nextPayment : null;
 
-// Provider global
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [idToken, setIdToken] = useState<string | null>(null);
-  const [role, setRole] = useState<Role | null>(null);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-
-  // Función para actualizar el contexto desde otros componentes
-  const setUserContext = (userData: User | null) => {
-    setUser(userData);
-    setRole(userData?.role || null);
-  };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        try {
-          const token = await getIdToken(firebaseUser);
-          const userData = await getUserByFirebaseId(firebaseUser.uid);
-
-          setFirebaseUser(firebaseUser);
-          setIdToken(token);
-          setUser(userData);
-
-          if (userData) {
-            const subscriptionData = await getSubscriptionByUserId(userData.id);
-            setRole(userData.role || null);
-            setSubscription(subscriptionData);
-          } else {
-            setRole(null);
-            setSubscription(null);
-          }
-        } catch (error) {
-          console.error("❌ Error al obtener token o usuario:", error);
-          setFirebaseUser(null);
-          setIdToken(null);
-          setUser(null);
-          setRole(null);
-          setSubscription(null);
+    useEffect(() => {
+        if (user) {
+            setUpdatedUser({ ...user });
         }
-      } else {
-        setFirebaseUser(null);
-        setIdToken(null);
-        setUser(null);
-        setRole(null);
-        setSubscription(null);
-      }
+    }, [user]);
 
-      setLoading(false);
-    });
+    const handleEditPicture = () => {
+        fileInputRef.current?.click();
+    };
 
-    return () => unsubscribe();
-  }, []);
+    const handleProfilePictureChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
 
-  return (
-    <AuthContext.Provider
-      value={{ user, firebaseUser, loading, idToken, role, subscription, setUserContext }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("private", "false");
+
+        try {
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+
+            alert("Imagen subida correctamente");
+
+            setUpdatedUser((prev) =>
+                prev ? { ...prev, profilePictureUrl: data.url } : prev
+            );
+        } catch (err) {
+            console.error("Error al subir imagen:", err);
+            alert("Error al subir la imagen");
+        }
+    };
+
+    const handleFieldChange = (field: keyof User, value: any) => {
+        setUpdatedUser((prev) =>
+            prev ? { ...prev, [field]: value } : prev
+        );
+    };
+
+    const handleLogout = () => {
+        logout();
+        router.push('/');
+    };
+
+    const handleSaveChanges = async () => {
+        if (!updatedUser) return;
+
+        try {
+            const data = await updateUserInfo(updatedUser);
+            alert("Cambios guardados correctamente");
+            console.log("Respuesta del backend:", data);
+            setUserContext(data);
+        } catch (err) {
+            console.error("Error al guardar cambios:", err);
+            alert("Error al guardar cambios");
+        }
+    };
+
+    function formatDateToDDMMYYYY(date: Date): string {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    const userProfileContent = (
+        <div className="w-5/9 overflow-y-scroll max-h-screen scrollbar-hidden relative">
+            <div className="flex pt-5 pl-5">
+                <SymbolButton variant="back" clickFunc={() => router.back()} />
+            </div>
+            <div className="flex flex-col justify-center items-center">
+                <p className="text-xl pb-5 font-bold text-[rgb(0,0,51)]">MI PERFIL</p>
+                <ProfilePicture pictureUrl={updatedUser?.profilePictureUrl} editPicture={handleEditPicture} />
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    onChange={handleProfilePictureChange}
+                    style={{ display: "none" }}
+                />
+            </div>
+            <div className="w-[90%] mx-auto pt-5">
+                <InformationField variant="text" label="Nombre" value={updatedUser?.firstName ?? ""} placeholder="Nombre" onChange={(val) => handleFieldChange("firstName", val)} />
+                <InformationField variant="text" label="Segundo nombre" value={updatedUser?.middleName ?? ""} placeholder="Segundo nombre (opcional)" onChange={(val) => handleFieldChange("middleName", val)} />
+                <InformationField variant="text" label="Primer apellido" value={updatedUser?.firstLastName ?? ""} placeholder="Apellido paterno" onChange={(val) => handleFieldChange("firstLastName", val)} />
+                <InformationField variant="text" label="Segundo apellido" value={updatedUser?.secondLastName ?? ""} placeholder="Apellido materno" onChange={(val) => handleFieldChange("secondLastName", val)} />
+                <InformationField variant="date" label="Fecha de nacimiento" value={updatedUser ? new Date(updatedUser.birthday).toISOString().split("T")[0] : undefined} placeholder="dd/mm/yyyy" onChange={(val) => handleFieldChange("birthday", val)} />
+                <InformationField variant="text" label="Número de teléfono" value={updatedUser?.phoneNumber ?? ""} placeholder="Número de teléfono" onChange={(val) => handleFieldChange("phoneNumber", val)} />
+            </div>
+            <div className="flex flex-col items-center">
+                <div className="pb-3">
+                    <ButtonText label="Restablecer contraseña" variant="variant3" minW={80} onClick={() => setShowResetModal(true)} />
+                </div>
+                <div className="pb-3">
+                    <ButtonText label="Guardar cambios" variant="variant4" minW={80} onClick={handleSaveChanges} />
+                </div>
+                <div className="pb-5">
+                    <ButtonText label="Cerrar sesión" variant="variant2" minW={80} onClick={handleLogout} />
+                </div>
+            </div>
+
+            {showResetModal && (
+                <ResetPassword
+                    onClose={() => setShowResetModal(false)}
+                    emailDefault={firebaseUser?.email ?? ""}
+                />
+            )}
+        </div>
+    );
+
+    const aquanetPlusSidebar = (
+        <div className="flex flex-col justify-center mx-auto w-4/9 bg-[#e5e7eb] items-center h-screen">
+            <Image
+                src="/aquanetplus.png"
+                alt="aquanet+"
+                width={350}
+                height={350}
+                className="pb-5"
+            />
+            {subscribed === "active" ? (
+                <>
+                    <ContratarPlan planType={planType} variant='subscribed' />
+                    <p className="text-xl font-bold pt-3 text-[rgb(0,0,51)]">
+                        Próximo ciclo de pago: {nextPaymentDate ? formatDateToDDMMYYYY(new Date(nextPaymentDate)) : "Sin fecha registrada"}
+                    </p>
+                </>
+            ) : (
+                <>
+                    <div className="pb-6">
+                        <ContratarPlan planType="monthly" size="small" />
+                    </div>
+                    <ContratarPlan planType="anual" size="small" />
+                </>
+            )}
+        </div>
+    );
+
+    return (
+        <div className="flex">
+            {userProfileContent}
+            {aquanetPlusSidebar}
+        </div>
+    );
 };
 
-// Hook para consumir el contexto
-export const UseAuth = () => useContext(AuthContext);
+export default UpdateUserPage;
