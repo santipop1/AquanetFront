@@ -85,94 +85,99 @@ export default function DashboardPage() {
   };
 
   return (
-
     <>
       <HeaderMini />
       <div className="dashboard">
         <aside className="dashboard-sidebar">
-          {/* Botón de modo oscuro/claro */}
-        <button
+          <button
             onClick={() => {
               const isDark = document.body.classList.toggle('dark');
               localStorage.setItem('theme', isDark ? 'dark' : 'light');
             }}
             className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition height-10 w-10 flex items-center justify-center mb-4"
           >
-            <BiAdjust />
+            {/* Asegúrate de importar esto */}
+            {/* <BiAdjust /> */}
           </button>
+
           <h2 className="dashboard-subtitle">Mis Franquicias</h2>
           <div className="dashboard-franquicias-list">
-            {franquicias.map((f) => (
+            {franquicias.map((f, index) => (
               <RecuadroFranquicias
-                key={f.id}
-                nombre={`Franquicia ${f.id}`}
-                logoSrc={"/gotita.png"}
+                key={index}
+                nombre={f.nombre}
+                logoSrc={f.logoSrc}
                 onClick={() => setFranquiciaActiva(f)}
               />
             ))}
           </div>
-        )}
-        
-        {paymentStatus === 'failed' && (
-          <div className="payment-error">
-            <p>Error en el pago. Por favor intenta nuevamente.</p>
         </aside>
+
         <main className="dashboard-main">
-          <h2 className="dashboard-titulo">{franquiciaActiva ? `Franquicia ${franquiciaActiva.id}` : ''}</h2>
+          {paymentStatus === 'failed' && (
+            <div className="payment-error">
+              <p>Error en el pago. Por favor intenta nuevamente.</p>
+            </div>
+          )}
+
+          <h2 className="dashboard-titulo">{franquiciaActiva?.nombre}</h2>
+
           <div className="dashboard-grid">
+            {/*
             <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
-            <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
+            <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null} />
             <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
-          </div>
-        )}
-
-        <div className="dashboard-grid">
-          <RecuadroDashboard variante="info" />
-          <RecuadroDashboard variante="ventas" />
-          <RecuadroDashboard variante="refacciones" />
-        </div>
-
-        <div className="subscription-section">
-          <h3>Selecciona tu plan de suscripción</h3>
-          
-          <div className="plan-selector">
-            <label className={`plan-option ${selectedPlan === 'monthly' ? 'selected' : ''}`}>
-              <input
-                type="radio"
-                name="plan"
-                checked={selectedPlan === 'monthly'}
-                onChange={() => setSelectedPlan('monthly')}
-              />
-              <div className="plan-content">
-                <span className="plan-name">Plan Mensual</span>
-                <span className="plan-price">$70.00 USD/mes</span>
-              </div>
-            </label>
-            
-            <label className={`plan-option ${selectedPlan === 'annual' ? 'selected' : ''}`}>
-              <input
-                type="radio"
-                name="plan"
-                checked={selectedPlan === 'annual'}
-                onChange={() => setSelectedPlan('annual')}
-              />
-              <div className="plan-content">
-                <span className="plan-name">Plan Anual</span>
-                <span className="plan-price">$69.48 USD/año</span>
-                <span className="plan-savings">(Ahorras 1.7%)</span>
-              </div>
-            </label>
+            */}
           </div>
 
-          <button 
-            onClick={handlePayment} 
-            disabled={isLoading || !userId}
-            className="stripe-button"
-          >
-            {isLoading ? 'Procesando...' : `Suscribirse ${selectedPlan === 'monthly' ? 'Mensualmente' : 'Anualmente'}`}
-          </button>
-        </div>
-      </main>
-    </div>
+          <div className="dashboard-grid">
+            <RecuadroDashboard variante="info" />
+            <RecuadroDashboard variante="ventas" />
+            <RecuadroDashboard variante="refacciones" />
+          </div>
+
+          <div className="subscription-section">
+            <h3>Selecciona tu plan de suscripción</h3>
+
+            <div className="plan-selector">
+              <label className={`plan-option ${selectedPlan === 'monthly' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="plan"
+                  checked={selectedPlan === 'monthly'}
+                  onChange={() => setSelectedPlan('monthly')}
+                />
+                <div className="plan-content">
+                  <span className="plan-name">Plan Mensual</span>
+                  <span className="plan-price">$70.00 USD/mes</span>
+                </div>
+              </label>
+
+              <label className={`plan-option ${selectedPlan === 'annual' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="plan"
+                  checked={selectedPlan === 'annual'}
+                  onChange={() => setSelectedPlan('annual')}
+                />
+                <div className="plan-content">
+                  <span className="plan-name">Plan Anual</span>
+                  <span className="plan-price">$69.48 USD/año</span>
+                  <span className="plan-savings">(Ahorras 1.7%)</span>
+                </div>
+              </label>
+            </div>
+
+            <button
+              onClick={handlePayment}
+              disabled={isLoading || !userId}
+              className="stripe-button"
+            >
+              {isLoading ? 'Procesando...' : `Suscribirse ${selectedPlan === 'monthly' ? 'Mensualmente' : 'Anualmente'}`}
+            </button>
+          </div>
+        </main>
+      </div>
+    </>
   );
 }

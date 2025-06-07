@@ -1,4 +1,5 @@
 export interface ScoredNeighborhood {
+    id: number;
     name: string;
     geojsonId: string;
     municipalityName: string;

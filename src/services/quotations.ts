@@ -1,3 +1,4 @@
+import { QuotationDTO } from '@/types/QuotationDTO';
 import api from './api';
 
 export const createQuotation = async (payload: any) => {

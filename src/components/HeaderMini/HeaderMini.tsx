@@ -76,15 +76,17 @@ export default function HeaderMini() {
           className="absolute right-0 top-14 z-10 bg-white shadow-lg rounded-lg border p-4 space-y-2 w-48 flex flex-col items-center"
         >
           <ButtonText
-            variant="pill-outline"
+            variant="variant3"
             label="Editar perfil"
             onClick={() => router.push("/edit-user")}
+            minW={40}
           />
           <NotificationDropdown />
           <ButtonText
-            variant="pill-danger"
+            variant="variant5"
             label="Cerrar sesión"
             onClick={handleLogout}
+            minW={40}
           />
         </div>
         )}

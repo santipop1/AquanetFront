@@ -104,12 +104,14 @@ const Header = () => {
                 variant="pill-outline"
                 label="Editar perfil"
                 onClick={() => router.push("/edit-user")}
+                minW={40}
               />
               <NotificationDropdown />
               <ButtonText
                 variant="pill-danger"
                 label="Cerrar sesión"
                 onClick={handleLogout}
+                minW={40}
               />
             </div>
           )}

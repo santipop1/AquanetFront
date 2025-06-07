@@ -9,8 +9,9 @@ body.dark {
   --dashboard-bg: #121619;
   --sidebar-bg: #1F2326;
   --text-primary: #DADADA;
-  --border-color: #3B4145;
-  
+  --border-color: #3B4145; 
+}
+
 .dashboard {
     display: flex;
     height: 100vh;
