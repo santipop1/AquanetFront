@@ -1,6 +1,7 @@
-
 export const protectedRoutes = new Set([
     "/dashboard",
+    "/formulario",
+    "/Notifications",
     "/profile",
     "/settings"
 ]);
