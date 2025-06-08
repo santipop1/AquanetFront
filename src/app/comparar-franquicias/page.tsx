@@ -7,7 +7,6 @@ import CardFranquicias from '@/components/cardFranquicias/cardFranquicias';
 import { getWaterPlantTypes, WaterPlantTypeCard } from '@/services/waterPlantTypes';
 import Link from 'next/link';
 
-
 export default function Page() {
   const [franquiciasData, setFranquiciasData] = useState<WaterPlantTypeCard[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -31,33 +30,33 @@ export default function Page() {
 
   return (
     <>
-    <Header />
-    <main className="main-container">
-      <h1 className="page-title">¡Conoce nuestras franquicias disponibles!</h1>
-      <div className="grid-container">
-        {franquiciasData.map((item, index) => (
-          <CardFranquicias
-            key={index}
-            title={item.title}
-            brand={item.brand}
-            year={item.year}
-            description={item.description}
-            imageUrl={item.imageUrl}
-            price={item.price}
-            size={item.size}
-            isActive={activeIndex === index}
-            onClick={() => handleCardClick(index)}
-          />
-        ))}
-      </div>
-      <div className="registro-redirect">
-            <Link href="/formulario">
-              <button className="cta-franquicia">
-                ¡QUIERO COMPRAR UNA FRANQUICIA!
-              </button>
-            </Link>
-          </div>
-    </main>
+      <Header />
+      <main className="main-container bg-white min-h-screen">
+        <h1 className="page-title">¡Conoce nuestras franquicias disponibles!</h1>
+        <div className="grid-container">
+          {franquiciasData.map((item, index) => (
+            <CardFranquicias
+              key={index}
+              title={item.title}
+              brand={item.brand}
+              year={item.year}
+              description={item.description}
+              imageUrl={item.imageUrl}
+              price={item.price}
+              size={item.size}
+              isActive={activeIndex === index}
+              onClick={() => handleCardClick(index)}
+            />
+          ))}
+        </div>
+        <div className="registro-redirect">
+          <Link href="/formulario">
+            <button className="cta-franquicia">
+              ¡QUIERO COMPRAR UNA FRANQUICIA!
+            </button>
+          </Link>
+        </div>
+      </main>
     </>
   );
 }

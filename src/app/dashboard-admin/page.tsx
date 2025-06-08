@@ -64,7 +64,7 @@ export default function DashboardPage() {
               const isDark = document.body.classList.toggle('dark');
               localStorage.setItem('theme', isDark ? 'dark' : 'light');
             }}
-            className="text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition height-10 w-10 flex items-center justify-center mb-4"
+            className="modo-boton text-sm bg-gray-200 text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition height-10 w-10 flex items-center justify-center mb-4"
           >
             <BiAdjust />
           </button>

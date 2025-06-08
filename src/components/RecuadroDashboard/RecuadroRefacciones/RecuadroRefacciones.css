@@ -37,19 +37,24 @@
   }
   
   .recuadro-refacciones th {
-    background-color: #eef2ff;
+    background-color: #8cc2c071;
+  }
+  body.dark .recuadro-refacciones th {
+    background-color: rgba(18, 36, 46, 0.425);
+    color: var(--foreground);
   }
   
   .recuadro-refacciones button {
-    background-color: #e0e7ff;
+    background-color: #8cc2c0;
     border: none;
     padding: 0.3rem 0.8rem;
     border-radius: 8px;
     cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   }
   
   .recuadro-refacciones button:hover {
-    background-color: #c7d2fe;
+    background-color: #2F7C7C;
   }
 
   body.dark .recuadro-refacciones {
