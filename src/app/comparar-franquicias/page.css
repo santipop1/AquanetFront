@@ -14,3 +14,28 @@
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 20px;
 }
+
+.registro-redirect {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.cta-franquicia {
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 70px 70px rgba(0, 0, 0, 0.2);
+}
+
+.cta-franquicia:hover {
+  background-color: #166534;
+  color: #ffffff;
+  transform: scale(1.05);
+}

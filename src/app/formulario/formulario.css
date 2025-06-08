@@ -42,7 +42,7 @@
   .formulario-boton {
     display: block;
     margin: 2rem auto 0;
-    background-color: #8cc2c0 !important;
+    background-color: #000035 !important;
     color: #ffffff !important;
     padding: 0.75rem 2.5rem;
     font-weight: 600;
@@ -56,7 +56,7 @@
   }
 
   .formulario-boton:hover {
-    background-color: #000035 !important;
+    background-color: #8cc2c0 !important;
   }
   
   .formulario-boton:active {
