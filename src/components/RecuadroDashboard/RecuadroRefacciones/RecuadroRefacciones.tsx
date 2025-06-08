@@ -45,7 +45,9 @@ const RecuadroRefacciones = ({ waterPlantId }: { waterPlantId: number | null }) 
               <td>{sp.name}</td>
               <td>{getCountdown(sp.nextChangeDate)}</td>
               <td>
-                <button onClick={async () => {
+                <button
+                 className="text-white font-bold bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded"
+                 onClick={async () => {
                   try {
                     await UpdatedSparePart(sp.id);
                     alert('Cambio registrado correctamente');
