@@ -35,14 +35,14 @@
   
   .card-franquicias-title {
     font-size: 17px;
-    color: #111827;
+    color: #000035;
     font-weight: bold;
     margin: 0;
   }
   
   .card-franquicias-brand {
     font-size: 14px;
-    color: #6366f1;
+    color: #000035;
     margin: 2px 0 6px 0; 
   }
   
@@ -50,7 +50,7 @@
     width: 100%;
     margin-top: auto;
     padding: 8px 12px;
-    background-color: #6366f1;
+    background-color: #8cc2c0;
     color: white;
     border: none;
     border-radius: 8px;
@@ -61,7 +61,7 @@
   }
   
   .card-franquicias-button:hover {
-    background-color: #4f46e5;
+    background-color: #000035;
   }
   
   .modal-overlay {
