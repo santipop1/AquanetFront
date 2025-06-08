@@ -18,19 +18,7 @@ body {
   text-align: center;
 }
 
-/* HEADER MINI */
-.header-mini {
-  background: var(--turquesa);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 5%;
-  border-bottom: none;
-  width: 100%;
-}
+
 
 .header-mini .logo img {
   height: auto;

@@ -1,0 +1,8 @@
+.notifications-background {
+    background-color: #8cc2c0;
+    min-height: 100vh;
+    padding: 3rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }

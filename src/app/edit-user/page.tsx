@@ -140,7 +140,7 @@ const UpdateUserPage = () => {
     );
 
     const aquanetPlusSidebar = (
-        <div className="flex flex-col justify-center mx-auto w-4/9 bg-[#e5e7eb] items-center h-screen">
+        <div className="flex flex-col justify-center mx-auto w-4/9 bg-[#8cc2c0] items-center h-screen">
             <Image
                 src="/aquanetplus.png"
                 alt="aquanet+"
