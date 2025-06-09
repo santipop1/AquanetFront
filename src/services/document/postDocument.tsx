@@ -4,6 +4,7 @@ import back from "../back";
 
 type CreateDocumentPayload = {
   documentTypeId: number;
+  skeletonUrl?: string;
   documentUrl: string;
   waterPlantId: number;
   status: string;

@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import { UseAuth } from '@/providers/AuthProvider';
 import { ListWaterPlants } from '@/services/waterPlants';
 import { BiAdjust } from "react-icons/bi";
+import Image from 'next/image';
+import { RingLoader } from 'react-spinners';
 import { useRouter } from 'next/navigation';
 import { ReporteNormativasDropdown }  from '@/components/ListaNormativas/ReporteNormativasDropdown';
 
@@ -17,11 +19,13 @@ export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
   const [franquicias, setFranquicias] = useState<any[]>([]);
   const [franquiciaActiva, setFranquiciaActiva] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>();
   const router = useRouter();
 
   useEffect(() => {
     const fetchFranquicias = async () => {
       if (!firebaseUser) return;
+      setLoading(true);
       try {
         const data = await ListWaterPlants({ id: firebaseUser.uid });
         setFranquicias(data);
@@ -30,10 +34,21 @@ export default function DashboardPage() {
         setFranquicias([]);
         setFranquiciaActiva(null);
       }
+      setLoading(false);
     };
     fetchFranquicias();
   }, [firebaseUser]);
 
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+        <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+        <RingLoader color="#8cc2c0b3" size={140} />
+        <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
+      </div>
+    );
+  }
+  
   // Agrupar franquicias por status (igual que admin)
   const statusOrder = ['ghost', 'map', 'type', 'documents', 'pay', 'active'];
   const statusLabels: Record<string, string> = {
@@ -86,7 +101,7 @@ export default function DashboardPage() {
       <Header />
       
       <div className="dashboard">
-        <aside className="dashboard-sidebar">
+        <aside className="dashboard-sidebar scrollbar-hidden">
           {/* Botón de modo oscuro/claro */}
         <button
             onClick={() => {

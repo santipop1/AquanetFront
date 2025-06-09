@@ -17,6 +17,7 @@ import { DocumentType } from '@/types/DocumentType';
 import { DocumentDTO } from '@/types/DocumentDTO';
 import { RingLoader } from 'react-spinners';
 import { DocumentRow } from '@/components/DocumentCard/DocumentCard';
+import { updateDocumentStatus } from '@/services/document/updateDocumentStatus';
 
 export default function SubirDocumento() {
   const router = useRouter();
@@ -57,7 +58,9 @@ export default function SubirDocumento() {
             description: type.description,
             documentTypeId: type.id,
             status: matched ? (matched.status as DocumentStatus) : 'none',
+            comments: matched?.comments ?? '',
             file: undefined,
+            skeletonUrl: matched?.skeletonUrl,
           };
         });
 
@@ -72,19 +75,20 @@ export default function SubirDocumento() {
     fetchData();
   }, [authLoading, idToken, waterPlantId]);
 
-  const handleSubmitAllDocuments = async (files: (File | undefined)[]) => {
+  const handleSubmitAllDocuments = async () => {
     setUploading(true);
-    const updatedDocs = [...documentos];
 
     try {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const typeId = documentos[i].documentTypeId;
+      const docsToUpload = documentos.filter((doc) => doc.file);
 
-        if (!file) continue;
+      if (docsToUpload.length === 0) return;
 
+      // Obtener los documentos existentes del backend (para tener IDs)
+      const existingDocuments = await listDocumentsByWaterPlantId(waterPlantId);
+
+      for (const doc of docsToUpload) {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", doc.file!);
         formData.append("private", "true");
         formData.append("folder", "documents");
 
@@ -96,30 +100,39 @@ export default function SubirDocumento() {
         const result = await uploadResponse.json();
         if (!uploadResponse.ok || !result.url) throw new Error("Upload failed");
 
-        await createDocument({
-          documentTypeId: typeId,
-          documentUrl: result.url,
-          waterPlantId: waterPlantId,
-          status: "pending",
-          comments: "",
-        });
+        const matched = existingDocuments.find(
+          (d: DocumentDTO) => d.documentTypeId === doc.documentTypeId
+        );
 
-        // ✅ Actualiza localmente para respuesta rápida
-        updatedDocs[i].status = "pending";
-        updatedDocs[i].file = undefined;
+        if (matched) {
+          // Actualiza documento existente
+          await updateDocumentStatus({
+            id: matched.id,
+            status: "pending",
+            documentUrl: result.url,
+          });
+        } else {
+          // Crea nuevo documento
+          await createDocument({
+            documentTypeId: doc.documentTypeId,
+            documentUrl: result.url,
+            waterPlantId: waterPlantId,
+            status: "pending",
+            comments: "",
+          });
+        }
       }
 
       await setStatus(waterPlantId, "documents");
-      setDocumentos(updatedDocs); // UX inmediata
 
-      // 🔁 Revalidación desde backend
-      const [types, existingDocuments] = await Promise.all([
+      // Revalidar con backend y repoblar estado actualizado
+      const [types, updatedDocuments] = await Promise.all([
         listDocumentTypes(),
         listDocumentsByWaterPlantId(waterPlantId),
       ]);
 
       const docsWithIcons = types.map((type: DocumentType) => {
-        const matched = existingDocuments.find(
+        const matched = updatedDocuments.find(
           (doc: DocumentDTO) => doc.documentTypeId === type.id
         );
 
@@ -130,13 +143,15 @@ export default function SubirDocumento() {
           description: type.description,
           documentTypeId: type.id,
           status: matched ? (matched.status as DocumentStatus) : 'none',
+          comments: matched?.comments ?? '',
           file: undefined,
+          skeletonUrl: matched?.skeletonUrl,
         };
       });
 
-      setDocumentos(docsWithIcons); // Sync total con backend
+      setDocumentos(docsWithIcons);
     } catch (e) {
-      console.error("Error en la subida o guardado del documento:", e);
+      console.error("Error al subir documento:", e);
     } finally {
       setUploading(false);
     }
@@ -152,16 +167,19 @@ export default function SubirDocumento() {
 
   if (showGlobalLoader) {
     return (
-      <div className="fixed inset-0 bg-white bg-opacity-75 flex justify-center items-center z-50 transition-opacity duration-500 ease-in-out">
-        <RingLoader color="#3b3fc0" size={150} />
+      <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+        <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+        <RingLoader color="#8cc2c0b3" size={140} />
+        <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="absolute top-3 left-5">
+      <div className="absolute top-3 left-5 flex gap-1">
         <SymbolButton variant="back" clickFunc={handleGoBack} />
+        <SymbolButton variant='home' clickFunc={() => router.push("/")}/>
       </div>
       <div className="documentos-subir-container">
         <div className="form-card">
