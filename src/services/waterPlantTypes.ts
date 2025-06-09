@@ -96,3 +96,14 @@ export const deleteWaterPlantType = async (id: number) => {
     throw error;
   }
 };
+
+
+export const GetWaterPlantTypeById = async (id: number) => {
+  try {
+    const { data } = await api.get(`/waterplants/getById`, { params: { id } });
+    return data;
+  } catch (error) {
+    console.error(`Error obteniendo waterplantype con ID ${id}:`, error);
+    throw error;
+  }
+};

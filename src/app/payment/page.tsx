@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getAuth, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import createCheckoutSession, { getCurrentFirebaseUser } from '@/services/stripehook';
+import createCheckoutSession from '@/services/stripehook';
+import { GetWaterPlantTypeById } from '@/services/waterPlantTypes';
 
 // Declarar el tipo para Stripe
 declare global {
@@ -18,6 +19,10 @@ export default function PaymentComponent() {
   const [processingPayment, setProcessingPayment] = useState(false);
   const [stripeLoaded, setStripeLoaded] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'annual'>('monthly');
+  const searchParams = useSearchParams();
+  const wpid = searchParams ? Number(searchParams.get('wpid')) : 1;
+  const [waterPlantType, setWaterPlantType] = useState<any | null>(null);
+  const [waterPlantLoading, setWaterPlantLoading] = useState(false);
   const router = useRouter();
 
   // Función para cargar Stripe dinámicamente
@@ -61,6 +66,24 @@ export default function PaymentComponent() {
 
     return () => unsubscribe();
   }, [router]);
+
+  useEffect(() => {
+    if (wpid) {
+      setWaterPlantLoading(true);
+      GetWaterPlantTypeById(wpid)
+        .then((data) => {
+          setWaterPlantType(data);
+          // Set selectedPlan to the first word of the plant name
+          if (data && data.name) {
+            setSelectedPlan(data.name.split(' ')[0]);
+          }
+        })
+        .finally(() => setWaterPlantLoading(false));
+    } else {
+      setWaterPlantType(null);
+      setSelectedPlan('monthly');
+    }
+  }, [wpid]);
 
   const handleSubscription = async () => {
     if (!user) {
@@ -106,7 +129,7 @@ export default function PaymentComponent() {
     }
   };
 
-  if (loading || !stripeLoaded) {
+  if (loading || !stripeLoaded || (wpid && waterPlantLoading)) {
     return (
       <div style={{ 
         display: 'flex', 
@@ -115,7 +138,7 @@ export default function PaymentComponent() {
         height: '100vh',
         fontSize: '18px'
       }}>
-        {loading ? 'Cargando usuario...' : 'Cargando Stripe...'}
+        {loading ? 'Cargando usuario...' : wpid && waterPlantLoading ? 'Cargando información de la planta...' : 'Cargando Stripe...'}
       </div>
     );
   }
@@ -146,9 +169,8 @@ export default function PaymentComponent() {
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     }}>
       <h2 style={{ color: '#333', marginBottom: '20px' }}>
-        Elige tu Plan de Suscripción
+        {wpid && waterPlantType ? 'Pago de Purificadora' : 'Elige tu Plan de Suscripción'}
       </h2>
-      
       <div style={{ 
         backgroundColor: '#fff', 
         padding: '20px', 
@@ -164,7 +186,7 @@ export default function PaymentComponent() {
         </p>
       </div>
 
-      {/* Selector de planes */}
+      {/* Selector de planes o pago de planta */}
       <div style={{
         display: 'flex',
         gap: '20px',
@@ -172,22 +194,21 @@ export default function PaymentComponent() {
         flexWrap: 'wrap',
         justifyContent: 'center'
       }}>
-        {/* Plan Mensual */}
-        <div 
-          onClick={() => setSelectedPlan('monthly')}
-          style={{
-            backgroundColor: '#fff',
-            padding: '30px',
-            borderRadius: '8px',
-            border: selectedPlan === 'monthly' ? '3px solid #007bff' : '2px solid #ddd',
-            boxShadow: selectedPlan === 'monthly' ? '0 4px 12px rgba(0, 123, 255, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.3s',
-            minWidth: '300px',
-            position: 'relative'
-          }}
-        >
-          {selectedPlan === 'monthly' && (
+        {wpid && waterPlantType ? (
+          <div
+            onClick={() => setSelectedPlan(waterPlantType.name.split(' ')[0])}
+            style={{
+              backgroundColor: '#fff',
+              padding: '30px',
+              borderRadius: '8px',
+              border: '3px solid #007bff',
+              boxShadow: '0 4px 12px rgba(0, 123, 255, 0.2)',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              minWidth: '300px',
+              position: 'relative'
+            }}
+          >
             <div style={{
               position: 'absolute',
               top: '-10px',
@@ -205,128 +226,172 @@ export default function PaymentComponent() {
             }}>
               ✓
             </div>
-          )}
-          
-          <h3 style={{ color: '#007bff', marginBottom: '15px' }}>
-            Plan Mensual
-          </h3>
-          <div style={{ 
-            fontSize: '48px', 
-            fontWeight: 'bold', 
-            color: '#333',
-            marginBottom: '10px'
-          }}>
-            $10.00
-          </div>
-          <p style={{ 
-            color: '#666', 
-            marginBottom: '20px',
-            fontSize: '16px'
-          }}>
-            por mes
-          </p>
-          <p style={{ 
-            color: '#999', 
-            fontSize: '14px',
-            marginBottom: '15px'
-          }}>
-            Renovación automática mensual
-          </p>
-        </div>
-
-        {/* Plan Anual */}
-        <div 
-          onClick={() => setSelectedPlan('annual')}
-          style={{
-            backgroundColor: '#fff',
-            padding: '30px',
-            borderRadius: '8px',
-            border: selectedPlan === 'annual' ? '3px solid #28a745' : '2px solid #ddd',
-            boxShadow: selectedPlan === 'annual' ? '0 4px 12px rgba(40, 167, 69, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.3s',
-            minWidth: '300px',
-            position: 'relative'
-          }}
-        >
-          {selectedPlan === 'annual' && (
-            <div style={{
-              position: 'absolute',
-              top: '-10px',
-              right: '-10px',
-              backgroundColor: '#28a745',
-              color: 'white',
-              borderRadius: '50%',
-              width: '24px',
-              height: '24px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}>
-              ✓
+            <h3 style={{ color: '#007bff', marginBottom: '15px' }}>{waterPlantType.name}</h3>
+            <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>
+              ${waterPlantType.price?.toFixed(2) ?? '0.00'}
             </div>
-          )}
+            <p style={{ color: '#666', marginBottom: '20px', fontSize: '16px' }}>{waterPlantType.description}</p>
+            <p style={{ color: '#999', fontSize: '14px', marginBottom: '15px' }}>
+              Pago único por la purificadora seleccionada
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Plan Mensual */}
+            <div 
+              onClick={() => setSelectedPlan('monthly')}
+              style={{
+                backgroundColor: '#fff',
+                padding: '30px',
+                borderRadius: '8px',
+                border: selectedPlan === 'monthly' ? '3px solid #007bff' : '2px solid #ddd',
+                boxShadow: selectedPlan === 'monthly' ? '0 4px 12px rgba(0, 123, 255, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
+                cursor: 'pointer',
+                transition: 'all 0.3s',
+                minWidth: '300px',
+                position: 'relative'
+              }}
+            >
+              {selectedPlan === 'monthly' && (
+                <div style={{
+                  position: 'absolute',
+                  top: '-10px',
+                  right: '-10px',
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '14px',
+                  fontWeight: 'bold'
+                }}>
+                  ✓
+                </div>
+              )}
 
-          {/* Badge de ahorro */}
-          <div style={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            backgroundColor: '#28a745',
-            color: 'white',
-            padding: '5px 10px',
-            borderRadius: '15px',
-            fontSize: '12px',
-            fontWeight: 'bold'
-          }}>
-            ¡AHORRA!
-          </div>
-          
-          <h3 style={{ color: '#28a745', marginBottom: '15px' }}>
-            Plan Anual
-          </h3>
-          <div style={{ 
-            fontSize: '48px', 
-            fontWeight: 'bold', 
-            color: '#333',
-            marginBottom: '5px'
-          }}>
-            $80.00
-          </div>
-          <p style={{ 
-            color: '#666', 
-            marginBottom: '10px',
-            fontSize: '16px'
-          }}>
-            por año
-          </p>
-          <p style={{ 
-            color: '#28a745', 
-            fontSize: '14px',
-            fontWeight: 'bold',
-            marginBottom: '15px'
-          }}>
-            Equivale a $8.33/mes
-          </p>
-          <p style={{ 
-            color: '#999', 
-            fontSize: '14px',
-            marginBottom: '15px'
-          }}>
-            Pago recurrente anual
-          </p>
-        </div>
+              
+              <h3 style={{ color: '#007bff', marginBottom: '15px' }}>
+                Plan Mensual
+              </h3>
+              <div style={{ 
+                fontSize: '48px', 
+                fontWeight: 'bold', 
+                color: '#333',
+                marginBottom: '10px'
+              }}>
+                $10.00
+              </div>
+              <p style={{ 
+                color: '#666', 
+                marginBottom: '20px',
+                fontSize: '16px'
+              }}>
+                por mes
+              </p>
+              <p style={{ 
+                color: '#999', 
+                fontSize: '14px',
+                marginBottom: '15px'
+              }}>
+                Renovación automática mensual
+              </p>
+            </div>
+            {/* Plan Anual */}
+            <div 
+              onClick={() => setSelectedPlan('annual')}
+              style={{
+                backgroundColor: '#fff',
+                padding: '30px',
+                borderRadius: '8px',
+                border: selectedPlan === 'annual' ? '3px solid #28a745' : '2px solid #ddd',
+                boxShadow: selectedPlan === 'annual' ? '0 4px 12px rgba(40, 167, 69, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
+                cursor: 'pointer',
+                transition: 'all 0.3s',
+                minWidth: '300px',
+                position: 'relative'
+              }}
+            >
+              {selectedPlan === 'annual' && (
+                <div style={{
+                  position: 'absolute',
+                  top: '-10px',
+                  right: '-10px',
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '14px',
+                  fontWeight: 'bold'
+                }}>
+                  ✓
+                </div>
+              )}
+              {/* Badge de ahorro */}
+              <div style={{
+                position: 'absolute',
+                top: '10px',
+                left: '10px',
+                backgroundColor: '#28a745',
+                color: 'white',
+                padding: '5px 10px',
+                borderRadius: '15px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}>
+                ¡AHORRA!
+              </div>
+              
+              <h3 style={{ color: '#28a745', marginBottom: '15px' }}>
+                Plan Anual
+              </h3>
+              <div style={{ 
+                fontSize: '48px', 
+                fontWeight: 'bold', 
+                color: '#333',
+                marginBottom: '5px'
+              }}>
+                $80.00
+              </div>
+              <p style={{ 
+                color: '#666', 
+                marginBottom: '10px',
+                fontSize: '16px'
+              }}>
+                por año
+              </p>
+              <p style={{ 
+                color: '#28a745', 
+                fontSize: '14px',
+                fontWeight: 'bold',
+                marginBottom: '15px'
+              }}>
+                Equivale a $8.33/mes
+              </p>
+              <p style={{ 
+                color: '#999', 
+                fontSize: '14px',
+                marginBottom: '15px'
+              }}>
+                Pago recurrente anual
+              </p>
+            </div>
+          </>
+        )}
       </div>
-      
       {/* Botón de suscripción */}
       <button 
         onClick={handleSubscription}
         disabled={processingPayment}
         style={{
           backgroundColor: processingPayment ? '#ccc' : 
-            selectedPlan === 'annual' ? '#28a745' : '#007bff',
+            (wpid && waterPlantType) ? '#007bff' : (selectedPlan === 'annual' ? '#28a745' : '#007bff'),
           color: 'white',
           border: 'none',
           padding: '15px 40px',
@@ -337,21 +402,11 @@ export default function PaymentComponent() {
           fontWeight: 'bold',
           minWidth: '300px'
         }}
-        onMouseOver={(e) => {
-          if (!processingPayment) {
-            e.currentTarget.style.backgroundColor = 
-              selectedPlan === 'annual' ? '#218838' : '#0056b3';
-          }
-        }}
-        onMouseOut={(e) => {
-          if (!processingPayment) {
-            e.currentTarget.style.backgroundColor = 
-              selectedPlan === 'annual' ? '#28a745' : '#007bff';
-          }
-        }}
       >
         {processingPayment ? 'Procesando...' : 
-         `Suscribirse al Plan ${selectedPlan === 'monthly' ? 'Mensual' : 'Anual'}`}
+         (wpid && waterPlantType)
+           ? `Pagar purificadora (${waterPlantType.name})`
+           : `Suscribirse al Plan ${selectedPlan === 'monthly' ? 'Mensual' : 'Anual'}`}
       </button>
       
       {processingPayment && (
