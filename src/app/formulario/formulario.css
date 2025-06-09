@@ -63,3 +63,10 @@
   .formulario-boton:active {
     background-color: #4b5563 !important;
   }
+
+  .formulario-boton:disabled {
+    background-color: #9ca3af !important; /* gris neutro */
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+  
