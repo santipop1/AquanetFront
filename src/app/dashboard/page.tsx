@@ -11,6 +11,7 @@ import { UseAuth } from '@/providers/AuthProvider';
 import { ListWaterPlants } from '@/services/waterPlants';
 import { BiAdjust } from "react-icons/bi";
 import { useRouter } from 'next/navigation';
+import { ReporteNormativasDropdown }  from '@/components/ListaNormativas/ReporteNormativasDropdown';
 
 export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
@@ -83,6 +84,7 @@ export default function DashboardPage() {
   return (
     <>
       <Header />
+      
       <div className="dashboard">
         <aside className="dashboard-sidebar">
           {/* Botón de modo oscuro/claro */}
@@ -115,12 +117,16 @@ export default function DashboardPage() {
           </div>
         </aside>
         <main className="dashboard-main">
+        <ReporteNormativasDropdown />
+        
           <h2 className="dashboard-titulo">{franquiciaActiva ? `Franquicia ${franquiciaActiva.id}` : ''}</h2>
           {franquiciaActiva && franquiciaActiva.status === 'active' ? (
+            
             <div className="dashboard-grid">
               <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
               <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
               <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
+              
             </div>
           ) : franquiciaActiva ? (
             <div style={{marginTop: 16, fontWeight: 'bold', color: '#888'}}>
