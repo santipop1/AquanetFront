@@ -46,7 +46,7 @@ export default function MapComponent({ lng, lat, zoom = 14, geojsonData, focused
             type: 'fill',
             source: 'colonias',
             paint: {
-              'fill-color': `#3b3fc0`,
+              'fill-color': `#166534`,
               'fill-opacity': 0.3,
             },
           });
@@ -56,7 +56,7 @@ export default function MapComponent({ lng, lat, zoom = 14, geojsonData, focused
             type: 'line',
             source: 'colonias',
             paint: {
-              'line-color': '#3b3fc0',
+              'line-color': '#166534',
               'line-width': 2.5,
             },
           });
