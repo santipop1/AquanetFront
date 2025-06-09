@@ -4,6 +4,7 @@ import { MdFileDownload } from "react-icons/md";
 import { HiPencil } from "react-icons/hi2";
 import { FaArrowLeft, FaRegCalendar, FaPlusCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoChevronDown } from "react-icons/go";
+import { IoHomeSharp } from "react-icons/io5";
 
 export interface SymbolButtonProps {
   variant:
@@ -15,7 +16,8 @@ export interface SymbolButtonProps {
     | "arrow-down"
     | "add"
     | "opened-eye"
-    | "closed-eye";
+    | "closed-eye"
+    | "home";
   clickFunc?: () => void;
 }
 
@@ -43,6 +45,8 @@ export const SymbolButton: React.FC<SymbolButtonProps> = ({
         return <FaEye />;
       case "closed-eye":
         return <FaEyeSlash />;
+      case "home":
+        return <IoHomeSharp />;
       default:
         return null;
     }

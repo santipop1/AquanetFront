@@ -6,12 +6,14 @@ interface ContratarPlanProps {
   variant?: "default" | "subscribed";
   planType: "monthly" | "anual" | null | string;
   size?: "default" | "small";
+  clickFunc?: () => void;
 }
 
 const ContratarPlan: React.FC<ContratarPlanProps> = ({
   variant = "default",
   planType,
-  size = "default"
+  size = "default",
+  clickFunc
 }) => {
 
   const titulo = planType === "monthly" ? "Plan Mensual" : "Plan Anual";
@@ -27,7 +29,7 @@ const ContratarPlan: React.FC<ContratarPlanProps> = ({
           <p className="text-[#00b84c] text-2xl">al mes</p>
           <p className="text-white text-xl">{notaAdicional}</p>
           <div className="pt-3">
-            <ButtonText variant="variant4" label="Contratar" size="lg"/>
+            <ButtonText variant="variant4" label="Contratar" size="lg" onClick={clickFunc}/>
           </div>
         </div>
       </div>
@@ -43,7 +45,7 @@ const ContratarPlan: React.FC<ContratarPlanProps> = ({
           <p className="text-[#00b84c] text-2xl">al mes</p>
           <p className="text-white text-xl">{notaAdicional}</p>
           <div className="pt-5">
-            <ButtonText variant="variant6" label="Cambiar de método de pago" size="md" minW={65}/>
+            <ButtonText variant="variant6" label="Cambiar método de pago" size="md" minW={65}/>
           </div>
           <div className="pt-3">
             <ButtonText variant="variant4" label="Cancelar suscripción" size="md" minW={65}/>
@@ -61,7 +63,7 @@ const ContratarPlan: React.FC<ContratarPlanProps> = ({
         <p className="text-[#00b84c] text-2xl">al mes</p>
         <p className="text-white text-xl">{notaAdicional}</p>
         <div className="pt-3">
-          <ButtonText variant="variant4" label="Contratar" size="lg"/>
+          <ButtonText variant="variant4" label="Contratar" size="lg" onClick={clickFunc}/>
         </div>
       </div>
     </div>

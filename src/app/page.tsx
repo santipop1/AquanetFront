@@ -134,19 +134,14 @@ export default function Prueba() {
           <div className="contenedor-planes">
             <div className="card-plan">
               <ContratarPlan
-                titulo="Plan Mensual"
-                precio="$699"
-                periodicidad="al mes"
-                onContratar={() => alert("Plan mensual contratado")}
+                planType="monthly"
+                clickFunc={() => alert("Plan mensual contratado")}
               />
             </div>
             <div className="card-plan">
               <ContratarPlan
-                titulo="Plan Anual"
-                precio="$579"
-                periodicidad="al mes"
-                notaAdicional="un solo pago de $6,948"
-                onContratar={() => alert("Plan anual contratado")}
+                planType="anual"
+                clickFunc={() => alert("Plan anual contratado")}
               />
             </div>
           </div>

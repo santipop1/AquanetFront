@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import "./formulario.css";
-import Image from "next/image";
-import { useState } from "react";
-import Header from "@/components/Header/Header";
-import { createQuotation } from "@/services/quotations";
-import { InformationField } from "@/components/InformationField/InformationField";
-import { UseAuth } from "@/providers/AuthProvider";
-import { useRouter } from "next/navigation";
-import { setStatus } from "@/services/waterPlant/setStatus";
+import './formulario.css';
+import Image from 'next/image';
+import { useState } from 'react';
+import Header from '@/components/Header/Header';
+import { createQuotation } from '@/services/quotations';
+import { InformationField } from '@/components/InformationField/InformationField';
+import { UseAuth } from '@/providers/AuthProvider';
+import { useRouter } from 'next/navigation';
+import { setStatus } from '@/services/waterPlant/setStatus';
+import { RingLoader } from 'react-spinners';
 
 export default function FormularioPage() {
   const [form, setForm] = useState({
@@ -56,12 +57,22 @@ export default function FormularioPage() {
       console.log("Status changed: ", result2);
       router.push(`/seleccionar-colonia?wpid=${waterPlantId}`);
     } catch (error) {
-      console.error("Error al enviar cotización:", error);
-      alert("Hubo un error al enviar el formulario");
+      console.error('Error al enviar cotización:', error);
+      alert('Hubo un error al enviar el formulario');
     } finally {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+        <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+        <RingLoader color="#8cc2c0b3" size={140} />
+        <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
+      </div>
+    );
+  }
 
   return (
     <>

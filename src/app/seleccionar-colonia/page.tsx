@@ -17,6 +17,7 @@ import { SymbolButton } from '@/components/SymbolButton/SymbolButton';
 import { setNeighborhood } from '@/services/waterPlant/setNeighborhood';
 import { setStatus } from '@/services/waterPlant/setStatus';
 import { UseAuth } from '@/providers/AuthProvider';
+import Image from 'next/image';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -118,8 +119,10 @@ const SeleccionarColoniaPage = () => {
 
   if (loading || authLoading) {
     return (
-      <div className="fixed inset-0 bg-white bg-opacity-75 flex justify-center items-center z-50 transition-opacity duration-500 ease-in-out">
-        <RingLoader color="#3b3fc0" size={150} />
+      <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+        <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+        <RingLoader color="#8cc2c0b3" size={140} />
+        <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
       </div>
     );
   }
@@ -129,8 +132,9 @@ const SeleccionarColoniaPage = () => {
 
   return (
     <div className="flex flex-col items-center w-full gap-6 bg-white min-h-screen my-auto">
-      <div className="absolute top-3 left-5">
+      <div className="absolute top-3 left-5 flex gap-1">
         <SymbolButton variant="back" clickFunc={() => router.back()} />
+        <SymbolButton variant='home' clickFunc={() => router.push("/")}/>
       </div>
       <div className="flex w-full px-8 gap-4 pt-10">
         {/* Mapa */}
@@ -176,10 +180,10 @@ const SeleccionarColoniaPage = () => {
           {focusedColonia ? (
             <>
               <div>
-                <h2 className="mx-auto text-center text-2xl font-bold text-[#3b3fc0]">
+                <h2 className="mx-auto text-center text-2xl font-bold text-[#166534]">
                   {focusedColonia.name}
                 </h2>
-                <h2 className="pt-2 pb-4 mb-4 mx-auto text-center border-b-1 border-black text-xl font-bold text-[#3b3fc0]">
+                <h2 className="pt-2 pb-4 mb-4 mx-auto text-center border-b-1 border-black text-xl font-bold text-[#166534]">
                   {focusedColonia.municipalityName}
                 </h2>
                 {/* Score */}
@@ -188,7 +192,7 @@ const SeleccionarColoniaPage = () => {
                   <div className="flex items-center mx-auto gap-6">
                     <div className="flex flex-col items-center">
                       <p className="text-xl text-black">{currentYear}</p>
-                      <p className="text-4xl font-bold text-[#3b3fc0]">
+                      <p className="text-4xl font-bold text-[#166534]">
                         {focusedColonia.currentScore.toFixed(2)}
                       </p>
                     </div>
@@ -204,7 +208,7 @@ const SeleccionarColoniaPage = () => {
                     </div>
                     <div className="flex flex-col items-center">
                       <p className="text-xl text-black">{predictedYear}</p>
-                      <p className="text-4xl font-bold text-[#3b3fc0]">
+                      <p className="text-4xl font-bold text-[#166534]">
                         {focusedColonia.futureScore.toFixed(2)}
                       </p>
                     </div>
@@ -221,7 +225,7 @@ const SeleccionarColoniaPage = () => {
                   <div>
                     <p className="text-sm text-black mb-1">Tipo de purificadora recomendada</p>
                     <div className="flex items-center gap-2 mx-auto justify-center text-lg font-semibold">
-                      <FaHandHoldingWater className="text-xl m-0 p-0 inline font-bold text-[#3b3fc0]" />
+                      <FaHandHoldingWater className="text-xl m-0 p-0 inline font-bold text-[#166534]" />
                       <p>{focusedColonia.waterPlantTypeName}</p>
                     </div>
                   </div>
@@ -229,21 +233,21 @@ const SeleccionarColoniaPage = () => {
                     <div className="flex flex-col items-center">
                       <p className="text-sm mb-1 text-black">Inversión inicial</p>
                       <div className="flex items-center gap-1 text-lg font-semibold">
-                        <FaPiggyBank className="text-xl text-[#3b3fc0]" />
+                        <FaPiggyBank className="text-xl text-[#166534]" />
                         <p>${focusedColonia.waterPlantPrice.toFixed(0)}</p>
                       </div>
                     </div>
                     <div className="flex flex-col items-center">
                       <p className="text-sm mb-1 text-black">Renta mensual</p>
                       <div className="flex items-center gap-1 text-lg font-semibold">
-                        <MdHouseSiding className="text-2xl text-[#3b3fc0]" />
+                        <MdHouseSiding className="text-2xl text-[#166534]" />
                         <p>${focusedColonia.estimatedRentCostPerMonth.toFixed(2)}</p>
                       </div>
                     </div>
                     <div className="flex flex-col items-center">
                       <p className="text-sm mb-1 text-black">Ventas mensuales</p>
                       <div className="flex items-center gap-1 text-lg font-semibold">
-                        <FaBottleWater className="text-xl text-[#3b3fc0]" />
+                        <FaBottleWater className="text-xl text-[#166534]" />
                         <p>${focusedColonia.predictedMonthlyRevenue.toFixed(2)}</p>
                       </div>
                     </div>
@@ -251,7 +255,7 @@ const SeleccionarColoniaPage = () => {
                   <div className="mt-2">
                     <p className="text-sm mb-1 text-black">Meses para recuperar inversión</p>
                     <div className="flex items-center justify-center gap-2 text-lg font-semibold">
-                      <MdCalendarMonth className="text-xl text-[#3b3fc0]" />
+                      <MdCalendarMonth className="text-xl text-[#166534]" />
                       <p>{focusedColonia.monthsToRecoverInvestment.toFixed(0)}</p>
                     </div>
                   </div>
