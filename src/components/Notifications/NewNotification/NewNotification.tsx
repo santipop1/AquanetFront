@@ -1,20 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { createNotification } from '@/services/notifications';
+import { ListUsersWithEmail } from '@/services/user/createUser';
+import { UseAuth } from '@/providers/AuthProvider';
 import './NewNotification.css';
-
-
-
-
 
 const NotificationForm = () => {
   const [form, setForm] = useState({
     title: '',
     message: '',
     type: 'alert',
-    email: '',
+    receiverUserId: '',
     sendDateTime: '',
     isEmail: false,
     isRecurrent: false,
@@ -24,6 +22,20 @@ const NotificationForm = () => {
     recurrenceEndDate: '',
     recurrenceCount: 0,
   });
+  const [users, setUsers] = useState<any[]>([]);
+  const { user } = UseAuth();
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const data = await ListUsersWithEmail();
+        setUsers(data);
+      } catch (e) {
+        setUsers([]);
+      }
+    }
+    fetchUsers();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -36,49 +48,47 @@ const NotificationForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
+    const payload: any = {
+      title: form.title,
+      message: form.message,
+      type: form.type,
+      isRead: false,
+      nextScheduledAt: form.sendDateTime ? new Date(form.sendDateTime) : null,
+      isPushNotification: true,
+      isEmail: form.isEmail,
+      isRecurrent: form.isRecurrent,
+      senderUserId: user?.id,
+      receiverUserId: parseInt(form.receiverUserId),
+    };
 
-  const payload: any = {
-    title: form.title,
-    message: form.message,
-    type: form.type,
-    isRead: false,
-    nextScheduledAt: form.sendDateTime ? new Date(form.sendDateTime) : null,
-    isPushNotification: true,
-    isEmail: form.isEmail,
-    isRecurrent: form.isRecurrent,
-    senderUserId: 1,
-    receiverUserId: parseInt(form.email),
+    if (form.isRecurrent) {
+      payload.recurrenceIntervalValue = Number(form.recurrenceIntervalValue);
+      payload.recurrenceEndType = form.durationType;
+
+      if (form.durationType === 'numero') {
+        payload.recurrenceCount = Number(form.recurrenceCount);
+      }
+
+      if (form.durationType === 'hasta' && form.recurrenceEndDate) {
+        payload.recurrenceEndDate = new Date(form.recurrenceEndDate);
+      }
+    }
+
+    try {
+      const result = await createNotification(payload);
+      alert('Notificación enviada correctamente');
+      console.log('Resultado:', result);
+    } catch (error) {
+      alert('Error al enviar notificación');
+    }
   };
-
-  if (form.isRecurrent) {
-    payload.recurrenceIntervalValue = Number(form.recurrenceIntervalValue);
-    payload.recurrenceEndType = form.durationType;
-
-    if (form.durationType === 'numero') {
-      payload.recurrenceCount = Number(form.recurrenceCount);
-    }
-
-    if (form.durationType === 'hasta' && form.recurrenceEndDate) {
-      payload.recurrenceEndDate = new Date(form.recurrenceEndDate);
-    }
-  }
-
-  try {
-    const result = await createNotification(payload);
-    alert('Notificación enviada correctamente');
-    console.log('Resultado:', result);
-  } catch (error) {
-    alert('Error al enviar notificación');
-  }
-};
-
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4 bg-white rounded shadow space-y-4">
       <div className="New-Notification-header">
-            <Image src="/logo.png" alt="logo aquanet" width={220} height={80} />
-          </div>
+        <Image src="/logo.png" alt="logo aquanet" width={220} height={80} />
+      </div>
       <h2 className="New-Notification-title">Crear Notificación</h2>
 
       <div>
@@ -121,13 +131,20 @@ const NotificationForm = () => {
 
       <div>
         <label className="block font-medium">Destinatario</label>
-        <input
-          name="email"
-          value={form.email}
+        <select
+          name="receiverUserId"
+          value={form.receiverUserId}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
-        />
+        >
+          <option value="">Selecciona un usuario</option>
+          {users.map((u) => (
+            <option key={u.id} value={u.id}>
+              {u.name} {u.email ? `(${u.email})` : ''}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>

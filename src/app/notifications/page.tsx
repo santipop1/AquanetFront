@@ -10,10 +10,14 @@ import { getNotifications } from "@/services/notifications";
 import { markAsReadNotification } from "@/services/notifications";
 import NotificationForm from "@/components/Notifications/NewNotification/NewNotification";
 import { UseAuth } from "@/providers/AuthProvider";
+
+
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<NotificationDetail[]>([]);
   const [selected, setSelected] = useState<NotificationDetail | null>(null);
-  const { firebaseUser, loading } = UseAuth();
+  const { firebaseUser, loading, user } = UseAuth();
+  console.log('user from UseAuth:', user);
+  console.log('firebaseUser from UseAuth:', firebaseUser);
 
   useEffect(() => {
     if (!firebaseUser || loading) return;
@@ -44,6 +48,10 @@ export default function NotificationsPage() {
             {notifications.length}
           </span>
         </h2>
+
+        {/* Solo mostrar el formulario si el usuario es admin (role.id === 2) */}
+        {user?.role?.id === 2 && <NotificationForm />}
+        {user?.role?.id === 3 && <NotificationForm />}
 
         <div className="space-y-3">
           {notifications.map((notif) => (

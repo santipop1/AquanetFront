@@ -26,3 +26,14 @@ export const createUser = async (payload: CreateUserPayload) => {
     throw error;
   }
 };
+
+export const ListUsersWithEmail = async () => {
+  try {
+      const { data } = await api.get('/users/listwithmail');
+      console.log('Usuarios obtenidos:', data);
+      return data;
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+      throw error;
+    }
+};
