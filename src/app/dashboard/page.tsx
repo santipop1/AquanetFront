@@ -10,11 +10,13 @@ import { useEffect, useState } from 'react';
 import { UseAuth } from '@/providers/AuthProvider';
 import { ListWaterPlants } from '@/services/waterPlants';
 import { BiAdjust } from "react-icons/bi";
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
   const [franquicias, setFranquicias] = useState<any[]>([]);
   const [franquiciaActiva, setFranquiciaActiva] = useState<any | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchFranquicias = async () => {
@@ -30,6 +32,53 @@ export default function DashboardPage() {
     };
     fetchFranquicias();
   }, [firebaseUser]);
+
+  // Agrupar franquicias por status (igual que admin)
+  const statusOrder = ['ghost', 'map', 'type', 'documents', 'pay', 'active'];
+  const statusLabels: Record<string, string> = {
+    ghost: 'Ubicación',
+    map: 'Tipo',
+    type: 'Subir documentos',
+    documents: 'Estatus documentos',
+    pay: 'Pago',
+    active: 'Activas',
+    null: 'Sin estatus',
+    undefined: 'Sin estatus',
+  };
+  const grouped = statusOrder.map(status => ({
+    status,
+    franquicias: franquicias.filter(f => f.status === status)
+  })).concat([
+    { status: 'Sin estatus', franquicias: franquicias.filter(f => !statusOrder.includes(f.status)) }
+  ]);
+
+  // Navegación automática según status
+  const handleFranquiciaClick = (f: any) => {
+    setFranquiciaActiva(f);
+    switch (f.status) {
+      case 'ghost':
+        router.push('/seleccionar-colonia?wpid=' + f.id);
+        break;
+      case 'map':
+        router.push('/select-water-plant-type?wpid=' + f.id);
+        break;
+      case 'type':
+        router.push('/documentos-subir?wpid=' + f.id);
+        break;
+      case 'documents':
+        router.push('/documentos-subir?wpid=' + f.id);
+        break;
+      case 'pay':
+        router.push('/payment?wpid=' + f.id);
+        break;
+      case 'active':
+        // No redirige, muestra dashboard normal
+        break;
+      default:
+        // Si el status no es reconocido, puedes mostrar un mensaje o dejarlo en dashboard
+        break;
+    }
+  };
 
   return (
     <>
@@ -48,23 +97,36 @@ export default function DashboardPage() {
           </button>
           <h2 className="dashboard-subtitle">Mis Franquicias</h2>
           <div className="dashboard-franquicias-list">
-            {franquicias.map((f) => (
-              <RecuadroFranquicias
-                key={f.id}
-                nombre={`Franquicia ${f.id}`}
-                logoSrc={"/gotita.png"}
-                onClick={() => setFranquiciaActiva(f)}
-              />
+            {grouped.map(group => (
+              group.franquicias.length > 0 && (
+                <div key={group.status} style={{ marginBottom: 24 }}>
+                  <h3 style={{ fontWeight: 'bold', margin: '16px 0 8px 0' }}>{statusLabels[group.status] || group.status}</h3>
+                  {group.franquicias.map((f) => (
+                    <RecuadroFranquicias
+                      key={f.id}
+                      nombre={`Franquicia ${f.id}`}
+                      logoSrc={"/gotita.png"}
+                      onClick={() => handleFranquiciaClick(f)}
+                    />
+                  ))}
+                </div>
+              )
             ))}
           </div>
         </aside>
         <main className="dashboard-main">
           <h2 className="dashboard-titulo">{franquiciaActiva ? `Franquicia ${franquiciaActiva.id}` : ''}</h2>
-          <div className="dashboard-grid">
-            <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
-            <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
-            <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
-          </div>
+          {franquiciaActiva && franquiciaActiva.status === 'active' ? (
+            <div className="dashboard-grid">
+              <RecuadroInfo franquiciaId={franquiciaActiva?.id ?? null} />
+              <RecuadroVentas waterPlantId={franquiciaActiva?.id ?? null}/>
+              <RecuadroRefacciones waterPlantId={franquiciaActiva?.id ?? null} />
+            </div>
+          ) : franquiciaActiva ? (
+            <div style={{marginTop: 16, fontWeight: 'bold', color: '#888'}}>
+              En fase de: {statusLabels[franquiciaActiva.status] || franquiciaActiva.status}
+            </div>
+          ) : null}
         </main>
       </div>
     </>
