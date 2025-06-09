@@ -118,6 +118,7 @@ export default function DashboardPage() {
         </aside>
         <main className="dashboard-main">
         <ReporteNormativasDropdown />
+        
           <h2 className="dashboard-titulo">{franquiciaActiva ? `Franquicia ${franquiciaActiva.id}` : ''}</h2>
           {franquiciaActiva && franquiciaActiva.status === 'active' ? (
             
