@@ -69,7 +69,7 @@
   }
   
   .open-popup-button {
-    background-color: #5ec269;
+    background-color: #72aaa8;
     color: white;
     padding: 12px 24px;
     border: none;
@@ -83,7 +83,7 @@
   }
   
   .open-popup-button:hover {
-    background-color: #4aa657;
+    background-color: #2e7d7c;
   }
   
   .dropdown-title {
@@ -96,7 +96,7 @@
   
   .dropdown-message {
     font-size: 1rem;
-    color: #2e7d32;
+    color: #2e7d7c;
     text-align: center;
     margin-bottom: 15px;
     font-weight: 600;
