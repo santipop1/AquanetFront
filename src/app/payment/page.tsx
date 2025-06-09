@@ -17,6 +17,7 @@ export default function PaymentComponent() {
   const [loading, setLoading] = useState(true);
   const [processingPayment, setProcessingPayment] = useState(false);
   const [stripeLoaded, setStripeLoaded] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'annual'>('monthly');
   const router = useRouter();
 
   // Función para cargar Stripe dinámicamente
@@ -76,9 +77,10 @@ export default function PaymentComponent() {
 
     try {
       console.log('Iniciando proceso de pago para usuario:', user.uid);
+      console.log('Plan seleccionado:', selectedPlan);
       
-      // Crear la sesión de checkout con el userId de Firebase (solo plan mensual)
-      const response = await createCheckoutSession(user.uid, 'monthly');
+      // Crear la sesión de checkout con el plan seleccionado
+      const response = await createCheckoutSession(user.uid, selectedPlan);
       
       console.log('Sesión creada:', response);
 
@@ -134,7 +136,7 @@ export default function PaymentComponent() {
 
   return (
     <div style={{
-      maxWidth: '600px',
+      maxWidth: '800px',
       margin: '50px auto',
       padding: '30px',
       fontFamily: 'Arial, sans-serif',
@@ -144,13 +146,13 @@ export default function PaymentComponent() {
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     }}>
       <h2 style={{ color: '#333', marginBottom: '20px' }}>
-        Plan de Suscripción
+        Elige tu Plan de Suscripción
       </h2>
       
       <div style={{ 
         backgroundColor: '#fff', 
         padding: '20px', 
-        marginBottom: '20px',
+        marginBottom: '30px',
         borderRadius: '8px',
         border: '1px solid #ddd'
       }}>
@@ -161,82 +163,233 @@ export default function PaymentComponent() {
           ID: {user.uid}
         </p>
       </div>
-      
+
+      {/* Selector de planes */}
       <div style={{
-        backgroundColor: '#fff',
-        padding: '30px',
-        borderRadius: '8px',
-        border: '2px solid #007bff',
-        boxShadow: '0 2px 4px rgba(0, 123, 255, 0.1)'
+        display: 'flex',
+        gap: '20px',
+        marginBottom: '30px',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
       }}>
-        <h3 style={{ color: '#007bff', marginBottom: '15px' }}>
-          Plan Mensual
-        </h3>
-        <div style={{ 
-          fontSize: '48px', 
-          fontWeight: 'bold', 
-          color: '#333',
-          marginBottom: '10px'
-        }}>
-          $10.00
-        </div>
-        <p style={{ 
-          color: '#666', 
-          marginBottom: '25px',
-          fontSize: '16px'
-        }}>
-          por mes
-        </p>
-        
-        <button 
-          onClick={handleSubscription}
-          disabled={processingPayment}
+        {/* Plan Mensual */}
+        <div 
+          onClick={() => setSelectedPlan('monthly')}
           style={{
-            backgroundColor: processingPayment ? '#ccc' : '#007bff',
-            color: 'white',
-            border: 'none',
-            padding: '15px 30px',
-            fontSize: '18px',
-            borderRadius: '5px',
-            cursor: processingPayment ? 'not-allowed' : 'pointer',
-            width: '100%',
-            transition: 'background-color 0.3s'
-          }}
-          onMouseOver={(e) => {
-            if (!processingPayment) {
-              e.currentTarget.style.backgroundColor = '#0056b3';
-            }
-          }}
-          onMouseOut={(e) => {
-            if (!processingPayment) {
-              e.currentTarget.style.backgroundColor = '#007bff';
-            }
+            backgroundColor: '#fff',
+            padding: '30px',
+            borderRadius: '8px',
+            border: selectedPlan === 'monthly' ? '3px solid #007bff' : '2px solid #ddd',
+            boxShadow: selectedPlan === 'monthly' ? '0 4px 12px rgba(0, 123, 255, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            minWidth: '300px',
+            position: 'relative'
           }}
         >
-          {processingPayment ? 'Procesando...' : 'Suscribirse Ahora'}
-        </button>
-        
-        {processingPayment && (
-          <p style={{ 
-            marginTop: '15px', 
-            color: '#666',
-            fontSize: '14px'
+          {selectedPlan === 'monthly' && (
+            <div style={{
+              position: 'absolute',
+              top: '-10px',
+              right: '-10px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              borderRadius: '50%',
+              width: '24px',
+              height: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px',
+              fontWeight: 'bold'
+            }}>
+              ✓
+            </div>
+          )}
+          
+          <h3 style={{ color: '#007bff', marginBottom: '15px' }}>
+            Plan Mensual
+          </h3>
+          <div style={{ 
+            fontSize: '48px', 
+            fontWeight: 'bold', 
+            color: '#333',
+            marginBottom: '10px'
           }}>
-            Redirigiendo a la página de pago seguro...
+            $10.00
+          </div>
+          <p style={{ 
+            color: '#666', 
+            marginBottom: '20px',
+            fontSize: '16px'
+          }}>
+            por mes
           </p>
-        )}
+          <p style={{ 
+            color: '#999', 
+            fontSize: '14px',
+            marginBottom: '15px'
+          }}>
+            Renovación automática mensual
+          </p>
+        </div>
+
+        {/* Plan Anual */}
+        <div 
+          onClick={() => setSelectedPlan('annual')}
+          style={{
+            backgroundColor: '#fff',
+            padding: '30px',
+            borderRadius: '8px',
+            border: selectedPlan === 'annual' ? '3px solid #28a745' : '2px solid #ddd',
+            boxShadow: selectedPlan === 'annual' ? '0 4px 12px rgba(40, 167, 69, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            minWidth: '300px',
+            position: 'relative'
+          }}
+        >
+          {selectedPlan === 'annual' && (
+            <div style={{
+              position: 'absolute',
+              top: '-10px',
+              right: '-10px',
+              backgroundColor: '#28a745',
+              color: 'white',
+              borderRadius: '50%',
+              width: '24px',
+              height: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px',
+              fontWeight: 'bold'
+            }}>
+              ✓
+            </div>
+          )}
+
+          {/* Badge de ahorro */}
+          <div style={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            backgroundColor: '#28a745',
+            color: 'white',
+            padding: '5px 10px',
+            borderRadius: '15px',
+            fontSize: '12px',
+            fontWeight: 'bold'
+          }}>
+            ¡AHORRA!
+          </div>
+          
+          <h3 style={{ color: '#28a745', marginBottom: '15px' }}>
+            Plan Anual
+          </h3>
+          <div style={{ 
+            fontSize: '48px', 
+            fontWeight: 'bold', 
+            color: '#333',
+            marginBottom: '5px'
+          }}>
+            $80.00
+          </div>
+          <p style={{ 
+            color: '#666', 
+            marginBottom: '10px',
+            fontSize: '16px'
+          }}>
+            por año
+          </p>
+          <p style={{ 
+            color: '#28a745', 
+            fontSize: '14px',
+            fontWeight: 'bold',
+            marginBottom: '15px'
+          }}>
+            Equivale a $8.33/mes
+          </p>
+          <p style={{ 
+            color: '#999', 
+            fontSize: '14px',
+            marginBottom: '15px'
+          }}>
+            Pago recurrente anual
+          </p>
+        </div>
       </div>
       
+      {/* Botón de suscripción */}
+      <button 
+        onClick={handleSubscription}
+        disabled={processingPayment}
+        style={{
+          backgroundColor: processingPayment ? '#ccc' : 
+            selectedPlan === 'annual' ? '#28a745' : '#007bff',
+          color: 'white',
+          border: 'none',
+          padding: '15px 40px',
+          fontSize: '20px',
+          borderRadius: '8px',
+          cursor: processingPayment ? 'not-allowed' : 'pointer',
+          transition: 'background-color 0.3s',
+          fontWeight: 'bold',
+          minWidth: '300px'
+        }}
+        onMouseOver={(e) => {
+          if (!processingPayment) {
+            e.currentTarget.style.backgroundColor = 
+              selectedPlan === 'annual' ? '#218838' : '#0056b3';
+          }
+        }}
+        onMouseOut={(e) => {
+          if (!processingPayment) {
+            e.currentTarget.style.backgroundColor = 
+              selectedPlan === 'annual' ? '#28a745' : '#007bff';
+          }
+        }}
+      >
+        {processingPayment ? 'Procesando...' : 
+         `Suscribirse al Plan ${selectedPlan === 'monthly' ? 'Mensual' : 'Anual'}`}
+      </button>
+      
+      {processingPayment && (
+        <p style={{ 
+          marginTop: '15px', 
+          color: '#666',
+          fontSize: '14px'
+        }}>
+          Redirigiendo a la página de pago seguro...
+        </p>
+      )}
+      
+      {/* Información adicional */}
       <div style={{ 
-        marginTop: '20px', 
+        marginTop: '30px', 
         fontSize: '12px', 
         color: '#999',
-        textAlign: 'left'
+        textAlign: 'left',
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '8px',
+        border: '1px solid #ddd'
       }}>
+        <h4 style={{ marginBottom: '15px', color: '#333' }}>
+          Incluido en ambos planes:
+        </h4>
         <p>✓ Acceso completo a todas las funciones</p>
         <p>✓ Soporte técnico incluido</p>
-        <p>✓ Cancela en cualquier momento</p>
         <p>✓ Pago seguro con Stripe</p>
+        {selectedPlan === 'monthly' && (
+          <p>✓ Cancela en cualquier momento</p>
+        )}
+        {selectedPlan === 'annual' && (
+          <>
+            <p>✓ Ahorra $20 al año</p>
+            <p>✓ Sin preocupaciones por 12 meses</p>
+          </>
+        )}
       </div>
     </div>
   );
