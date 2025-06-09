@@ -116,7 +116,7 @@ export default function Page() {
         ))}
       </div>
       <div style={{textAlign:'center',marginTop:'2.5rem'}}>
-        <button className="btn-primary" onClick={() => setShowCreate(true)}>
+        <button className="btn-edit" onClick={() => setShowCreate(true)}>
           Crear nueva franquicia
         </button>
       </div>

@@ -27,6 +27,10 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
   }
+
+.New-Notification-boton:hover {
+    background-color: #568b89 !important;
+  }
   
 
   .New-Notification-boton:active {

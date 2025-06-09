@@ -35,7 +35,7 @@ const NotificationModal: FC<Props> = ({ notification, onClose }) => {
         <h3 className="text-xl font-bold mb-2">{notification.title}</h3>
         <div className="text-sm flex gap-4 mb-4">
           <span>{formattedDate}</span>
-          <span>mitec</span>
+          <span>{notification.type}</span>
         </div>
 
         <p className="mb-4">{notification.message}</p>

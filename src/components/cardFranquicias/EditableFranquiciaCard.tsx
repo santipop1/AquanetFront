@@ -70,29 +70,31 @@ const EditableFranquiciaCard: React.FC<EditableFranquiciaCardProps> = ({ franqui
       </div>
       <div className="form-group">
         <label>Compañía ID:
-          <input name="company_id" value={form.company_id} onChange={handleChange} type="number" />
+          <input name="company_id" value={form.company_id} onChange={handleChange} type="number" step="0.1" min="0"/>
         </label>
       </div>
       <div className="form-group">
         <label>Precio:
-          <input name="price" value={form.price} onChange={handleChange} type="number" step="0.01" />
+          <input name="price" value={form.price} onChange={handleChange} type="number" step="0.1" min="0" />
         </label>
       </div>
       <div className="form-group">
         <label>Tamaño (m2):
-          <input name="size_m2" value={form.size_m2} onChange={handleChange} type="number" step="0.1" />
+          <input name="size_m2" value={form.size_m2} onChange={handleChange} type="number" step="0.1" min="0" />
         </label>
       </div>
       <div className="form-group">
         <label>Frecuencia limpieza tanque (meses):
-          <input name="tank_cleaning_freq_months" value={form.tank_cleaning_freq_months} onChange={handleChange} type="number" />
+          <input name="tank_cleaning_freq_months" value={form.tank_cleaning_freq_months} onChange={handleChange} type="number" step="0.1" min="0"/>
         </label>
       </div>
       <div className="form-group">
-        <label>Osmosis:
-          <input name="osmosis" type="checkbox" checked={!!form.osmosis} onChange={handleChange} />
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap' }}>
+          <input name="osmosis" type="checkbox" checked={!!form.osmosis} onChange={handleChange}/>
+          Sí cuenta con osmosis
         </label>
       </div>
+      
       {error && <div className="error">{error}</div>}
       <div style={{display:'flex',gap:'1rem',justifyContent:'center',marginTop:'1.5rem'}}>
         <button className="btn-primary" onClick={handleSave} disabled={loading}>{loading ? 'Guardando...' : 'Guardar'}</button>

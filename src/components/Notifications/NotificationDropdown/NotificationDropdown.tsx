@@ -79,9 +79,6 @@ export const NotificationDropdown = () => {
                     <span className="text-sm text-gray-600">
                       {n.message}
                     </span>
-                    <span className="text-xs text-gray-400 mt-1">
-                      Tecnológico de Monterrey | mITec
-                    </span>
                   </div>
                   <div className="text-xs bg-gray-200 text-gray-600 rounded-full px-2 h-fit">
                     {formatDateDiff(n.lastSentAt)}
