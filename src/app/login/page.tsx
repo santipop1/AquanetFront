@@ -8,8 +8,7 @@ import { useRouter } from 'next/navigation';
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
-  onAuthStateChanged,
-  getIdToken
+  getIdToken,
 } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
 
@@ -20,6 +19,7 @@ import ResetPassword from '@/components/ResetPassword/ResetPassword';
 
 import { RingLoader } from 'react-spinners';
 import './Login.css';
+import { UseAuth } from '@/providers/AuthProvider';
 
 export default function Login() {
   const [correo, setCorreo] = useState('');
@@ -27,54 +27,32 @@ export default function Login() {
   const [showResetModal, setShowResetModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
-  const [loginSuccess, setLoginSuccess] = useState(false); // 👈 nuevo estado
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
 
+  const { role, loading: authLoading } = UseAuth();
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const token = await getIdToken(user, true);
-        localStorage.setItem('token', token);
-        router.push(`/payment?userId=${user.uid}`);
-      } else {
-        setInitializing(false);
+    if (!authLoading && role) {
+      // Redirección basada en el ID de rol
+      switch (role.id) {
+        case 1:
+          router.push('/dashboard');
+          break;
+        case 2:
+          router.push('/dashboard-admin');
+          break;
+        case 3:
+          router.push('/franquiciasEmpresas');
+          break;
+        default:
+          console.warn('Rol no reconocido');
+          break;
       }
-      unsubscribe();
-    });
-  }, []);
-
-  const waitForFirebaseUser = (): Promise<void> => {
-    return new Promise((resolve) => {
-      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-        if (firebaseUser) {
-          unsubscribe();
-          resolve();
-        }
-      });
-    });
-  };
-
-  const handleLoginSuccess = async () => {
-    try {
-      setLoginSuccess(true); // 👈 mantenemos pantalla de carga activa
-      await waitForFirebaseUser();
-
-      const user = auth.currentUser;
-      if (user) {
-        const token = await getIdToken(user, true);
-        localStorage.setItem('token', token);
-        const userId = user.uid;
-        router.push(`/payment?userId=${userId}`);
-      }
-    } catch (error) {
-      console.error('Error en el proceso de login:', error);
-      alert('Error al procesar el inicio de sesión');
-      setLoginSuccess(false); // Solo si hubo error
-    } finally {
-      setLoading(false);
     }
-  };
+    setInitializing(false);
+  }, [role, authLoading]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -88,7 +66,7 @@ export default function Login() {
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, correo, contrasena);
-      await handleLoginSuccess();
+      setLoginSuccess(true);
     } catch (error: any) {
       setErrorMsg('Inicio de sesión incorrecto. Verifica tus datos e intenta de nuevo.');
       setLoading(false);
@@ -99,7 +77,7 @@ export default function Login() {
     try {
       setLoading(true);
       await signInWithPopup(auth, provider);
-      await handleLoginSuccess();
+      setLoginSuccess(true);
     } catch (error: any) {
       setErrorMsg('Error con Google. Intenta de nuevo.');
       setLoading(false);

@@ -7,6 +7,7 @@ import Modal from '@/components/cardFranquicias/Modal';
 import CreateFranquiciaCard from '@/components/cardFranquicias/CreateFranquiciaCard';
 import { getWaterPlantTypesByUser, WaterPlantTypeCard, deleteWaterPlantType } from '@/services/waterPlantTypes';
 import { UseAuth } from '@/providers/AuthProvider';
+import Header from "@/components/Header/Header";
 import './page.css';
 
 export default function Page() {
@@ -63,6 +64,8 @@ export default function Page() {
   };
 
   return (
+    <>
+    <Header />
     <main className="main-container">
       <h1 className="page-title">Franquicias disponibles</h1>
       <div className="grid-container">
@@ -100,7 +103,8 @@ export default function Page() {
               isActive={activeIndex === index}
               onClick={() => handleCardClick(index)}
             />
-            <button onClick={() => handleEditClick(index)} style={{ marginTop: 8 }}>Editar</button>
+            <button onClick={() => handleEditClick(index)} className="btn-edit mt-2"> Editar franquicia </button>
+
             <Modal open={editIndex === index} onClose={handleCloseEdit}>
               <EditableFranquiciaCard
                 franquicia={item}
@@ -120,5 +124,6 @@ export default function Page() {
         <CreateFranquiciaCard onClose={() => setShowCreate(false)} onCreated={handleCreated} />
       </Modal>
     </main>
+    </>
   );
 }
