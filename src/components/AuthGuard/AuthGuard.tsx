@@ -1,4 +1,3 @@
-// components/AuthGuard.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -7,7 +6,8 @@ import { UseAuth } from "@/providers/AuthProvider";
 import {
   protectedRoutes,
   protectedRoutesAdmin,
-  protectedRoutesFranchise
+  protectedRoutesFranchise,
+  sharedRoutes
 } from "@/utils/protectedRoutes";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
@@ -15,20 +15,22 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, loading, role } = UseAuth();
 
+  // Rutas permitidas por todos los roles
+
   useEffect(() => {
     if (loading) return;
 
     const isInProtected = protectedRoutes.has(pathname);
     const isInAdmin = protectedRoutesAdmin.has(pathname);
     const isInFranchise = protectedRoutesFranchise.has(pathname);
+    const isShared = sharedRoutes.has(pathname);
 
-    // 🚫 No logueado y quiere entrar a ruta protegida
-    if (!user && (isInProtected || isInAdmin || isInFranchise)) {
+    if (!user && (isInProtected || isInAdmin || isInFranchise || isShared)) {
       router.push("/login");
       return;
     }
 
-    // ✅ Ya logueado y va a login o registro
+    // Ya logueado pero en login o registro
     if (user && (pathname === "/login" || pathname === "/registro")) {
       if (role?.id === 1) router.push("/dashboard");
       else if (role?.id === 2) router.push("/dashboard-admin");
@@ -36,20 +38,22 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // 🚫 No tiene rol adecuado para entrar a ruta específica
-    if (role?.id === 1 && (isInAdmin || isInFranchise)) {
-      router.push("/dashboard");
-      return;
-    }
+    // Verificamos acceso basado en rol solo si no es ruta compartida
+    if (!isShared) {
+      if (role?.id === 1 && (isInAdmin || isInFranchise)) {
+        router.push("/dashboard");
+        return;
+      }
 
-    if (role?.id === 2 && (isInProtected || isInFranchise)) {
-      router.push("/dashboard-admin");
-      return;
-    }
+      if (role?.id === 2 && (isInProtected || isInFranchise)) {
+        router.push("/dashboard-admin");
+        return;
+      }
 
-    if (role?.id === 3 && (isInProtected || isInAdmin)) {
-      router.push("/franquiciasempresas");
-      return;
+      if (role?.id === 3 && (isInProtected || isInAdmin)) {
+        router.push("/franquiciasempresas");
+        return;
+      }
     }
   }, [user, loading, role, pathname, router]);
 
