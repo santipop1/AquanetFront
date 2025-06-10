@@ -1,44 +1,37 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import EditableFranquiciaCard from './EditableFranquiciaCard';
+import React from 'react';
 
 const meta: Meta<typeof EditableFranquiciaCard> = {
-  title: 'Componentes/Formularios/EditableFranquiciaCard',
+  title: 'Componentes/Franquicias/EditableFranquiciaCard',
   component: EditableFranquiciaCard,
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Story />
-      </div>
-    ),
-  ],
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
-        component:
-          'Este componente permite editar los datos de una franquicia en un formulario. Muestra campos como nombre, descripción, tamaño, precio y más. Ideal para paneles de administración o dashboards.',
+        component: 'Formulario para editar una franquicia existente. Permite modificar atributos como nombre, descripción, precio, tamaño, compañía, frecuencia de limpieza y si tiene osmosis.',
       },
     },
   },
 };
 
 export default meta;
+
 type Story = StoryObj<typeof EditableFranquiciaCard>;
 
 export const Default: Story = {
   args: {
     franquicia: {
       id: 1,
-      name: 'AquaPlus Pro',
-      description: 'Franquicia con sistema de ósmosis inversa avanzada y soporte técnico 24/7.',
-      company_id: 101,
-      price: 200000,
+      name: 'Franquicia de prueba',
+      description: 'Descripción de ejemplo',
+      price: 12345,
       size_m2: 20,
-      tank_cleaning_freq_months: 3,
+      tank_cleaning_freq_months: 6,
       osmosis: true,
+      company_id: 2,
     },
-    onClose: () => alert('Modal cerrado'),
-    onSaved: (updated) => alert('Cambios guardados:\n' + JSON.stringify(updated, null, 2)),
+    onClose: () => alert('Edición cancelada'),
+    onSaved: (updated: any) => alert('Franquicia actualizada: ' + JSON.stringify(updated)),
   },
 };
-

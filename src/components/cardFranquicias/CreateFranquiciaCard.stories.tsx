@@ -1,33 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import CreateFranquiciaCard from './CreateFranquiciaCard';
+import React from 'react';
 
 const meta: Meta<typeof CreateFranquiciaCard> = {
-  title: 'Componentes/Formularios/CreateFranquiciaCard',
+  title: 'Componentes/Franquicias/CreateFranquiciaCard',
   component: CreateFranquiciaCard,
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Story />
-      </div>
-    ),
-  ],
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
-        component:
-          'Este componente muestra un formulario para registrar una nueva franquicia. Incluye validaciones básicas, opciones de osmosis, y campos como precio, tamaño y frecuencia de limpieza del tanque.',
+        component: 'Formulario para crear una nueva franquicia. Incluye campos como nombre, descripción, precio, tamaño, frecuencia de limpieza y si cuenta con osmosis.',
       },
     },
   },
 };
 
 export default meta;
+
 type Story = StoryObj<typeof CreateFranquiciaCard>;
 
 export const Default: Story = {
   args: {
-    onClose: () => alert('Formulario cerrado'),
+    onClose: () => alert('Cancelado'),
     onCreated: () => alert('Franquicia creada'),
   },
 };
