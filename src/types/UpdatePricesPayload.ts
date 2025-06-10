@@ -1,6 +1,6 @@
 
 export interface UpdatePricesPayload {
-  waterPlantId: number;
+  id: number;
   pricePerJug?: number;
   pricePerLiter?: number;
   pricePerGallon?: number;

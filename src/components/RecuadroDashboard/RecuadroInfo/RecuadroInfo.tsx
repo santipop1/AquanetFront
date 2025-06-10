@@ -58,7 +58,11 @@ const RecuadroInfo = ({ franquiciaId }: RecuadroInfoProps) => {
     if (!franquiciaId) return;
     setLoading(true);
     try {
-      await UpdatePrices({ id: franquiciaId, ...prices });
+      // Convierte los valores string a number (o undefined si vacío)
+      const numericPrices = Object.fromEntries(
+        Object.entries(prices).map(([key, value]) => [key, value === '' ? undefined : Number(value)])
+      );
+      await UpdatePrices({ id: franquiciaId, ...numericPrices });
       alert("Precios actualizados correctamente");
       setOriginalPrices(prices); // Actualiza el original después de guardar
     } catch {
