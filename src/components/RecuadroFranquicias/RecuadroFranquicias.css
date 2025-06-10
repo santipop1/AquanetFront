@@ -28,6 +28,15 @@ body.dark {
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
+.recuadro-nombre-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  width: 100%;
+}
+
+
 .recuadro-franquicia:hover {
   background-color: var(--franquicia-bg-hover);
   transform: translateY(-1px);

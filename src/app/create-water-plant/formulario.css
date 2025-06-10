@@ -1,0 +1,72 @@
+.formulario-background {
+  background-color: #8cc2c0;
+  min-height: 100vh;
+  padding: 3rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+  
+  .formulario-container {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2.5rem 3rem;
+    max-width: 720px;
+    width: 100%;
+    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
+  }
+  
+  
+  .formulario-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .formulario-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  
+  .formulario-subtitle {
+    text-align: center;
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 2rem;
+  }
+  
+  .formulario-boton {
+    display: block;
+    margin: 2rem auto 0;
+    background-color: #568b89 !important;
+
+    color: #ffffff !important;
+    padding: 0.75rem 2.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: 999px;
+    text-transform: none;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .formulario-boton:hover {
+    background-color: #8cc2c0 !important;
+  }
+  
+  .formulario-boton:active {
+    background-color: #4b5563 !important;
+  }
+
+  .formulario-boton:disabled {
+    background-color: #9ca3af !important; /* gris neutro */
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+  
