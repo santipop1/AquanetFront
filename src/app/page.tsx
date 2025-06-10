@@ -9,6 +9,22 @@ import Footer from "@/components/Footer/Footer";
 import { useEffect } from "react";
 import { UseAuth } from "@/providers/AuthProvider";
 
+declare global {
+  interface Window {
+    watsonAssistantChatOptions?: {
+      integrationID: string;
+      region: string;
+      serviceInstanceID: string;
+      showLauncher: boolean;
+      greeting: Array<{ delay: number; message: string; is_enabled: boolean }>;
+      onLoad: (instance: {
+        updateCSSVariables: (vars: Record<string, string>) => void;
+        render: () => void;
+      }) => void;
+    };
+  }
+}
+
 export default function Prueba() {
   const { user } = UseAuth();
 
@@ -47,7 +63,7 @@ export default function Prueba() {
       "https://web-chat.global.assistant.watson.appdomain.cloud/versions/latest/WatsonAssistantChatEntry.js";
     document.head.appendChild(script);
     return () => {
-      document.head.contains(script) && document.head.removeChild(script);
+      if (document.head.contains(script)) document.head.removeChild(script);
     };
   }, []);
 
@@ -108,7 +124,10 @@ export default function Prueba() {
           <p className="bonus-text">
             ¡Incluye 2 años de{" "}
             <span className="inline-logo">
-              <img src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
+
+              <Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
+
+  
             </span>{" "}
             totalmente gratis!
           </p>
