@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import "./RestablecerContrasena.css";
-import { ButtonText } from "@/components/ButtonText/ButtonText";
 
 const RestablecerContrasena = () => {
   const [email, setEmail] = useState("");
 
   const handleSend = () => {
     alert(`Correo enviado a: ${email}`);
+  };
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   return (
@@ -27,12 +30,18 @@ const RestablecerContrasena = () => {
       />
 
       <div className="rc-button-wrapper">
-        <ButtonText
-          label="Enviar correo"
-          variant="variant2"
-          onClick={handleSend}
-          disabled={!email}
-        />
+        {/* El botón se deshabilita visualmente y funcionalmente si el email no es válido */}
+        <div style={{ width: '100%' }}>
+          <button
+            className="button-text variant2 size-md"
+            onClick={handleSend}
+            disabled={!isValidEmail(email)}
+            style={{ width: '100%' }}
+            type="button"
+          >
+            Enviar correo
+          </button>
+        </div>
       </div>
     </div>
   );
