@@ -52,7 +52,7 @@ export default function FormularioPage() {
     }
     const payload = {
       ...form,
-      user_uid: firebaseUser.uid,
+      user_uid: firebaseUser ? firebaseUser.uid : null,
     };
 
     try {

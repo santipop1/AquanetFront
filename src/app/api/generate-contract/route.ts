@@ -39,7 +39,6 @@ export async function POST(req: Request) {
       linebreaks: true,
     });
 
-    // 👇 Aquí usamos variables CORTAS en la plantilla
     doc.setData({
       c: comprador,
       a: aval,
@@ -63,7 +62,7 @@ export async function POST(req: Request) {
       },
     });
   } catch (e) {
-    console.error("❌ Error generando contrato:", e);
+    console.error("Error generando contrato:", e);
     return NextResponse.json({ error: "Error generando contrato" }, { status: 500 });
   }
 }
