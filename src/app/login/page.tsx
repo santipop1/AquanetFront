@@ -112,14 +112,11 @@ export default function Login() {
               Recupérala aquí
             </button>
           </p>
-
           <button type="button" className="google-auth-btn" onClick={handleGoogleLogin}>
             <Image src="/google-icon.png" alt="Google" width={20} height={20} />
             <span>Continuar con Google</span>
           </button>
-
           <hr className="divider" />
-
           <form onSubmit={handleSubmit}>
             <InformationField
               variant="text"
@@ -128,7 +125,6 @@ export default function Login() {
               value={correo}
               onChange={(val) => setCorreo(String(val))}
             />
-
             <InformationField
               variant="password"
               label="Contraseña"

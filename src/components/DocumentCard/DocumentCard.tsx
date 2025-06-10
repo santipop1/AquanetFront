@@ -29,9 +29,10 @@ type DocumentCardProps = {
   title: string;
   documents: DocumentRow[];
   onSubmit: (files: (File | undefined)[]) => Promise<void>;
+  onCompleted: () => void;
 };
 
-export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) {
+export function DocumentCard({ title, documents, onSubmit, onCompleted }: DocumentCardProps) {
   const [docStates, setDocStates] = useState<DocumentRow[]>(documents);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -175,6 +176,8 @@ export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) 
     !docStates.every(
       (doc) => doc.status === 'accepted' || doc.status === 'pending'
     );
+  
+  const allAccepted = docStates.length > 0 && docStates.every((doc) => doc.status === 'accepted');
 
   return (
     <>
@@ -213,19 +216,29 @@ export function DocumentCard({ title, documents, onSubmit }: DocumentCardProps) 
         </div>
 
         <div className="text-center mt-8">
-          <button
-            disabled={uploading || !canSubmit}
-            className="px-5 py-2 rounded-md text-white font-bold 
-              bg-[#166534] hover:bg-[#1E2A2A]
-              disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={async () => {
-              setUploading(true);
-              await onSubmit(docStates.map((doc) => doc.file));
-              setUploading(false);
-            }}
-          >
-            {uploading ? 'Subiendo...' : 'Completar'}
-          </button>
+          {allAccepted ? (
+            <button
+              className="px-5 py-2 rounded-md text-white font-bold 
+                bg-[#166534] hover:bg-[#1E2A2A]"
+              onClick={onCompleted}
+            >
+              Continuar a pago
+            </button>
+          ) : (
+            <button
+              disabled={uploading || !canSubmit}
+              className="px-5 py-2 rounded-md text-white font-bold 
+                bg-[#166534] hover:bg-[#1E2A2A]
+                disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={async () => {
+                setUploading(true);
+                await onSubmit(docStates.map((doc) => doc.file));
+                setUploading(false);
+              }}
+            >
+              {uploading ? 'Subiendo...' : 'Completar'}
+            </button>
+          )}
         </div>
       </div>
 

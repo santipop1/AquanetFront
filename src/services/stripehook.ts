@@ -1,6 +1,5 @@
-import { User as FirebaseUser, getAuth, getIdToken, onAuthStateChanged, signOut } from "firebase/auth";
+import { User as FirebaseUser, getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 import api from './api';
-import getUserByFirebaseId from "./user/getUserByFirebaseId";
 
 // Tipos TypeScript para mejor tipado
 interface SubscriptionStatus {
@@ -63,6 +62,7 @@ export const checkSubscriptionStatus = async (): Promise<SubscriptionStatus> => 
 
     console.log('✅ Estado de suscripción obtenido:', res.data);
     return res.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('❌ Error checking subscription status:', error);
     
@@ -163,6 +163,7 @@ const createCheckoutSessionWithValidation = async (
     console.log('✅ Sesión de checkout creada:', res.data);
     return res.data;
     
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('❌ Error creating checkout session:', error);
     
@@ -206,7 +207,7 @@ export const verifyPayment = async (
     
     console.log('✅ Verificación de pago completada:', res.data);
     return res.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Error verifying payment:', error);
     throw error;
   }
@@ -239,7 +240,7 @@ export const getSessionStatus = async (sessionId: string) => {
 
     console.log('✅ Estado de sesión obtenido:', res.data);
     return res.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Error getting session status:', error);
     throw error;
   }
@@ -273,7 +274,7 @@ export const manualProcessSubscription = async (sessionId: string) => {
 
     console.log('✅ Suscripción procesada manualmente:', res.data);
     return res.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Error en procesamiento manual:', error);
     throw error;
   }
@@ -343,11 +344,11 @@ export const redirectToCheckout = async (planType: 'monthly' | 'annual' = 'month
     
     return checkoutData;
     
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Error en redirección a checkout:', error);
     
     // Mostrar mensaje de error al usuario
-    alert(error.message || 'Error al procesar la solicitud de pago');
+    alert(error || 'Error al procesar la solicitud de pago');
     throw error;
   }
 };
@@ -379,7 +380,7 @@ export const cancelSubscription = async () => {
 
     console.log('✅ Suscripción cancelada:', res.data);
     return res.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Error cancelando suscripción:', error);
     throw error;
   }
@@ -410,7 +411,7 @@ export const getPaymentStatistics = async () => {
 
     console.log('📊 Estadísticas de pagos:', res.data);
     return res.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Error obteniendo estadísticas:', error);
     throw error;
   }
@@ -425,6 +426,7 @@ export const formatDate = (dateString: string): string => {
       day: 'numeric'
     });
   } catch (error) {
+    console.log('Fecha no válida', error)
     return 'Fecha no válida';
   }
 };

@@ -7,6 +7,7 @@ import ContratarPlan from "@/components/ContratarPlan/ContratarPlan";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import { useEffect } from "react";
+import { UseAuth } from "@/providers/AuthProvider";
 
 declare global {
   interface Window {
@@ -25,19 +26,15 @@ declare global {
 }
 
 export default function Prueba() {
+  const { user } = UseAuth();
+
   useEffect(() => {
     window.watsonAssistantChatOptions = {
       integrationID: "9aa77c57-a1c6-44aa-9184-f937eb1cd57e",
       region: "us-south",
       serviceInstanceID: "f0d6142e-e0bd-48cc-bfee-14d7ea2a6525",
       showLauncher: true,
-      greeting: [
-        {
-          delay: 0,
-          message: "",
-          is_enabled: false,
-        },
-      ],
+      greeting: [{ delay: 0, message: "", is_enabled: false }],
       onLoad: (instance) => {
         instance.updateCSSVariables({
           "launcher-icon-size": "0px",
@@ -74,7 +71,6 @@ export default function Prueba() {
     <>
       <Header />
       <main className="pagina-prueba">
-        {/* Hero Section */}
         <section className="hero">
           <div className="hero-overlay" />
           <div className="hero-content">
@@ -89,9 +85,11 @@ export default function Prueba() {
                 modelo de franquicias rentable, sustentable y automatizado.
               </p>
               <div className="hero-buttons">
-                <Link href="/registro" className="btn-primary">
-                  Regístrate
-                </Link>
+                {!user && (
+                  <Link href="/registro" className="btn-primary">
+                    Regístrate
+                  </Link>
+                )}
               </div>
             </div>
             <div className="hero-image">
@@ -99,14 +97,21 @@ export default function Prueba() {
             </div>
           </div>
         </section>
-
-        {/* Video + CTA */}
         <section className="contenido">
           <h2>¡Purifica tu futuro!</h2>
-          <video controls className="video">
-            <source src="/videoaquanet.mp4" type="video/mp4" />
-            Tu navegador no soporta este video.
-          </video>
+          <div className="video">
+            <iframe
+              width="100%"
+              height="400"
+              src="https://www.youtube.com/embed/Tiq__hBosMg"
+              title="Video Aquanet"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              style={{ borderRadius: "8px", boxShadow: "0 30px 50px rgba(0, 0, 0, 0.2)" }}
+            ></iframe>
+          </div>
+
           <p className="promo-text">
             Purifica tu futuro comprando una franquicia purificadora con{" "}
             <span className="inline-logo">
@@ -119,16 +124,10 @@ export default function Prueba() {
           <p className="bonus-text">
             ¡Incluye 2 años de{" "}
             <span className="inline-logo">
-<<<<<<< Updated upstream
-              <img
-                src="/aquanetplus.png"
-                alt="aquanet+"
-                width={100}
-                height={30}
-              />
-=======
+
               <Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
->>>>>>> Stashed changes
+
+  
             </span>{" "}
             totalmente gratis!
           </p>
@@ -142,7 +141,7 @@ export default function Prueba() {
           <div className="registro-redirect">
             <Link href="/comparar-franquicias">
               <button className="cta-franquicia">
-                ¿CUÁL ES LA MEJOR FRANQUICIA PARA MÍ?
+                ¡CONOCE NUESTRAS FRANQUICIAS!
               </button>
             </Link>
           </div>
@@ -166,7 +165,6 @@ export default function Prueba() {
             </div>
           </div>
         </section>
-
         <Footer />
       </main>
     </>

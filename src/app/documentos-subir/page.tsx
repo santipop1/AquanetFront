@@ -163,6 +163,12 @@ export default function SubirDocumento() {
     router.back();
   };
 
+  const handleGoToPayment = async () => {
+    const result = await setStatus(waterPlantId, "pay");
+    console.log("Status changed: ", result);
+    router.push(`/proceed-to-payment?wpid=${waterPlantId}`)
+  }
+
   const showGlobalLoader = authLoading || isLoading || uploading;
 
   if (showGlobalLoader) {
@@ -192,6 +198,7 @@ export default function SubirDocumento() {
               title="Documentos requeridos"
               documents={documentos}
               onSubmit={handleSubmitAllDocuments}
+              onCompleted={handleGoToPayment}
             />
           )}
         </div>
