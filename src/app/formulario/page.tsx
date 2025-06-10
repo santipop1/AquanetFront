@@ -50,9 +50,9 @@ export default function FormularioPage() {
       setLoading(false);
       return;
     }
-    const payload = {
+    const payload: QuotationDTO = {
       ...form,
-      user_uid: firebaseUser ? firebaseUser.uid : null,
+      user_uid: firebaseUser.uid,
     };
 
     try {
