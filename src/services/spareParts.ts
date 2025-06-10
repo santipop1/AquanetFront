@@ -1,6 +1,7 @@
 import api from '../services/api';
+import { SparePart } from '../types/SparePart';
 
-export const getSpareParts = async (waterplantid: number): Promise<any[]> => {
+export const getSpareParts = async (waterplantid: number): Promise<SparePart[]> => {
   try {
     const { data } = await api.post('/spareparts', waterplantid, {
       headers: {

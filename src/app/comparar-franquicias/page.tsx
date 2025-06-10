@@ -16,7 +16,7 @@ export default function Page() {
       try {
         const data = await getWaterPlantTypes();
         setFranquiciasData(data);
-      } catch (error) {
+      } catch {
         console.error('No se pudieron cargar las franquicias.');
       }
     };
@@ -44,7 +44,7 @@ export default function Page() {
               imageUrl={item.imageUrl}
               price={item.price}
               size={item.size}
-              isActive={activeIndex === index}
+              isActive={Boolean(activeIndex === index)}
               onClick={() => handleCardClick(index)}
             />
           ))}

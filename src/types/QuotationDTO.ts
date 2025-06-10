@@ -6,5 +6,5 @@ export interface QuotationDTO {
     avalFirstLastName: string;
     avalSecondLastName: string;
     desiredPlantSizeId: number;
-    waterPlantId: number;
+    waterPlantId?: number;
 };

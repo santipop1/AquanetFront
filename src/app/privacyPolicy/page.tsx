@@ -63,7 +63,7 @@ const PrivacyPolicy: React.FC = () => {
           Aquanet podrá suspender cuentas por incumplimientos o vulneraciones de seguridad, sin previo aviso.
         </p>
         <p className="mb-4">
-          El servicio se ofrece "tal cual", sin garantías implícitas. Aquanet no se hace responsable de fallos, interrupciones o pérdidas derivadas del uso.
+          El servicio se ofrece &quot;tal cual&quot;, sin garantías implícitas. Aquanet no se hace responsable de fallos, interrupciones o pérdidas derivadas del uso.
         </p>
         <p className="mb-4">
           Este acuerdo y el aviso de privacidad pueden modificarse. El uso continuo implica aceptación de dichas modificaciones.

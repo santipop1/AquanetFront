@@ -1,6 +1,8 @@
 import api from './api';
+import { WaterPlant } from '../types/WaterPlant';
+import { UpdatePricesPayload } from '../types/UpdatePricesPayload';
 
-export const ListWaterPlantsAll = async () => {
+export const ListWaterPlantsAll = async (): Promise<WaterPlant[]> => {
   try {
       const { data } = await api.get('/waterplants/listall');
       console.log('Plantas de agua obtenidas:', data);
@@ -11,9 +13,9 @@ export const ListWaterPlantsAll = async () => {
     }
 };
 
-export const ListWaterPlants = async (useruid: any) => {
+export const ListWaterPlants = async (params: { id: string }): Promise<WaterPlant[]> => {
   try {
-      const { data } = await api.post('/waterplants/list', useruid);
+      const { data } = await api.post('/waterplants/list', params);
       console.log('Plantas de agua obtenidas:', data);
       return data;
     } catch (error) {
@@ -22,7 +24,7 @@ export const ListWaterPlants = async (useruid: any) => {
     }
 };
 
-export const UpdatePrices = async (payload: any) => {
+export const UpdatePrices = async (payload: UpdatePricesPayload) => {
     try {
         const { data } = await api.patch('/waterplants/moneyinfo', payload);
         console.log('Precios actualizados:', data);

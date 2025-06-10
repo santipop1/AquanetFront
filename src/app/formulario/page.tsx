@@ -10,9 +10,11 @@ import { UseAuth } from '@/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { setStatus } from '@/services/waterPlant/setStatus';
 import { RingLoader } from 'react-spinners';
+import { QuotationDTO } from '@/types/QuotationDTO';
 
 export default function FormularioPage() {
-  const [form, setForm] = useState({
+  type FormState = Omit<QuotationDTO, 'user_uid' | 'waterPlantId'>;
+  const [form, setForm] = useState<FormState>({
     budget: 0,
     desiredPlantSizeId: 1,
     avalFirstName: "",
@@ -25,10 +27,10 @@ export default function FormularioPage() {
   const { firebaseUser } = UseAuth();
   const router = useRouter();
 
-  const handleChange = (name: string, value: string | number) => {
+  const handleChange = <K extends keyof FormState>(name: K, value: FormState[K]) => {
     setForm((prev) => ({
       ...prev,
-      [name]: typeof prev[name] === "number" ? Number(value) : value,
+      [name]: value,
     }));
   };
 
@@ -42,9 +44,12 @@ export default function FormularioPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setLoading(true);
-
+    if (!firebaseUser) {
+      alert('Usuario no autenticado');
+      setLoading(false);
+      return;
+    }
     const payload = {
       ...form,
       user_uid: firebaseUser.uid,
@@ -92,7 +97,7 @@ export default function FormularioPage() {
             variant="select"
             label="Seleccionar Presupuesto"
             value={form.budget}
-            onChange={(value) => handleChange("budget", value)}
+            onChange={(value) => handleChange("budget", value as number)}
             options={[
               { label: "Menos de $50,000", value: 0 },
               { label: "$50,000 - $100,000", value: 50000 },
@@ -106,7 +111,7 @@ export default function FormularioPage() {
             variant="select"
             label="Seleccionar tamaño deseado de local"
             value={form.desiredPlantSizeId}
-            onChange={(value) => handleChange("desiredPlantSizeId", value)}
+            onChange={(value) => handleChange("desiredPlantSizeId", value as number)}
             options={[
               { label: "10 - 20 m²", value: 1 },
               { label: "20 - 30 m²", value: 2 },
@@ -118,19 +123,19 @@ export default function FormularioPage() {
             variant="text"
             label="Nombre(s) de tu aval (como aparece en su INE)"
             value={form.avalFirstName}
-            onChange={(value) => handleChange("avalFirstName", value)}
+            onChange={(value) => handleChange("avalFirstName", value as string)}
           />
           <InformationField
             variant="text"
             label="Apellido Paterno de tu aval (como aparece en su INE)"
             value={form.avalFirstLastName}
-            onChange={(value) => handleChange("avalFirstLastName", value)}
+            onChange={(value) => handleChange("avalFirstLastName", value as string)}
           />
           <InformationField
             variant="text"
             label="Apellido Materno de tu aval (como aparece en su INE)"
             value={form.avalSecondLastName}
-            onChange={(value) => handleChange("avalSecondLastName", value)}
+            onChange={(value) => handleChange("avalSecondLastName", value as string)}
           />
 
           <button
