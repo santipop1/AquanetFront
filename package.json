@@ -17,6 +17,7 @@
     "@mui/material": "^7.1.0",
     "@radix-ui/react-dialog": "^1.1.14",
     "@stripe/stripe-js": "^7.3.1",
+
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
     "docxtemplater": "^3.63.2",

@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { createNotification } from '@/services/notifications';
 import { ListUsersWithEmail } from '@/services/user/createUser';
 import { UseAuth } from '@/providers/AuthProvider';
+import { NotificationPayload } from '@/types/NotificationPayload';
+import { User } from '@/types/userListDTO';
 import './NewNotification.css';
 
 const NotificationForm = () => {
@@ -22,7 +24,7 @@ const NotificationForm = () => {
     recurrenceEndDate: '',
     recurrenceCount: 0,
   });
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const { user } = UseAuth();
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const NotificationForm = () => {
       try {
         const data = await ListUsersWithEmail();
         setUsers(data);
-      } catch (e) {
+      } catch {
         setUsers([]);
       }
     }
@@ -40,46 +42,47 @@ const NotificationForm = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, type, checked } = e.target;
+    const target = e.target;
+    const { name, value } = target;
+    let newValue: string | boolean | number = value;
+    if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+      newValue = target.checked;
+    }
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: newValue,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload: any = {
+    const payload: NotificationPayload = {
       title: form.title,
       message: form.message,
-      type: form.type,
+      type: form.type as 'alert' | 'notification' | 'message',
       isRead: false,
-      nextScheduledAt: form.sendDateTime ? new Date(form.sendDateTime) : null,
+      nextScheduledAt: form.sendDateTime ? new Date(form.sendDateTime) : undefined,
       isPushNotification: true,
       isEmail: form.isEmail,
       isRecurrent: form.isRecurrent,
-      senderUserId: user?.id,
+      senderUserId: user?.id ?? 0,
       receiverUserId: parseInt(form.receiverUserId),
     };
-
     if (form.isRecurrent) {
       payload.recurrenceIntervalValue = Number(form.recurrenceIntervalValue);
       payload.recurrenceEndType = form.durationType;
-
       if (form.durationType === 'numero') {
         payload.recurrenceCount = Number(form.recurrenceCount);
       }
-
       if (form.durationType === 'hasta' && form.recurrenceEndDate) {
         payload.recurrenceEndDate = new Date(form.recurrenceEndDate);
       }
     }
-
     try {
       const result = await createNotification(payload);
       alert('Notificación enviada correctamente');
       console.log('Resultado:', result);
-    } catch (error) {
+    } catch {
       alert('Error al enviar notificación');
     }
   };

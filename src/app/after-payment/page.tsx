@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { SymbolButton } from "@/components/SymbolButton/SymbolButton";
@@ -9,7 +10,7 @@ import { stripeCheckoutSuccess } from "@/services/stripeCheckoutSuccess";
 import { UseAuth } from "@/providers/AuthProvider";
 import { RingLoader } from "react-spinners";
 
-const AfterPaymentPage = () => {
+const AfterPaymentContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const sessionId = searchParams?.get('session_id') ?? "";
@@ -73,5 +74,13 @@ const AfterPaymentPage = () => {
         </div>
     );
 };
+
+const AfterPaymentPage = () => {
+    return (
+        <Suspense>
+            <AfterPaymentContent />
+        </Suspense>
+    );
+}
 
 export default AfterPaymentPage;

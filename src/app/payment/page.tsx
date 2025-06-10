@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getAuth, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import createCheckoutSession from '@/services/stripehook';
@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-export default function PaymentComponent() {
+function PaymentContent() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [processingPayment, setProcessingPayment] = useState(false);
@@ -447,5 +447,13 @@ export default function PaymentComponent() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PaymentComponent() {
+  return (
+    <Suspense>
+      <PaymentContent />
+    </Suspense>
   );
 }

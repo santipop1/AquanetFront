@@ -11,20 +11,21 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import {  getSales, createSale } from '@/services/sales';
+import { SalesYear, SaleByMonth } from '@/types/SalesData';
+import { SalePayload } from '@/types/SalePayload';
 import './RecuadroVentas.css';
 
 const RecuadroVentas = ({ waterPlantId }: { waterPlantId: number | null }) => {
-  const [salesData, setSalesData] = useState<any[]>([]);
+  const [salesData, setSalesData] = useState<SalesYear[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [data, setData] = useState<any[]>([]);
-  const [nuevaVenta, setNuevaVenta] = useState('');
+  const [data, setData] = useState<{ mes: string; ventas: number }[]>([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [form, setForm] = useState({ quantityJug: '', quantityLiter: '', quantityGallon: '' });
+  const [form, setForm] = useState<{ quantityJug: string; quantityLiter: string; quantityGallon: string }>({ quantityJug: '', quantityLiter: '', quantityGallon: '' });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!waterPlantId) return;
-    getSales(waterPlantId).then((res) => {
+    getSales(waterPlantId).then((res: SalesYear[]) => {
       setSalesData(res);
       if (res.length > 0) setSelectedYear(res[0].year);
     });
@@ -49,7 +50,7 @@ const RecuadroVentas = ({ waterPlantId }: { waterPlantId: number | null }) => {
       'Nov',
       'Dic',
     ];
-    const chartData = yearData.salesByMonth.map((m: any) => ({
+    const chartData = yearData.salesByMonth.map((m: SaleByMonth) => ({
       mes: months[m.month - 1],
       ventas: m.totalLiters,
     }));
@@ -58,18 +59,23 @@ const RecuadroVentas = ({ waterPlantId }: { waterPlantId: number | null }) => {
 
   const agregarVenta = async () => {
     if (!form.quantityJug && !form.quantityLiter && !form.quantityGallon) return;
+    if (waterPlantId === null) return;
     setLoading(true);
     try {
-      await createSale({
+      // Ajustar el payload para que cumpla con SalePayload
+      const payload: SalePayload = {
         waterPlantId,
-        quantityJug: Number(form.quantityJug),
-        quantityLiter: Number(form.quantityLiter),
-        quantityGallon: Number(form.quantityGallon)
-      });
+        amount:
+          Number(form.quantityJug || 0) +
+          Number(form.quantityLiter || 0) +
+          Number(form.quantityGallon || 0),
+        date: new Date().toISOString(),
+      };
+      await createSale(payload);
       setForm({ quantityJug: '', quantityLiter: '', quantityGallon: '' });
       setMostrarFormulario(false);
       // Opcional: recargar ventas después de agregar
-    } catch (e) {
+    } catch {
       alert('Error al registrar venta');
     } finally {
       setLoading(false);

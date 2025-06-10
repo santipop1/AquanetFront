@@ -10,6 +10,22 @@ import { useEffect } from "react";
 import { UseAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
+declare global {
+  interface Window {
+    watsonAssistantChatOptions?: {
+      integrationID: string;
+      region: string;
+      serviceInstanceID: string;
+      showLauncher: boolean;
+      greeting: Array<{ delay: number; message: string; is_enabled: boolean }>;
+      onLoad: (instance: {
+        updateCSSVariables: (vars: Record<string, string>) => void;
+        render: () => void;
+      }) => void;
+    };
+  }
+}
+
 export default function HomePage() {
   const { user } = UseAuth();
   const router = useRouter();
@@ -49,7 +65,7 @@ export default function HomePage() {
       "https://web-chat.global.assistant.watson.appdomain.cloud/versions/latest/WatsonAssistantChatEntry.js";
     document.head.appendChild(script);
     return () => {
-      document.head.contains(script) && document.head.removeChild(script);
+      if (document.head.contains(script)) document.head.removeChild(script);
     };
   }, []);
 
@@ -110,7 +126,10 @@ export default function HomePage() {
           <p className="bonus-text">
             ¡Incluye 2 años de{" "}
             <span className="inline-logo">
-              <img src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
+
+              <Image src="/aquanetplus.png" alt="aquanet+" width={100} height={30} />
+
+  
             </span>{" "}
             totalmente gratis!
           </p>

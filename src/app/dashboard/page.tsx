@@ -18,6 +18,7 @@ import { WaterPlant } from '@/types/WaterPlant';
 import { ButtonText } from '@/components/ButtonText/ButtonText';
 import { FaCirclePlus } from "react-icons/fa6";
 
+
 export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
   const [franquicias, setFranquicias] = useState<WaterPlant[]>([]);
@@ -182,5 +183,6 @@ export default function DashboardPage() {
         </main>
       </div>
     </>
+
   );
 }
