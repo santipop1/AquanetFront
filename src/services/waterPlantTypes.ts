@@ -1,4 +1,5 @@
 import api from './api';
+import { WaterPlantType } from '../types/WaterPlantType';
 
 export interface WaterPlantTypeCard {
   id: number;
@@ -58,7 +59,7 @@ export const getWaterPlantTypesByUser = async (id: number): Promise<WaterPlantTy
 
 
 
-export const updatedWaterPlantType = async (payload: any) => {
+export const updatedWaterPlantType = async (payload: WaterPlantType) => {
   try {
       const res = await api.patch('/water-plant-types/updated', payload);
       return res.data;
@@ -68,7 +69,7 @@ export const updatedWaterPlantType = async (payload: any) => {
     }
 };
 
-export const patchWaterPlantType = async (payload: any) => {
+export const patchWaterPlantType = async (payload: WaterPlantType) => {
   try {
     const res = await api.patch('/water-plant-types/updated', payload);
     return res.data;
@@ -78,7 +79,7 @@ export const patchWaterPlantType = async (payload: any) => {
   }
 };
 
-export const createWaterPlantType = async (payload: any) => {
+export const createWaterPlantType = async (payload: WaterPlantType) => {
   try {
     const res = await api.post('/water-plant-types', payload);
     return res.data;

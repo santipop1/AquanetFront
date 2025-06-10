@@ -34,7 +34,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     if (user && (pathname === "/login" || pathname === "/registro")) {
       if (role?.id === 1) router.push("/dashboard");
       else if (role?.id === 2) router.push("/dashboard-admin");
-      else if (role?.id === 3) router.push("/franquiciasempresas");
+      else if (role?.id === 3) router.push("/franquiciasEmpresas");
       return;
     }
 
@@ -51,7 +51,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       }
 
       if (role?.id === 3 && (isInProtected || isInAdmin)) {
-        router.push("/franquiciasempresas");
+        router.push("/franquiciasEmpresas");
         return;
       }
     }

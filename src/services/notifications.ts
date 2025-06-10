@@ -1,8 +1,8 @@
-
 import api from '../services/api';
 import { NotificationDetail } from '../types/NotificationDetail';
+import { NotificationPayload } from '../types/NotificationPayload';
 
-export const createNotification = async (payload: any) => {
+export const createNotification = async (payload: NotificationPayload) => {
   try {
     const res = await api.post('/notifications', payload);
     return res.data;

@@ -14,11 +14,12 @@ import Image from 'next/image';
 import { RingLoader } from 'react-spinners';
 import { useRouter } from 'next/navigation';
 import { ReporteNormativasDropdown }  from '@/components/ListaNormativas/ReporteNormativasDropdown';
+import { WaterPlant } from '@/types/WaterPlant';
 
 export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
-  const [franquicias, setFranquicias] = useState<any[]>([]);
-  const [franquiciaActiva, setFranquiciaActiva] = useState<any | null>(null);
+  const [franquicias, setFranquicias] = useState<WaterPlant[]>([]);
+  const [franquiciaActiva, setFranquiciaActiva] = useState<WaterPlant | null>(null);
   const [loading, setLoading] = useState<boolean>();
   const router = useRouter();
 
@@ -30,7 +31,7 @@ export default function DashboardPage() {
         const data = await ListWaterPlants({ id: firebaseUser.uid });
         setFranquicias(data);
         if (data.length > 0) setFranquiciaActiva(data[0]);
-      } catch (error) {
+      } catch {
         setFranquicias([]);
         setFranquiciaActiva(null);
       }
@@ -69,7 +70,7 @@ export default function DashboardPage() {
   ]);
 
   // Navegación automática según status
-  const handleFranquiciaClick = (f: any) => {
+  const handleFranquiciaClick = (f: WaterPlant) => {
     setFranquiciaActiva(f);
     switch (f.status) {
       case 'ghost':

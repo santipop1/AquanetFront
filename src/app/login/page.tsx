@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
-  getIdToken,
 } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
 
@@ -67,7 +66,7 @@ export default function Login() {
       setLoading(true);
       await signInWithEmailAndPassword(auth, correo, contrasena);
       setLoginSuccess(true);
-    } catch (error: any) {
+    } catch {
       setErrorMsg('Inicio de sesión incorrecto. Verifica tus datos e intenta de nuevo.');
       setLoading(false);
     }
@@ -78,7 +77,7 @@ export default function Login() {
       setLoading(true);
       await signInWithPopup(auth, provider);
       setLoginSuccess(true);
-    } catch (error: any) {
+    } catch {
       setErrorMsg('Error con Google. Intenta de nuevo.');
       setLoading(false);
     }

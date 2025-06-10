@@ -9,6 +9,8 @@ interface CardFranquiciasProps {
   imageUrl: string;
   price?: string;
   size?: string;
+  isActive?: boolean;
+  onClick?: () => void;
 }
 
 const CardFranquicias: React.FC<CardFranquiciasProps> = ({
@@ -18,18 +20,20 @@ const CardFranquicias: React.FC<CardFranquiciasProps> = ({
   description,
   imageUrl,
   price,
-  size
+  size,
+  isActive,
+  onClick
 }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      <div className="card-franquicias">
+      <div className={"card-franquicias" + (isActive ? " card-franquicias-active" : "")} onClick={onClick}>
         <img src={imageUrl} alt={`${title} Poster`} className="card-franquicias-image" />
         <div className="card-franquicias-content">
           <h2 className="card-franquicias-title">{title}</h2>
           <p className="card-franquicias-brand">Marca: {brand}</p>
-          <button className="card-franquicias-button" onClick={() => setShowModal(true)}>
+          <button className="card-franquicias-button" onClick={e => { e.stopPropagation(); setShowModal(true); }}>
             Mostrar más información
           </button>
         </div>
