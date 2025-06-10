@@ -1,51 +1,69 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Modal from './Modal';
-import React from 'react';
+import React, { useState } from 'react';
 
 const meta: Meta<typeof Modal> = {
-  title: 'Componentes/Interfaz/Modal',
+  title: 'Componentes/Comunes/ModalConfirmación',
   component: Modal,
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <div style={{
-        height: '100vh',
-        backgroundColor: '#f3f4f6',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <Story />
-      </div>
-    )
-  ],
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
-        component:
-          'Este componente muestra una ventana modal superpuesta con título, contenido personalizado y botones de confirmación o cierre. También adapta el contenido si el título es "Comentarios del Documento".',
+        component: 'Modal reutilizable con botones de confirmación y cancelación. Adapta su contenido si el título es "Comentarios del Documento".',
       },
     },
   },
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Modal>;
 
-export const ConfirmModal: Story = {
-  args: {
-    title: '¿Estás seguro de eliminar este elemento?',
-    onClose: () => alert('Modal cerrado'),
-    onConfirm: () => alert('Confirmado'),
-    children: <p>Esta acción no se puede deshacer.</p>,
+export const ConfirmaciónGeneral: Story = {
+  render: () => {
+    function ModalExample() {
+      const [open, setOpen] = useState(true);
+      return (
+        <>
+          <button onClick={() => setOpen(true)}>Abrir modal</button>
+          {open && (
+            <Modal
+              title="¿Deseas continuar?"
+              onClose={() => setOpen(false)}
+              onConfirm={() => {
+                alert('Confirmado');
+                setOpen(false);
+              }}
+            >
+              <p>Esta acción no se puede deshacer.</p>
+            </Modal>
+          )}
+        </>
+      );
+    }
+    return <ModalExample />;
   },
 };
 
-export const ComentarioDocumento: Story = {
-  args: {
-    title: 'Comentarios del Documento',
-    onClose: () => alert('Modal de comentario cerrado'),
-    onConfirm: () => {}, // No se usa en esta variante
-    children: <p>El documento tiene observaciones que debes revisar.</p>,
+export const ComentariosDelDocumento: Story = {
+  render: () => {
+    function ComentarioExample() {
+      const [open, setOpen] = useState(true);
+      return (
+        <>
+          <button onClick={() => setOpen(true)}>Abrir comentarios</button>
+          {open && (
+            <Modal
+              title="Comentarios del Documento"
+              onClose={() => setOpen(false)}
+              onConfirm={() => {}}
+            >
+              <p>Aquí puedes ver y añadir comentarios relacionados con el documento.</p>
+            </Modal>
+          )}
+        </>
+      );
+    }
+    return <ComentarioExample />;
   },
 };

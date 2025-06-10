@@ -1,26 +1,27 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import ResetPassword from './ResetPassword';
+import type { Meta, StoryObj } from "@storybook/react";
+import ResetPassword from "./ResetPassword";
 
 const meta: Meta<typeof ResetPassword> = {
-  title: 'Componentes/Modales/ResetPassword',
+  title: "Componentes/ResetPassword",
   component: ResetPassword,
-  tags: ['autodocs'],
   parameters: {
-    layout: 'fullscreen',
+    layout: "centered",
     docs: {
       description: {
-        component: 'Modal para enviar un correo de restablecimiento de contraseña usando Firebase Auth.',
+        component: "Este componente muestra un modal para restablecer la contraseña de usuario mediante correo electrónico. Incluye un campo para ingresar el correo, validación y retroalimentación del estado del envío.",
       },
     },
   },
+  tags: ["autodocs"],
 };
 
 export default meta;
+
 type Story = StoryObj<typeof ResetPassword>;
 
 export const Default: Story = {
   args: {
-    onClose: () => alert('Modal cerrado'),
-    emailDefault: 'ejemplo@correo.com',
+    onClose: () => alert("Modal cerrado"),
+    emailDefault: "ejemplo@correo.com",
   },
 };

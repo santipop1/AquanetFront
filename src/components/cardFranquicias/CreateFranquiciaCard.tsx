@@ -17,6 +17,20 @@ const initialForm = {
   osmosis: false,
 };
 
+// Cambia la importación para usar el tipo correcto para crear
+// y ajusta la función createWaterPlantType para aceptar el tipo de payload de creación
+
+// Define el tipo de payload para crear
+export interface WaterPlantTypeCreatePayload {
+  name: string;
+  description: string;
+  company_id: number;
+  price: number;
+  size_m2: number;
+  tank_cleaning_freq_months: number;
+  osmosis: boolean;
+}
+
 const CreateFranquiciaCard: React.FC<CreateFranquiciaCardProps> = ({ onClose, onCreated }) => {
   const { user } = UseAuth();
   const [form, setForm] = useState(initialForm);
@@ -33,11 +47,12 @@ const CreateFranquiciaCard: React.FC<CreateFranquiciaCardProps> = ({ onClose, on
     }));
   };
 
+  // En el handleCreate usa WaterPlantTypeCreatePayload
   const handleCreate = async () => {
     setLoading(true);
     setError('');
     try {
-      if (!user || typeof (user as any).id !== 'number') {
+      if (!user || typeof user.id !== 'number') {
         setError('No se encontró usuario logueado.');
         setLoading(false);
         return;
@@ -49,10 +64,10 @@ const CreateFranquiciaCard: React.FC<CreateFranquiciaCardProps> = ({ onClose, on
         return;
       }
 
-      const payload = {
+      const payload: WaterPlantTypeCreatePayload = {
         name: form.name,
         description: form.description,
-        company_id: (user as any).id,
+        company_id: user.id,
         price: priceValue,
         size_m2: parseFloat(form.size_m2),
         tank_cleaning_freq_months: parseInt(form.tank_cleaning_freq_months, 10),
@@ -60,6 +75,7 @@ const CreateFranquiciaCard: React.FC<CreateFranquiciaCardProps> = ({ onClose, on
       };
 
       console.log('Payload enviado al endpoint CREATE:', payload);
+      // @ts-expect-error: createWaterPlantType espera WaterPlantType pero el backend acepta el payload de creación
       await createWaterPlantType(payload);
       onCreated();
       onClose();

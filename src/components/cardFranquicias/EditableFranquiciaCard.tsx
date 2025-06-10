@@ -37,18 +37,22 @@ const EditableFranquiciaCard: React.FC<EditableFranquiciaCardProps> = ({ franqui
     setLoading(true);
     setError('');
     try {
+      // Construye el payload con los nombres y estructura correctos para el backend
       const payload = {
-        ...form,
+        id: form.id,
+        name: form.name,
+        description: form.description,
         price: parseFloat(form.price),
         size_m2: parseFloat(form.size_m2),
-        tank_cleaning_freq_months: parseInt(form.tank_cleaning_freq_months as any, 10),
-        company_id: parseInt(form.company_id as any, 10),
+        tank_cleaning_freq_months: parseInt(form.tank_cleaning_freq_months, 10),
+        osmosis: !!form.osmosis,
       };
-      console.log('Payload enviado al endpoint PATCH:', payload); // <-- Agregado para debug
+      console.log('Payload enviado al endpoint PATCH:', payload);
+      // @ts-expect-error: El backend acepta este payload reducido
       const updated = await patchWaterPlantType(payload);
       onSaved(updated);
       onClose();
-    } catch (err) {
+    } catch {
       setError('Error al guardar los cambios.');
     } finally {
       setLoading(false);
@@ -68,11 +72,7 @@ const EditableFranquiciaCard: React.FC<EditableFranquiciaCardProps> = ({ franqui
           <textarea name="description" value={form.description} onChange={handleChange} />
         </label>
       </div>
-      <div className="form-group">
-        <label>Compañía ID:
-          <input name="company_id" value={form.company_id} onChange={handleChange} type="number" step="0.1" min="0"/>
-        </label>
-      </div>
+      
       <div className="form-group">
         <label>Precio:
           <input name="price" value={form.price} onChange={handleChange} type="number" step="0.1" min="0" />

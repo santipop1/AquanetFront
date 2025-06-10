@@ -18,12 +18,12 @@ type Story = StoryObj<typeof meta>;
 // Stories
 export const WithPicture: Story = {
   args: {
-    picture: 'https://e.rpp-noticias.io/xlarge/2025/01/10/275427_1691067.webp', // Imagen de ejemplo
+    pictureUrl: 'https://e.rpp-noticias.io/xlarge/2025/01/10/275427_1691067.webp', // Imagen de ejemplo
   },
 };
 
 export const WithoutPicture: Story = {
   args: {
-    picture: undefined, // Para mostrar el icono por defecto
+    pictureUrl: undefined, // Para mostrar el icono por defecto
   },
 };
