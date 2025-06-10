@@ -45,6 +45,7 @@ const ProceedToPaymentPageInner = () => {
                 <ButtonText
                     variant="variant4"
                     label="Proceder al pago"
+                    onClick={() => router.push(`/payment?wpid=`+waterPlantId)}
                 />
             </div>
         </div>

@@ -8,6 +8,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import { useEffect } from "react";
 import { UseAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 declare global {
   interface Window {
@@ -25,8 +26,9 @@ declare global {
   }
 }
 
-export default function Prueba() {
+export default function HomePage() {
   const { user } = UseAuth();
+  const router = useRouter();
 
   useEffect(() => {
     window.watsonAssistantChatOptions = {
@@ -154,13 +156,13 @@ export default function Prueba() {
             <div className="card-plan">
               <ContratarPlan
                 planType="monthly"
-                clickFunc={() => alert("Plan mensual contratado")}
+                clickFunc={() => router.push(`/payment`)}
               />
             </div>
             <div className="card-plan">
               <ContratarPlan
                 planType="anual"
-                clickFunc={() => alert("Plan anual contratado")}
+                clickFunc={() => router.push(`/payment`)}
               />
             </div>
           </div>
