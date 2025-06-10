@@ -325,36 +325,6 @@ export const getCurrentFirebaseUser = (): Promise<FirebaseUser | null> => {
   });
 };
 
-// Función para redirigir a checkout con validación
-export const redirectToCheckout = async (planType: 'monthly' | 'annual' = 'monthly') => {
-  try {
-    const user = await getCurrentFirebaseUser();
-    
-    if (!user) {
-      throw new Error('Debes iniciar sesión para continuar');
-    }
-
-    const checkoutData = await createCheckoutSessionWithValidation(user.uid, planType);
-    
-    // Redirigir a la URL de checkout de Stripe
-    if (checkoutData.checkoutUrl) {
-      console.log('🔗 Redirigiendo a checkout:', checkoutData.checkoutUrl);
-      window.location.href = checkoutData.checkoutUrl;
-    } else {
-      throw new Error('No se pudo obtener la URL de checkout');
-    }
-    
-    return checkoutData;
-    
-  } catch (error) {
-    console.error('❌ Error en redirección a checkout:', error);
-    
-    // Mostrar mensaje de error al usuario
-    alert(error || 'Error al procesar la solicitud de pago');
-    throw error;
-  }
-};
-
 // Función para cancelar suscripción (si implementas esta funcionalidad)
 export const cancelSubscription = async () => {
   try {
