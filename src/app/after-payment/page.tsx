@@ -1,11 +1,12 @@
 "use client"
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { SymbolButton } from "@/components/SymbolButton/SymbolButton";
 import { ButtonText } from "@/components/ButtonText/ButtonText";
 
-const AfterPaymentPage = () => {
+const AfterPaymentContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const waterPlantId = searchParams ? Number(searchParams.get('wpid')) : 1;
@@ -37,6 +38,14 @@ const AfterPaymentPage = () => {
                 />
             </div>
         </div>
+    );
+}
+
+const AfterPaymentPage = () => {
+    return (
+        <Suspense>
+            <AfterPaymentContent />
+        </Suspense>
     );
 }
 

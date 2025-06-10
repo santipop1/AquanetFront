@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import MapComponent from '@/components/Map/MapComponent';
 import getTop3Neighborhoods from '@/services/socoredNeighborhood/getTop3Neighborhoods';
 import { ScoredNeighborhood } from '@/types/ScoredNeighborhood';
@@ -21,7 +21,7 @@ import Image from 'next/image';
 
 const ITEMS_PER_PAGE = 3;
 
-const SeleccionarColoniaPage = () => {
+const SeleccionarColoniaContent = () => {
   const [geojsonData, setGeojsonData] = useState<GeoJSON.Feature[]>([]);
   const [topColonias, setTopColonias] = useState<ScoredNeighborhood[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -271,6 +271,14 @@ const SeleccionarColoniaPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const SeleccionarColoniaPage = () => {
+  return (
+    <Suspense>
+      <SeleccionarColoniaContent />
+    </Suspense>
   );
 };
 
