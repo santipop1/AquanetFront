@@ -20,9 +20,9 @@ const UpdateUserPage = () => {
     const [showResetModal, setShowResetModal] = useState(false);
     const router = useRouter();
 
-    const subscribed = subscription ? subscription.status : "inactive";
-    const planType = subscription ? subscription.subscriptionType.planName : null;
-    const nextPaymentDate = subscription ? subscription.nextPayment : null;
+    const subscribed = subscription ? subscription?.status : "inactive";
+    const planType = subscription ? subscription?.subscriptionType?.planName : null;
+    const nextPaymentDate = subscription ? subscription?.nextPayment : null;
 
     useEffect(() => {
         if (user) {
@@ -62,7 +62,7 @@ const UpdateUserPage = () => {
         }
     };
 
-    const handleFieldChange = (field: keyof User, value: any) => {
+    const handleFieldChange = <K extends keyof User>(field: K, value: User[K]) => {
         setUpdatedUser((prev) =>
             prev ? { ...prev, [field]: value } : prev
         );
@@ -111,12 +111,12 @@ const UpdateUserPage = () => {
                 />
             </div>
             <div className="w-[90%] mx-auto pt-5">
-                <InformationField variant="text" label="Nombre" value={updatedUser?.firstName ?? ""} placeholder="Nombre" onChange={(val) => handleFieldChange("firstName", val)} />
-                <InformationField variant="text" label="Segundo nombre" value={updatedUser?.middleName ?? ""} placeholder="Segundo nombre (opcional)" onChange={(val) => handleFieldChange("middleName", val)} />
-                <InformationField variant="text" label="Primer apellido" value={updatedUser?.firstLastName ?? ""} placeholder="Apellido paterno" onChange={(val) => handleFieldChange("firstLastName", val)} />
-                <InformationField variant="text" label="Segundo apellido" value={updatedUser?.secondLastName ?? ""} placeholder="Apellido materno" onChange={(val) => handleFieldChange("secondLastName", val)} />
-                <InformationField variant="date" label="Fecha de nacimiento" value={updatedUser ? new Date(updatedUser.birthday).toISOString().split("T")[0] : undefined} placeholder="dd/mm/yyyy" onChange={(val) => handleFieldChange("birthday", val)} />
-                <InformationField variant="text" label="Número de teléfono" value={updatedUser?.phoneNumber ?? ""} placeholder="Número de teléfono" onChange={(val) => handleFieldChange("phoneNumber", val)} />
+                <InformationField variant="text" label="Nombre" value={updatedUser?.firstName ?? ""} placeholder="Nombre" onChange={(val) => handleFieldChange("firstName", String(val))} />
+                <InformationField variant="text" label="Segundo nombre" value={updatedUser?.middleName ?? ""} placeholder="Segundo nombre (opcional)" onChange={(val) => handleFieldChange("middleName", String(val))} />
+                <InformationField variant="text" label="Primer apellido" value={updatedUser?.firstLastName ?? ""} placeholder="Apellido paterno" onChange={(val) => handleFieldChange("firstLastName", String(val))} />
+                <InformationField variant="text" label="Segundo apellido" value={updatedUser?.secondLastName ?? ""} placeholder="Apellido materno" onChange={(val) => handleFieldChange("secondLastName", String(val))} />
+                <InformationField variant="date" label="Fecha de nacimiento" value={updatedUser ? new Date(updatedUser.birthday).toISOString().split("T")[0] : undefined} placeholder="dd/mm/yyyy" onChange={(val) => handleFieldChange("birthday", new Date(val))} />
+                <InformationField variant="text" label="Número de teléfono" value={updatedUser?.phoneNumber ?? ""} placeholder="Número de teléfono" onChange={(val) => handleFieldChange("phoneNumber", String(val))} />
             </div>
             <div className="flex flex-col items-center">
                 <div className="pb-3">

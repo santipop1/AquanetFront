@@ -1,4 +1,3 @@
-// app/api/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { Storage } from "@google-cloud/storage";
 
@@ -44,8 +43,8 @@ export async function POST(req: NextRequest) {
       : `https://storage.googleapis.com/${bucketName}/${fileName}`;
 
     return NextResponse.json({ url }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

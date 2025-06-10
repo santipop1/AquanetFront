@@ -39,8 +39,8 @@ export async function GET(req: NextRequest) {
         });
 
         return NextResponse.json({ url }, { status: 200 });
-    } catch (err: any) {
+    } catch (err) {
         console.error("Signed URL error:", err);
-        return NextResponse.json({ message: err.message }, { status: 500 });
+        return NextResponse.json({ err }, { status: 500 });
     }
 }
