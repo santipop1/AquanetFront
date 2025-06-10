@@ -12,13 +12,16 @@ import { useRef, useState, useEffect } from "react";
 import { User } from "@/types/User";
 import { updateUserInfo } from "@/services/user/updateUserInfo";
 import { useRouter } from "next/navigation";
+import { stripeCancelSubscription } from "@/services/stripeCancelSubscription";
+import { RingLoader } from "react-spinners";
 
 const UpdateUserPage = () => {
-    const { user, subscription, setUserContext, logout, firebaseUser } = UseAuth();
+    const { user, subscription, setUserContext, logout, firebaseUser, loading: authLoading } = UseAuth();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [updatedUser, setUpdatedUser] = useState<User | null>(user ?? null);
     const [showResetModal, setShowResetModal] = useState(false);
     const router = useRouter();
+    const [loading, setLoading] = useState<boolean>();
 
     const subscribed = subscription ? subscription?.status : "inactive";
     const planType = subscription ? subscription?.subscriptionType?.planName : null;
@@ -29,6 +32,31 @@ const UpdateUserPage = () => {
             setUpdatedUser({ ...user });
         }
     }, [user]);
+
+    useEffect(() => {
+        if (authLoading) {
+            setLoading(true);
+        } else {
+            setLoading(false);
+        }
+    }, [authLoading]);
+
+
+    const handleCancelSubscription = async () => {
+        setLoading(true);
+        try {
+            const res = await stripeCancelSubscription(firebaseUser ? firebaseUser.uid : "");
+            console.log("Cancel subscription: ", res);
+            alert("Suscripción cancelada exitosamente");
+            router.refresh();
+        } catch (e) {
+            console.error("Couldn't cancel subscription:", e);
+            alert("Hubo un error al cancelar la suscripción");
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const handleEditPicture = () => {
         fileInputRef.current?.click();
@@ -42,6 +70,7 @@ const UpdateUserPage = () => {
         formData.append("file", file);
         formData.append("private", "false");
 
+        setLoading(true);
         try {
             const res = await fetch("/api/upload", {
                 method: "POST",
@@ -56,9 +85,13 @@ const UpdateUserPage = () => {
             setUpdatedUser((prev) =>
                 prev ? { ...prev, profilePictureUrl: data.url } : prev
             );
-        } catch (err) {
+        } 
+        catch (err) {
             console.error("Error al subir imagen:", err);
             alert("Error al subir la imagen");
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -76,14 +109,19 @@ const UpdateUserPage = () => {
     const handleSaveChanges = async () => {
         if (!updatedUser) return;
 
+        setLoading(true);
         try {
             const data = await updateUserInfo(updatedUser);
             alert("Cambios guardados correctamente");
             console.log("Respuesta del backend:", data);
             setUserContext(data);
-        } catch (err) {
+        } 
+        catch (err) {
             console.error("Error al guardar cambios:", err);
             alert("Error al guardar cambios");
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -92,6 +130,16 @@ const UpdateUserPage = () => {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
+    }
+
+    if (loading) {
+        return (
+        <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+            <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+            <RingLoader color="#8cc2c0b3" size={140} />
+            <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
+        </div>
+        );
     }
 
     const userProfileContent = (
@@ -150,7 +198,7 @@ const UpdateUserPage = () => {
             />
             {subscribed === "active" ? (
                 <>
-                    <ContratarPlan planType={planType} variant='subscribed' />
+                    <ContratarPlan planType={planType} variant='subscribed' clickFunc={handleCancelSubscription}/>
                     <p className="text-xl font-bold pt-3 text-[rgb(0,0,51)]">
                         Próximo ciclo de pago: {nextPaymentDate ? formatDateToDDMMYYYY(new Date(nextPaymentDate)) : "Sin fecha registrada"}
                     </p>
@@ -158,9 +206,9 @@ const UpdateUserPage = () => {
             ) : (
                 <>
                     <div className="pb-6">
-                        <ContratarPlan planType="monthly" size="small" />
+                        <ContratarPlan planType="monthly" size="small" clickFunc={() => router.push(`/payment`)}/>
                     </div>
-                    <ContratarPlan planType="anual" size="small" />
+                    <ContratarPlan planType="anual" size="small" clickFunc={() => router.push(`/payment`)}/>
                 </>
             )}
         </div>

@@ -45,10 +45,7 @@ const ContratarPlan: React.FC<ContratarPlanProps> = ({
           <p className="text-[#00b84c] text-2xl">al mes</p>
           <p className="text-white text-xl">{notaAdicional}</p>
           <div className="pt-5">
-            <ButtonText variant="variant6" label="Cambiar método de pago" size="md" minW={65}/>
-          </div>
-          <div className="pt-3">
-            <ButtonText variant="variant4" label="Cancelar suscripción" size="md" minW={65}/>
+            <ButtonText variant="variant4" label="Cancelar suscripción" size="md" minW={65} onClick={clickFunc}/>
           </div>
         </div>
       </div>
