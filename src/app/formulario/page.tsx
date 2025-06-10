@@ -6,39 +6,61 @@ import { useState } from 'react';
 import Header from '@/components/Header/Header';
 import { createQuotation } from '@/services/quotations';
 import { InformationField } from '@/components/InformationField/InformationField';
+import { UseAuth } from '@/providers/AuthProvider';
+import { useRouter } from 'next/navigation';
+import { setStatus } from '@/services/waterPlant/setStatus';
+import { RingLoader } from 'react-spinners';
+import { QuotationDTO } from '@/types/QuotationDTO';
 
 export default function FormularioPage() {
-  const [form, setForm] = useState({
-    nombreUsuario: '',
-    apellidoUsuario: '',
-    fechaNacimiento: '',
-    presupuesto: '',
-    tamanoLocal: '',
-    nombreAval: '',
-    apellidoAval: '',
+  type FormState = Omit<QuotationDTO, 'user_uid' | 'waterPlantId'>;
+  const [form, setForm] = useState<FormState>({
+    budget: 0,
+    desiredPlantSizeId: 1,
+    avalFirstName: "",
+    avalMiddleName: "",
+    avalFirstLastName: "",
+    avalSecondLastName: "",
   });
 
   const [loading, setLoading] = useState(false);
+  const { firebaseUser } = UseAuth();
+  const router = useRouter();
 
-  const handleChange = (name: string, value: string) => {
+  const handleChange = <K extends keyof FormState>(name: K, value: FormState[K]) => {
     setForm((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
+  const isFormValid = () => {
+    return (
+      form.avalFirstName.trim() &&
+      form.avalFirstLastName.trim() &&
+      form.avalSecondLastName.trim()
+    );
+  };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    if (!firebaseUser) {
+      alert('Usuario no autenticado');
+      setLoading(false);
+      return;
+    }
     const payload = {
       ...form,
-      createdAt: new Date().toISOString(),
+      user_uid: firebaseUser ? firebaseUser.uid : null,
     };
 
     try {
       const result = await createQuotation(payload);
-      alert('Cotización enviada correctamente');
-      console.log('Cotización:', result);
+      const waterPlantId = result.waterPlantId;
+      const result2 = await setStatus(waterPlantId, "ghost");
+      console.log("Status changed: ", result2);
+      router.push(`/seleccionar-colonia?wpid=${waterPlantId}`);
     } catch (error) {
       console.error('Error al enviar cotización:', error);
       alert('Hubo un error al enviar el formulario');
@@ -47,72 +69,83 @@ export default function FormularioPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50">
+        <Image src="/logo.png" alt="aquaNet" width={160} height={60} className="mb-6" />
+        <RingLoader color="#8cc2c0b3" size={140} />
+        <p className="text-[#8cc2c0b3] text-xl mt-6 animate-pulse">Cargando...</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <Header />
       <div className="formulario-background">
-        <div className="formulario-container">
+        <form onSubmit={handleSubmit} className="formulario-container">
           <div className="formulario-header">
             <Image src="/logo.png" alt="logo aquanet" width={220} height={80} />
           </div>
           <h2 className="formulario-title">¡Purifica tu futuro!</h2>
           <p className="formulario-subtitle">
-            ¡Por favor llena los siguientes datos para que encontremos tu franquicia ideal!
+            ¡Por favor llena los siguientes datos para que encontremos tu
+            franquicia ideal!
           </p>
 
           <InformationField
-            variant="text"
-            label="Nombre(s) (como aparece en tu INE)"
-            value={form.nombreUsuario}
-            onChange={(value) => handleChange('nombreUsuario', value)}
-          />
-          <InformationField
-            variant="text"
-            label="Apellidos (como aparece en tu INE)"
-            value={form.apellidoUsuario}
-            onChange={(value) => handleChange('apellidoUsuario', value)}
-          />
-          <InformationField
-            variant="date"
-            label="Fecha de nacimiento"
-            value={form.fechaNacimiento}
-            onChange={(value) => handleChange('fechaNacimiento', value)}
-          />
-          <InformationField
             variant="select"
-            label="Seleccionar presupuesto"
-            value={form.presupuesto}
-            onChange={(value) => handleChange('presupuesto', value)}
-            options={["Menos de $10,000", "$10,000 - $30,000", "$30,000 - $50,000", "Más de $50,000"]}
+            label="Seleccionar Presupuesto"
+            value={form.budget}
+            onChange={(value) => handleChange("budget", value as number)}
+            options={[
+              { label: "Menos de $50,000", value: 0 },
+              { label: "$50,000 - $100,000", value: 50000 },
+              { label: "$100,000 - $200,000", value: 100000 },
+              { label: "$200,000 - $300,000", value: 200000 },
+              { label: "Más de $300,000", value: 300000 },
+            ]}
           />
+
           <InformationField
             variant="select"
             label="Seleccionar tamaño deseado de local"
-            value={form.tamanoLocal}
-            onChange={(value) => handleChange('tamanoLocal', value)}
-            options={["Menos de 10 m²", "10 - 20 m²", "20 - 40 m²", "Más de 40 m²"]}
+            value={form.desiredPlantSizeId}
+            onChange={(value) => handleChange("desiredPlantSizeId", value as number)}
+            options={[
+              { label: "10 - 20 m²", value: 1 },
+              { label: "20 - 30 m²", value: 2 },
+              { label: "30 m²", value: 3 },
+            ]}
           />
+
           <InformationField
             variant="text"
             label="Nombre(s) de tu aval (como aparece en su INE)"
-            value={form.nombreAval}
-            onChange={(value) => handleChange('nombreAval', value)}
+            value={form.avalFirstName}
+            onChange={(value) => handleChange("avalFirstName", value as string)}
           />
           <InformationField
             variant="text"
-            label="Apellidos de tu aval (como aparece en su INE)"
-            value={form.apellidoAval}
-            onChange={(value) => handleChange('apellidoAval', value)}
+            label="Apellido Paterno de tu aval (como aparece en su INE)"
+            value={form.avalFirstLastName}
+            onChange={(value) => handleChange("avalFirstLastName", value as string)}
+          />
+          <InformationField
+            variant="text"
+            label="Apellido Materno de tu aval (como aparece en su INE)"
+            value={form.avalSecondLastName}
+            onChange={(value) => handleChange("avalSecondLastName", value as string)}
           />
 
           <button
+            type="submit"
             className="formulario-boton"
-            onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || !isFormValid()}
           >
-            {loading ? 'Enviando...' : 'Confirmar'}
+            {loading ? "Enviando..." : "Confirmar"}
           </button>
-        </div>
+        </form>
       </div>
     </>
   );

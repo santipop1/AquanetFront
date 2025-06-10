@@ -1,0 +1,98 @@
+.editable-franquicia-card-wrapper {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.editable-franquicia-card-form {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.editable-franquicia-card-form h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1a202c;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-group label {
+  font-size: 1rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.65rem 0.75rem;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #568b89;
+}
+
+.btn-secondary {
+  background: #ff0000cc;
+  color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
+.error {
+  color: #dc2626;
+  margin-top: 0.5rem;
+  text-align: center;
+}

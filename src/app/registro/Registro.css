@@ -48,7 +48,7 @@ form input {
 }
 
 .registro-btn {
-  background-color: #2c3eec;
+  background-color: #8cc2c0;
   color: white;
   padding: 0.75rem;
   width: 100%;
@@ -62,7 +62,7 @@ form input {
 }
 
 .registro-btn:hover {
-  background-color: #1b2dc7;
+  background-color: #000035;
 }
 
 

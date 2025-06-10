@@ -1,38 +1,41 @@
-.carousel-wrapper {
+.main-container {
+  padding: 20px;
+}
+
+.page-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #111827;
+  font-weight: bold;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.registro-redirect {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 2rem;
-  background-color: #f3f4f6;
-  min-height: 100vh;
+  margin-top: 2rem;
 }
 
-.carousel-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  gap: 1rem;
-  padding: 1rem;
-  width: 100%;
-  max-width: 1200px;
-}
-
-.carousel-container::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel-button {
-  background-color: #3b82f6;
-  color: white;
+.cta-franquicia {
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
   border: none;
-  padding: 1rem;
-  font-size: 1.5rem;
-  border-radius: 50%;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 70px 70px rgba(0, 0, 0, 0.2);
 }
 
-.carousel-button:hover {
-  background-color: #2563eb;
+.cta-franquicia:hover {
+  background-color: #166534;
+  color: #ffffff;
+  transform: scale(1.05);
 }

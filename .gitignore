@@ -5,10 +5,13 @@
 /.pnp
 .pnp.*
 .yarn/*
+yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+# yarn.lock
+yarn.lock
 
 # testing
 /coverage

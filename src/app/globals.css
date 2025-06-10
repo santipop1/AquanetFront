@@ -5,6 +5,19 @@
   --foreground: #171717;
 }
 
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+
+
+body.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
 .scrollbar-hidden {
   -ms-overflow-style: none;  /* IE y Edge */
   scrollbar-width: none;     /* Firefox */
@@ -33,8 +46,46 @@
 
 */
 
+.texto-delineado {
+  -webkit-text-stroke: 0.3px black; /* Borde sutil de 0.3px */
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes gradientMove {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background: linear-gradient(270deg, #ff00cc, #3333ff, #00ffcc, #ffcc00, #ff00cc);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 12s ease infinite;
+}
+
+.outlined-text {
+  text-shadow: 0 0 0.5px black;
+}
+
+@keyframes pulseColor {
+  0%   { color: #ff00cc; }   /* fucsia */
+  20%  { color: #3333ff; }   /* azul violeta */
+  40%  { color: #00ffcc; }   /* aqua */
+  60%  { color: #ffcc00; }   /* amarillo */
+  80%  { color: #ff00cc; }   /* fucsia otra vez */
+  100% { color: #ff00cc; } 
+}
+
+.icon-gradient-fake {
+  animation: pulseColor 12s ease infinite;
 }

@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ResetPassword.css';
 
 interface ResetPasswordProps {
   onClose: () => void;
+  emailDefault?: string;
 }
 
-const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
+const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose, emailDefault }) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (emailDefault) setEmail(emailDefault);
+  }, [emailDefault]);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as Element).classList.contains('modal-overlay')) {
@@ -16,13 +21,19 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   };
 
   const handleReset = async () => {
+    if (!email) {
+      setMessage("Por favor, ingresa tu correo.");
+      return;
+    }
+
     try {
       const { sendPasswordResetEmail } = await import('firebase/auth');
       const { auth } = await import('@/app/libreria/firebase');
 
       await sendPasswordResetEmail(auth, email);
       setMessage('Correo enviado. Revisa tu bandeja de entrada.');
-    } catch (error: any) {
+    } catch (error) {
+      console.error('Error al enviar correo:', error);
       setMessage('Error. Intenta de nuevo.');
     }
   };
@@ -39,7 +50,11 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button className="reset-button" onClick={handleReset}>
+        <button
+          className="reset-button"
+          onClick={handleReset}
+          disabled={!email.trim()}
+        >
           Enviar correo
         </button>
         {message && <p className="reset-message">{message}</p>}

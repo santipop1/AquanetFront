@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./RecuadroDashboard.css";
 
 interface RecuadroDashboardProps {
@@ -6,6 +6,20 @@ interface RecuadroDashboardProps {
 }
 
 const RecuadroDashboard = ({ variante }: RecuadroDashboardProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ventaMes, setVentaMes] = useState('');
+
+  const handleGuardarVenta = () => {
+    console.log("Venta registrada:", ventaMes);
+    setVentaMes('');
+    setIsModalOpen(false);
+  };
+
+  const handleCancelarVenta = () => {
+    setVentaMes('');
+    setIsModalOpen(false);
+  };
+
   return (
     <div className={`dc-container dc-${variante}`}>
       {variante === "refacciones" && (
@@ -75,7 +89,30 @@ const RecuadroDashboard = ({ variante }: RecuadroDashboardProps) => {
             <p>Gráfico de barras de ventas</p>
           </div>
 
-          <button className="dc-btn-secondary">Generar Reporte</button>
+          <button className="dc-btn-secondary" onClick={() => setIsModalOpen(true)}>
+            Registrar venta del mes
+          </button>
+
+          {isModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h4>Registrar Venta del Mes</h4>
+                <label>
+                  Monto de venta:
+                  <input
+                    type="number"
+                    value={ventaMes}
+                    onChange={(e) => setVentaMes(e.target.value)}
+                    placeholder="Ej. 5000"
+                  />
+                </label>
+                <div className="modal-actions">
+                  <button onClick={handleGuardarVenta}>Guardar</button>
+                  <button onClick={handleCancelarVenta}>Cancelar</button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
