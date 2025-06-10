@@ -6,7 +6,7 @@ import RecuadroFranquicias from '@/components/RecuadroFranquicias/RecuadroFranqu
 import RecuadroInfo from '@/components/RecuadroDashboard/RecuadroInfo/RecuadroInfo';
 import RecuadroVentas from '@/components/RecuadroDashboard/RecuadroVentas/RecuadroVentas';
 import RecuadroRefacciones from '@/components/RecuadroDashboard/RecuadroRefacciones/RecuadroRefacciones';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { UseAuth } from '@/providers/AuthProvider';
 import { ListWaterPlants } from '@/services/waterPlants';
 import { BiAdjust } from "react-icons/bi";
@@ -18,8 +18,7 @@ import { WaterPlant } from '@/types/WaterPlant';
 import { ButtonText } from '@/components/ButtonText/ButtonText';
 import { FaCirclePlus } from "react-icons/fa6";
 
-
-export default function DashboardPage() {
+const DashboardContent = () => {
   const { firebaseUser } = UseAuth();
   const [franquicias, setFranquicias] = useState<WaterPlant[]>([]);
   const [franquiciaActiva, setFranquiciaActiva] = useState<WaterPlant | null>(null);
@@ -53,7 +52,7 @@ export default function DashboardPage() {
       setLoading(false);
     };
     fetchFranquicias();
-  }, [firebaseUser]);
+  }, [firebaseUser, hasSetInitialFranquicia, wpid]);
 
   if (loading) {
     return (
@@ -184,5 +183,13 @@ export default function DashboardPage() {
       </div>
     </>
 
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense>
+      <DashboardContent />
+    </Suspense>
   );
 }
