@@ -11,6 +11,7 @@ import { signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, provider } from '@/app/libreria/firebase';
 import { UseAuth } from '@/providers/AuthProvider';
 import { RingLoader } from 'react-spinners';
+import { CreateUserPayload } from '@/services/user/createUser';
 
 import './Registro.css';
 
@@ -105,26 +106,27 @@ export default function Register() {
     try {
       const authResult = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
 
-      const payload: any = {
+      const payload: CreateUserPayload = {
+        email: formData.email,
+        password: formData.password,
         firstName: formData.firstName,
+        middleName: formData.middleName,
         firstLastName: formData.firstLastName,
         secondLastName: formData.secondLastName,
         birthday: new Date(formData.birthday),
         phoneNumber: formData.phoneNumber,
-        curp: "",
-        rfc: "",
+        curp: '',
+        rfc: '',
+        profilePictureUrl: '',
+        roleId: 1,
         firebaseId: authResult.user.uid
       };
-
-      if (formData.middleName.trim() !== '') {
-        payload.middleName = formData.middleName;
-      }
 
       const result = await createUser(payload);
       setUserContext(result);
 
       router.push('/dashboard');
-    } catch (error) {
+    } catch {
       setErrorMsg("Error al registrar. Intenta de nuevo.");
       setLoading(false);
     } 
@@ -145,7 +147,7 @@ export default function Register() {
       setTimeout(() => {
         router.push('/registro/completar-registro');
       }, 100);
-    } catch (error: any) {
+    } catch {
       setErrorMsg("Error con Google. Intenta de nuevo.");
       setLoading(false);
     }
