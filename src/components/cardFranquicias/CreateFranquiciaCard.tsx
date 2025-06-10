@@ -86,8 +86,8 @@ const CreateFranquiciaCard: React.FC<CreateFranquiciaCardProps> = ({ onClose, on
           name="description"
           value={form.description}
           onChange={handleChange}
-          rows={4} // más alto
-          style={{ resize: 'vertical' }} // permite redimensionar
+          rows={4} 
+          style={{ resize: 'vertical' }} 
         />
       </div>
 

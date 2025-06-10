@@ -10,7 +10,6 @@ const RecuadroRefacciones = ({ waterPlantId }: { waterPlantId: number | null }) 
     getSpareParts(waterPlantId).then(setSpareParts);
   }, [waterPlantId]);
 
-  // Función para calcular el contador de días/meses/años
   const getCountdown = (date: string | null) => {
     if (!date) return 'Sin registro';
     const now = new Date();
