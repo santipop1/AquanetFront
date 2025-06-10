@@ -86,7 +86,8 @@ export const checkSubscriptionStatus = async (): Promise<SubscriptionStatus> => 
 // Función principal para crear sesión de checkout con validación previa
 const createCheckoutSessionWithValidation = async (
   userId: string, 
-  planType: 'monthly' | 'annual' = 'monthly'
+  planType: 'monthly' | 'annual' = 'monthly',
+  wpid: number
 ): Promise<CheckoutSessionResponse> => {
   try {
     console.log('🚀 Iniciando proceso de checkout con validación...');
@@ -149,7 +150,8 @@ const createCheckoutSessionWithValidation = async (
         userId: firebaseUserId,
         gmail: email,
         id: null,     
-        planType: planType
+        planType: planType,
+        waterPlantId: wpid
       },
       {
         headers: {

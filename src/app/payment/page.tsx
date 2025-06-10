@@ -103,7 +103,7 @@ export default function PaymentComponent() {
       console.log('Plan seleccionado:', selectedPlan);
       
       // Crear la sesión de checkout con el plan seleccionado
-      const response = await createCheckoutSession(user.uid, selectedPlan);
+      const response = await createCheckoutSession(user.uid, selectedPlan, wpid);
       
       console.log('Sesión creada:', response);
 
@@ -282,7 +282,7 @@ export default function PaymentComponent() {
                 color: '#333',
                 marginBottom: '10px'
               }}>
-                $10.00
+                $699.00
               </div>
               <p style={{ 
                 color: '#666', 
@@ -357,7 +357,7 @@ export default function PaymentComponent() {
                 color: '#333',
                 marginBottom: '5px'
               }}>
-                $80.00
+                $6948.00
               </div>
               <p style={{ 
                 color: '#666', 
@@ -372,7 +372,7 @@ export default function PaymentComponent() {
                 fontWeight: 'bold',
                 marginBottom: '15px'
               }}>
-                Equivale a $8.33/mes
+                Equivale a $579.00/mes
               </p>
               <p style={{ 
                 color: '#999', 

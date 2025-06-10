@@ -13,7 +13,6 @@ const AfterPaymentPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const sessionId = searchParams?.get('session_id') ?? "";
-    const waterPlantId = Number(searchParams?.get('wpid') ?? 1);
     const { loading: authLoading } = UseAuth();
     const [loading, setLoading] = useState<boolean>();
 
@@ -60,14 +59,24 @@ const AfterPaymentPage = () => {
                     ¡Bienvenido a la familia <p className="animate-gradient pl-2">Aquanet</p>!
                 </h1>
 
-                <p className="text-lg text-gray-600 max-w-xl">
-                    ¡Felicidades por tomar un paso hacia purificar tu futuro!
+                <p className="text-lg text-gray-600 max-w-2xl">
+                    Ya puedes disfrutar de todos los beneficios que {" "}
+                    <span className="inline-flex items-center gap-2 translate-y-1.5">
+                        <Image 
+                            src="/aquanetplus.png" 
+                            alt="Logo AquaNet Plus" 
+                            width={90} 
+                            height={90}
+                            className=""
+                        />
+                    </span>
+                    {""} tiene para ti.
                 </p>
 
                 <ButtonText
                     variant="variant4"
                     label="Llévame a mi dashboard"
-                    onClick={() => router.push(`/dashboard?wpid=`+Number(waterPlantId))}
+                    onClick={() => router.push(`/dashboard`)} // crear franquicia sin purifica tu futuro
                 />
             </div>
         </div>

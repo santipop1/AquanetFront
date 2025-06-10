@@ -12,9 +12,11 @@ import { ListWaterPlants } from '@/services/waterPlants';
 import { BiAdjust } from "react-icons/bi";
 import Image from 'next/image';
 import { RingLoader } from 'react-spinners';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ReporteNormativasDropdown }  from '@/components/ListaNormativas/ReporteNormativasDropdown';
 import { WaterPlant } from '@/types/WaterPlant';
+import { ButtonText } from '@/components/ButtonText/ButtonText';
+import { FaCirclePlus } from "react-icons/fa6";
 
 export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
@@ -22,6 +24,9 @@ export default function DashboardPage() {
   const [franquiciaActiva, setFranquiciaActiva] = useState<WaterPlant | null>(null);
   const [loading, setLoading] = useState<boolean>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const wpid = searchParams ? Number(searchParams.get('wpid')) : null;
+  const [hasSetInitialFranquicia, setHasSetInitialFranquicia] = useState(false);
 
   useEffect(() => {
     const fetchFranquicias = async () => {
@@ -30,7 +35,16 @@ export default function DashboardPage() {
       try {
         const data = await ListWaterPlants({ id: firebaseUser.uid });
         setFranquicias(data);
-        if (data.length > 0) setFranquiciaActiva(data[0]);
+
+        if (data.length > 0 && !hasSetInitialFranquicia) {
+          if (wpid) {
+            const found = data.find(f => f.id === wpid);
+            setFranquiciaActiva(found ?? data[0]);
+          } else {
+            setFranquiciaActiva(data[0]);
+          }
+          setHasSetInitialFranquicia(true);
+        }
       } catch {
         setFranquicias([]);
         setFranquiciaActiva(null);
@@ -86,7 +100,7 @@ export default function DashboardPage() {
         router.push('/documentos-subir?wpid=' + f.id);
         break;
       case 'pay':
-        router.push('/payment?wpid=' + f.id);
+        router.push('/proceed-to-payment?wpid=' + f.id);
         break;
       case 'active':
         // No redirige, muestra dashboard normal
@@ -100,7 +114,6 @@ export default function DashboardPage() {
   return (
     <>
       <Header />
-      
       <div className="dashboard">
         <aside className="dashboard-sidebar scrollbar-hidden">
           {/* Botón de modo oscuro/claro */}
@@ -124,12 +137,23 @@ export default function DashboardPage() {
                       key={f.id}
                       nombre={`Franquicia ${f.id}`}
                       logoSrc={"/gotita.png"}
-                      onClick={() => handleFranquiciaClick(f)}
+                      onClick={() => setFranquiciaActiva(f)}
                     />
                   ))}
                 </div>
               )
             ))}
+
+            {/* Sección Agregar nueva */}
+            <div style={{ marginTop: 32 }}>
+              <h3 style={{ fontWeight: 'bold', margin: '16px 0 8px 0' }}>Agregar nueva</h3>
+              <RecuadroFranquicias
+                key="new"
+                nombre={<FaCirclePlus className="text-2xl text-[#166534]" />}
+                logoSrc={"/gotita.png"}
+                onClick={() => router.push('/select-add-water-plant')}
+              />
+            </div>
           </div>
         </aside>
         <main className="dashboard-main">
@@ -145,8 +169,14 @@ export default function DashboardPage() {
               
             </div>
           ) : franquiciaActiva ? (
-            <div style={{marginTop: 16, fontWeight: 'bold', color: '#888'}}>
+            <div style={{marginTop: 16, fontWeight: 'bold', color: '#888'}} className='flex flex-col gap-6'>
               En fase de: {statusLabels[franquiciaActiva.status] || franquiciaActiva.status}
+              <ButtonText
+                variant="variant4"
+                label="Ir a la página de la fase"
+                onClick={() => handleFranquiciaClick(franquiciaActiva)}
+                minW={60}
+              />
             </div>
           ) : null}
         </main>
