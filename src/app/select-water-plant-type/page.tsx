@@ -1,7 +1,7 @@
 "use client";
 
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import WaterPlantTypeSelectList from '@/components/WaterPlantTypeSelectList/WaterPlantTypeSelectList';
 import { getWaterPlantTypesForSelection } from '@/services/waterPlantType/getWaterPlantTypes';
 import { getWaterPlantById } from '@/services/waterPlant/getWaterPlantById';
@@ -18,7 +18,7 @@ import { listDocumentsByWaterPlantId } from '@/services/document/listDocumentsBy
 import { updateDocumentStatus } from '@/services/document/updateDocumentStatus';
 import { DocumentDTO } from '@/types/DocumentDTO';
 
-const SelectWaterPlantTypePage = () => {
+function SelectWaterPlantTypePageInner() {
   const searchParams = useSearchParams();
   const waterPlantId = Number(searchParams.get('wpid'));
   const recommendedTypeId = Number(searchParams.get('wptrid'));
@@ -150,5 +150,11 @@ const SelectWaterPlantTypePage = () => {
     </div>
   );
 };
+
+const SelectWaterPlantTypePage = () => (
+  <Suspense>
+    <SelectWaterPlantTypePageInner />
+  </Suspense>
+);
 
 export default SelectWaterPlantTypePage;
