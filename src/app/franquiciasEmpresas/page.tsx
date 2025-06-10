@@ -23,7 +23,7 @@ export default function Page() {
         if (!user || typeof user.id !== 'number') return;
         const data = await getWaterPlantTypesByUser(user.id);
         setFranquiciasData(data);
-      } catch (error) {
+      } catch {
         console.error('No se pudieron cargar las franquicias.');
       }
     };
@@ -43,13 +43,13 @@ export default function Page() {
     setEditIndex(null);
   };
 
-  const handleSaved = (updated: any) => {
+  const handleSaved = (updated: WaterPlantTypeCard) => {
     setFranquiciasData(prev => prev.map((item, idx) => idx === editIndex ? { ...item, ...updated } : item));
   };
 
   const handleCreated = async () => {
-    // Refresca la lista después de crear
-    const data = await getWaterPlantTypes();
+    if (!user || typeof user.id !== 'number') return;
+    const data = await getWaterPlantTypesByUser(user.id);
     setFranquiciasData(data);
   };
 
