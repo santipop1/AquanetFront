@@ -64,12 +64,10 @@ const RecuadroVentas = ({ waterPlantId }: { waterPlantId: number | null }) => {
     try {
       // Ajustar el payload para que cumpla con SalePayload
       const payload: SalePayload = {
-        waterPlantId,
-        amount:
-          Number(form.quantityJug || 0) +
-          Number(form.quantityLiter || 0) +
-          Number(form.quantityGallon || 0),
-        date: new Date().toISOString(),
+        waterPlantId: waterPlantId,
+        quantityJug: form.quantityJug ? parseInt(form.quantityJug, 10) : 0,
+        quantityLiter: form.quantityLiter ? parseInt(form.quantityLiter, 10) : 0,
+        quantityGallon: form.quantityGallon ? parseInt(form.quantityGallon, 10) : 0,
       };
       await createSale(payload);
       setForm({ quantityJug: '', quantityLiter: '', quantityGallon: '' });

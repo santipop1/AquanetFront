@@ -1,8 +1,9 @@
 
 export interface SalePayload {
+ 
   waterPlantId: number;
-  amount: number;
-  date: string; // ISO string
-  description?: string;
+  quantityJug: number;
+  quantityLiter: number;
+  quantityGallon: number;
   // Agrega aquí otros campos según tu modelo de venta
 }
