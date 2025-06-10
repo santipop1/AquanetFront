@@ -8,7 +8,7 @@ import './documentos-subir.css';
 import createDocument from '@/services/document/postDocument';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setStatus } from '@/services/waterPlant/setStatus';
-import { JSX, useEffect, useState } from 'react';
+import { JSX, useEffect, useState, Suspense } from 'react';
 import { listDocumentTypes } from '@/services/documentType/listDocumentTypes';
 import { listDocumentsByWaterPlantId } from '@/services/document/listDocumentsByWaterPlantId';
 import { DocumentStatus } from '@/components/DocumentCard/DocumentCard';
@@ -19,7 +19,7 @@ import { RingLoader } from 'react-spinners';
 import { DocumentRow } from '@/components/DocumentCard/DocumentCard';
 import { updateDocumentStatus } from '@/services/document/updateDocumentStatus';
 
-export default function SubirDocumento() {
+function SubirDocumentoInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const waterPlantId = searchParams ? Number(searchParams.get('wpid')) : 1;
@@ -204,5 +204,13 @@ export default function SubirDocumento() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function SubirDocumento() {
+  return (
+    <Suspense>
+      <SubirDocumentoInner />
+    </Suspense>
   );
 }
