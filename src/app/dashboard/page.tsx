@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { ReporteNormativasDropdown }  from '@/components/ListaNormativas/ReporteNormativasDropdown';
 import { WaterPlant } from '@/types/WaterPlant';
 
+
 export default function DashboardPage() {
   const { firebaseUser } = UseAuth();
   const [franquicias, setFranquicias] = useState<WaterPlant[]>([]);
@@ -152,5 +153,6 @@ export default function DashboardPage() {
         </main>
       </div>
     </>
+
   );
 }
