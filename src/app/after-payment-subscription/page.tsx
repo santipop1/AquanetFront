@@ -1,15 +1,15 @@
 "use client"
 
-import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { SymbolButton } from "@/components/SymbolButton/SymbolButton";
 import { ButtonText } from "@/components/ButtonText/ButtonText";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { stripeCheckoutSuccess } from "@/services/stripeCheckoutSuccess";
 import { UseAuth } from "@/providers/AuthProvider";
 import { RingLoader } from "react-spinners";
+import { useSearchParams, useRouter } from "next/navigation";
 
-const AfterPaymentPage = () => {
+const AfterPaymentContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const sessionId = searchParams?.get('session_id') ?? "";
@@ -76,10 +76,18 @@ const AfterPaymentPage = () => {
                 <ButtonText
                     variant="variant4"
                     label="Llévame a mi dashboard"
-                    onClick={() => router.push(`/dashboard`)} // crear franquicia sin purifica tu futuro
+                    onClick={() => router.push(`/dashboard`)}
                 />
             </div>
         </div>
+    );
+};
+
+const AfterPaymentPage = () => {
+    return (
+        <Suspense>
+            <AfterPaymentContent />
+        </Suspense>
     );
 };
 
